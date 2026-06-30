@@ -6,7 +6,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class IntakeSubsystem extends SubsystemBase {
     public IntakeStates state = IntakeStates.SAFE;
-
+    public IntakeStates wantedIntakeState = IntakeStates.SAFE;
+    public IntakeStates currentIntakeState = IntakeStates.SAFE;
     public TalonFX leader;
 
 
@@ -18,6 +19,26 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void handleStateTransitions() {
+         switch (wantedIntakeState) {
+            case SAFE:
+
+            break;
+            case ZERO:
+
+            break;
+            case ELEPHANTIASIS:
+
+            break;
+            case EXTENDED:
+
+            break;
+            case INTAKING:
+
+            break;
+            case REVERSEINTAKE:
+
+            break;
+        }
 
     }
 

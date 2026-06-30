@@ -3,23 +3,16 @@ package frc.robot.Subsystems.Superstructure;
 public class Superstructure {
     public SuperstructureStates currentState = SuperstructureStates.SAFE;
     public SuperstructureStates wantedState = SuperstructureStates.SAFE;
-    public SuperstructureStates prevState = SuperstructureStates.SAFE;
-    //public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
 
     public static Superstructure currentInstance;
-   //private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-    // public Climb climb = Climb.getInstance();
-    // public Shooter shooter = Shooter.getInstance();
-    // public Intake intake = Intake.getInstance();
+  
 
     //@Override
-    // public void periodic() {
-    //     // Logger.recordOutput("currentState", this.currentState);
-    //     // Logger.recordOutput("wantedState", this.wantedState);
-    //     handleStateTransitions();
-    //     applyStates();
-    // }
+     public void periodic() {
+         handleStateTransitions();
+         applyStates();
+     }
 
     public Superstructure() {
         currentInstance = this;
@@ -49,7 +42,7 @@ public class Superstructure {
         wantedState = state;
     }
 
-    public void handleStateTransitions() {
+    private void handleStateTransitions() {
         switch (wantedState) {
             case SAFE:
 
@@ -74,7 +67,7 @@ public class Superstructure {
             break;
         }
     }
-    public void applyStates() {
+    private void applyStates() {
         switch (currentState) {
             case SAFE:
                 stateSAFE();
