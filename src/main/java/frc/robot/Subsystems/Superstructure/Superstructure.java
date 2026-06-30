@@ -1,25 +1,25 @@
 package frc.robot.Subsystems.Superstructure;
 
 public class Superstructure {
-    public States currentState = States.SAFE;
-    public States wantedState = States.SAFE;
-    public States prevState = States.SAFE;
-    public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
+    public SuperstructureStates currentState = SuperstructureStates.SAFE;
+    public SuperstructureStates wantedState = SuperstructureStates.SAFE;
+    public SuperstructureStates prevState = SuperstructureStates.SAFE;
+    //public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
 
     public static Superstructure currentInstance;
-    private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+   //private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     // public Climb climb = Climb.getInstance();
-    public Shooter shooter = Shooter.getInstance();
-    public Intake intake = Intake.getInstance();
+    // public Shooter shooter = Shooter.getInstance();
+    // public Intake intake = Intake.getInstance();
 
-    @Override
-    public void periodic() {
-        Logger.recordOutput("currentState", this.currentState);
-        Logger.recordOutput("wantedState", this.wantedState);
-        handleStateTransitions();
-        applyStates();
-    }
+    //@Override
+    // public void periodic() {
+    //     // Logger.recordOutput("currentState", this.currentState);
+    //     // Logger.recordOutput("wantedState", this.wantedState);
+    //     handleStateTransitions();
+    //     applyStates();
+    // }
 
     public Superstructure() {
         currentInstance = this;
@@ -33,19 +33,19 @@ public class Superstructure {
         return currentInstance;
     }
 
-    public States getCurrentState() {
+    public SuperstructureStates getCurrentState() {
         return currentState;
     }
 
-    public States getWantedState() {
+    public SuperstructureStates getWantedState() {
         return wantedState;
     }
 
-    public void setCurrentState(States state) {
+    public void setCurrentState(SuperstructureStates state) {
         currentState = state;
     }
 
-    public void setWantedState(States state) {
+    public void setWantedState(SuperstructureStates state) {
         wantedState = state;
     }
 
@@ -97,7 +97,9 @@ public class Superstructure {
     }
    
     private boolean stateZERO(){
+        return false;
     }
     private boolean stateAUTO(){
+        return false;
     }
 }
