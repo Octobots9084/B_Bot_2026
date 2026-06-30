@@ -6,11 +6,19 @@ package frc.robot;
 
 import java.util.Optional;
 
+import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Superstructure.Superstructure;
+import frc.robot.Subsystems.Superstructure.SuperstructureStates;
+
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -33,6 +41,17 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     container = new RobotContainer();
+
+    switch(Constants.currentMode) { //TODO log
+      case REAL:
+        Logger.addDataReceiver(new WPILOGWriter());
+        Logger.addDataReceiver(new NT4Publisher());
+      case SIM:
+        Logger.addDataReceiver(new NT4Publisher());
+      case REPLAY:
+        throw new UnsupportedOperationException("Not supported until a bunch more stuff is finished, sorry!");
+    }
+
   }
 
   /**
@@ -43,7 +62,10 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+
+    CommandScheduler.getInstance().run();
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -57,9 +79,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    CommandScheduler.getInstance().schedule(container.autoChooser.getSelected()); //awkward command
   }
 
   /** This function is called periodically during autonomous. */
@@ -86,22 +110,26 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    Superstructure.getInstance().wantedState = SuperstructureStates.SAFE;
+  }
 
   /** This function is called periodically when disabled. Copy pasted. */
   @Override
   public void disabledPeriodic() {
-    if (Constants.isBlueAlliance == null) {
-      Optional<Alliance> ally = DriverStation.getAlliance();
-      if (ally.isPresent()) {
-        if (ally.get() == Alliance.Red) {
-          Constants.isBlueAlliance = false;
-        }
-        if (ally.get() == Alliance.Blue) {
-          Constants.isBlueAlliance = true;
-        }
-      }
-    }
+    if (Constants.isBlueAlliance != null) return;
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (!ally.isPresent()) return;
+
+    Constants.isBlueAlliance = (ally.get() == Alliance.Blue);
+  }
+
+  
+  public static Boolean wonAuto() {
+  String gameData = DriverStation.getGameSpecificMessage();
+  if (gameData.length() < 0) return null;
+  boolean blueVictory = gameData.charAt(0) == 'B';
+  return blueVictory == Constants.isBlueAlliance;
   }
 
   /** This function is called once when test mode is enabled. */

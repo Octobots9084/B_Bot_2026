@@ -19,7 +19,7 @@ public class RobotContainer {
 
     ButtonConfig buttons;
 
-    private final SendableChooser<Command> autoChooser; //dont touch this
+    public final SendableChooser<Command> autoChooser; //dont touch this
 
 
     public RobotContainer() {
@@ -46,7 +46,7 @@ public class RobotContainer {
     // NAMED COMMANDS IN SWERVE
     SmartDashboard.putData("Auto", autoChooser);
     buttons.initTeleop();
-    
+
     }
 }
 
