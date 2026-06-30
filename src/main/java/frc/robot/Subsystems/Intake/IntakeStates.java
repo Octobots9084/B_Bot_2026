@@ -1,10 +1,11 @@
+
 package frc.robot.Subsystems.Intake;
 
-public enum IntakeStates {
+public enum IntakeStates{
     SAFE,
-    INTAKING,
-    ZERO,
     EXTENDED,
+    INTAKING,
+    ELEPHANTIASIS,//MK 3!
+    ZERO,
     REVERSEINTAKE,
-    ELEPHANTIASIS
 }
