@@ -1,40 +1,42 @@
-// // Resizable list that can grow and shrink dynamically
-// import java.util.ArrayList;
-// // General List interface (often used instead of ArrayList directly)
-// import java.util.List;
-// // Represents a value that may or may not exist (avoids null)
-// import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 // public class VisionIOSystem extends VisionIO{
 
-//     //new data type
-//     //FilteredResults[] is an array containing all the information from one camera
-//     //including type(multitag, singletag), pose, and confidence
+    /*
+    uses the FilteredCameraResults class
+    FilteredCameraResults objects contains all the information from one camera
+    including type(multitag, singletag)(enum), PhotonTrackedTargets, and EstimatedRobotPose 
+    */
+    
+    //filteredCameraResults should always be in an optional and be null if the camera has no reading
 
-//     public void periodic(){
-//         //get the raw results from the cameras
+    public void periodic(){
+        //create an empty array list named filteredResults to hold optional FilteredCameraResults objects
         
-//         //filterResults()
-//         //convert the raw results to filteredResults[]
+        //filterResults(cameraResults)
+        //fill the arraylist with filteredCameraResults by converting raw results into
+        //filtered results(setting the optional to empty if there is no reading)
 
-//         //chooseResults()
-//         //look at the filteredResults and decide which ones were going to use
-//         //(always use multitag, use single tag if there is no multitag)
+        //chooseResults(filteredResults)
+        //look at the filteredCameraResults arraylist and decide which ones were going to use and remove the others
+        //(always use multitag, use single tag if there is no multitag)
 
-//         //sendResults()
-//         //send all chosen FilteredResults to pose esimator
+        //sendResults(FilteredResults)
+        //send all remaining FilteredCameraResults (the contents of FilteredResults) to pose esimator
 
-//         //log relevant information
-//     }
+        //log if it was single tag or multitag, if the cameras were connected, and the confidence
+    }
 
 //     //public static boolean cameraConnected(), takes a camera returns true if connected
 
 //     //public static boolean camerasConnected(), returns true if all of the cameras are connected
 
-//     //public static FilteredResults[] filterResults(cameraResults), takes in raw results, return organized sorted information
+    //public static void filterResults(cameraResults), takes in raw results, fills the arraylist with filteredCameraResults
 
-//     //public static list of FilteredResults were going to use chooseResults(list of all FlteredResults), takes in sorted results, returns the ones were going to use
+    //public static void chooseResults(FilteredResults), removes the results were not going to use from the arraylist
 
-//     //public static void sendResults(list of filtered results were going to use), takes in a list of the filtered results were going to use, send it to pose calculator
-// }
+    //public static void sendResults(FilteredResults), send the arraylist(filteredResults) to the pose estimator, and any other relative information
+}
 
