@@ -12,7 +12,7 @@ import java.util.Optional;
     
     //filteredCameraResults should always be in an optional and be null if the camera has no reading
 
-    public void periodic(){
+   // public void periodic(){
         //create an empty array list named filteredResults to hold optional FilteredCameraResults objects
         
         //filterResults(cameraResults)
@@ -27,7 +27,7 @@ import java.util.Optional;
         //send all remaining FilteredCameraResults (the contents of FilteredResults) to pose esimator
 
         //log if it was single tag or multitag, if the cameras were connected, and the confidence
-    }
+    //}
 
 //     //public static boolean cameraConnected(), takes a camera returns true if connected
 
@@ -38,5 +38,5 @@ import java.util.Optional;
     //public static void chooseResults(FilteredResults), removes the results were not going to use from the arraylist
 
     //public static void sendResults(FilteredResults), send the arraylist(filteredResults) to the pose estimator, and any other relative information
-}
+//}
 
