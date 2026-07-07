@@ -1,18 +1,26 @@
 package frc.robot.Subsystems.Intake;
 
+import java.lang.reflect.Field;
+
+import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import frc.robot.Constants;
 
 public class IntakeIOSystem extends IntakeIO {
-    TalonFX rollerMover;
-    TalonFX rollerSpinner;
-    TalonFX rollerMoverF;
-    TalonFX rollerSpinnerF;
+    public TalonFX rollerMover;
+    public TalonFX rollerSpinner;
+    public TalonFX rollerMoverF;
+    public TalonFX rollerSpinnerF;
 
     MotionMagicVoltage moverMagic; 
     MotionMagicVelocityVoltage spinnerMagic;
@@ -33,7 +41,7 @@ public class IntakeIOSystem extends IntakeIO {
         moverMagic = new MotionMagicVoltage(0);
         spinnerMagic = new MotionMagicVelocityVoltage(0);
 
-        //TODO figure out what to config here
+        config();
 
         rollerMover.setControl(moverMagic);
         rollerSpinner.setControl(spinnerMagic);
@@ -41,6 +49,29 @@ public class IntakeIOSystem extends IntakeIO {
         rollerMoverF.setControl(rollerMoverFollower);
         rollerSpinnerF.setControl(rollerSpinnerFollower);
     }
+
+    //excuse the weird setup - this is to create slots to fill 
+    public void config() {
+        TalonFXConfiguration config = new TalonFXConfiguration();
+
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        config.CurrentLimits.StatorCurrentLimit = 40;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        
+        rollerMover.getConfigurator().apply(config);
+
+
+        config = new TalonFXConfiguration(); 
+
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        config.CurrentLimits.StatorCurrentLimit = 40;
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        
+        rollerSpinner.getConfigurator().apply(config);
+
+    }
+
+
     @Override
     public void spinRollers(double b) {
         spinnerMagic.Velocity = b;
@@ -50,10 +81,26 @@ public class IntakeIOSystem extends IntakeIO {
     
     /**TODO figure out actual positions */
     @Override
-    public void moveRollerToPos(float pos) {
+    public void moveRollerToPos(Double pos) {
         moverMagic.Position = pos / 5;
         rollerSpinner.setControl(moverMagic);
     }
 
-    
+    public void log() {
+        Logger.recordOutput("mover/", rollerMover.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("mover/", rollerMover.getPosition().getValueAsDouble());
+        Logger.recordOutput("mover/", rollerMover.getMotorVoltage().getValueAsDouble());
+
+        Logger.recordOutput("spinner/", rollerSpinner.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("spinner/", rollerSpinner.getPosition().getValueAsDouble());
+        Logger.recordOutput("spinner/", rollerSpinner.getMotorVoltage().getValueAsDouble());
+
+        Logger.recordOutput("moverF/", rollerMoverF.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("moverF/", rollerMoverF.getPosition().getValueAsDouble());
+        Logger.recordOutput("moverF/", rollerMoverF.getMotorVoltage().getValueAsDouble());
+
+        Logger.recordOutput("spinnerF/", rollerSpinnerF.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("spinnerF/", rollerSpinnerF.getPosition().getValueAsDouble());
+        Logger.recordOutput("spinnerF/", rollerSpinnerF.getMotorVoltage().getValueAsDouble());
+    }
 }
