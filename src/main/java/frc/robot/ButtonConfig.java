@@ -9,7 +9,7 @@ public class ButtonConfig {
     Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
-
+        //TODO button maps arent decided yet. Technically we haven't chosen what the joysticks do as of the time of writing this.
     }
     
 }

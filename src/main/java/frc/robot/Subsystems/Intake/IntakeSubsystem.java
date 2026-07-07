@@ -6,9 +6,16 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 public class IntakeSubsystem extends SubsystemBase {
     public IntakeStates state = IntakeStates.SAFE;
-    public IntakeStates wantedIntakeState = IntakeStates.SAFE;
-    public IntakeStates currentIntakeState = IntakeStates.SAFE;
+    public IntakeStates wantedIntakeState = IntakeStates.ZERO;
+    public IntakeStates currentIntakeState = IntakeStates.ZERO;
     public TalonFX leader;
+    public IntakeIO io;
+
+
+    public IntakeSubsystem() {
+        io = new IntakeIOSystem();
+        //TODO initalize motors once we have an idea of what they are
+    }
 
 
     @Override
@@ -21,21 +28,44 @@ public class IntakeSubsystem extends SubsystemBase {
     public void handleStateTransitions() {
          switch (wantedIntakeState) {
             case SAFE:
-
+                
+                currentIntakeState = wantedIntakeState;
             break;
             case ZERO:
-
+                if (currentIntakeState != IntakeStates.SAFE) break;
+                currentIntakeState = wantedIntakeState;
             break;
             case ELEPHANTIASIS:
+                if (currentIntakeState != IntakeStates.SAFE &&
+                    currentIntakeState != IntakeStates.REVERSEINTAKE &&
+                    currentIntakeState != IntakeStates.INTAKING)
+                        break;
 
+                currentIntakeState = wantedIntakeState;
             break;
             case EXTENDED:
-
+                if (currentIntakeState != IntakeStates.INTAKING &&
+                    currentIntakeState != IntakeStates.SAFE &&
+                    currentIntakeState != IntakeStates.REVERSEINTAKE) 
+                        break;
+            currentIntakeState = wantedIntakeState;
             break;
             case INTAKING:
+                if (currentIntakeState != IntakeStates.EXTENDED && 
+                    currentIntakeState != IntakeStates.ELEPHANTIASIS &&
+                    currentIntakeState != IntakeStates.REVERSEINTAKE && 
+                    currentIntakeState != IntakeStates.SAFE)
+                        break;
+            currentIntakeState = wantedIntakeState;
 
             break;
             case REVERSEINTAKE:
+                if (currentIntakeState != IntakeStates.EXTENDED && 
+                    currentIntakeState != IntakeStates.ELEPHANTIASIS &&
+                    currentIntakeState != IntakeStates.INTAKING && 
+                    currentIntakeState != IntakeStates.SAFE)
+                        break;
+            currentIntakeState = wantedIntakeState;
 
             break;
         }
@@ -43,7 +73,34 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void applyStates () {
+        switch(currentIntakeState) {
+            case ELEPHANTIASIS:
+                // i was going to name this elephantimer but variableless worked just fine :(
+                io.moveRollerToPos(System.currentTimeMillis() % 1000 > 500 ? 1 : 0);
+                io.spinRollers(0);
+                break;
+            case EXTENDED:
+                io.moveRollerToPos(1);
+                io.spinRollers(0);
+                break;
+            case INTAKING:
+                io.moveRollerToPos(1);
+                io.spinRollers(1);
+                break;
+            case REVERSEINTAKE:
+                io.moveRollerToPos(1);
+                io.spinRollers(-1);
+                break;
+            case SAFE:
+                io.moveRollerToPos(0);
+                io.spinRollers(0);
+                break;
+            case ZERO:
+                break;
+            default:
+                throw new RuntimeException("If you see this message, current state is probably null: " + currentIntakeState + ". Anyway, this should never be reached.");
 
+        }
     }
 
     public void logging() {

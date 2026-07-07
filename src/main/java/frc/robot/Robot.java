@@ -6,16 +6,18 @@ package frc.robot;
 
 import java.util.Optional;
 
-import choreo.auto.AutoChooser;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Superstructure.Superstructure;
 import frc.robot.Subsystems.Superstructure.SuperstructureStates;
 
+import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
@@ -25,7 +27,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * the TimedRobot documentation. If you change the name of this class or the package after creating
  * this project, you must also update the Main.java file in the project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -51,7 +53,7 @@ public class Robot extends TimedRobot {
       case REPLAY:
         throw new UnsupportedOperationException("Not supported until a bunch more stuff is finished, sorry!");
     }
-
+    
   }
 
   /**
@@ -65,6 +67,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
 
     CommandScheduler.getInstance().run();
+    Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
   }
 
   /**
@@ -83,35 +86,33 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-    CommandScheduler.getInstance().schedule(container.autoChooser.getSelected()); //awkward command
+    if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().schedule(container.autoChooser.getSelected()); //awkward command
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
+    if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
+  }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
     Superstructure.getInstance().wantedState = SuperstructureStates.SAFE;
+    ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
+
   }
 
   /** This function is called periodically when disabled. Copy pasted. */
@@ -131,10 +132,20 @@ public class Robot extends TimedRobot {
   boolean blueVictory = gameData.charAt(0) == 'B';
   return blueVictory == Constants.isBlueAlliance;
   }
+  /**Degrees for some reason. */
+  public static boolean onRamp(double wanted, double tolerance) {
+    tolerance = Units.degreesToRadians(tolerance);
+    double tilt = SmartDashboard.getNumber("autotest/TILT INPUT", tolerance);
+  
+    return tilt > wanted + tolerance || tilt < wanted - tolerance;
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
+    CommandScheduler.getInstance().cancelAll();
+  }
 
   /** This function is called periodically during test mode. */
   @Override
