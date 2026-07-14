@@ -20,6 +20,7 @@ public class FilteredCameraResults{
     */
 
     int numTargets;
+    double timeStamp;
     ArrayList<PhotonTrackedTarget> targets = new ArrayList<>();
     Optional<EstimatedRobotPose> visionEst;
     PhotonPipelineResult result;
@@ -27,6 +28,8 @@ public class FilteredCameraResults{
     //constructor takes in a raw result
     public FilteredCameraResults(PhotonPipelineResult result, PhotonPoseEstimator photonEstimator){
         this.result = result;
+        timeStamp = result.getTimestampSeconds();
+
 
         //the list of targets from the result gets filled with targets that are not to ambiguis
         for(int i = 0; i< result.getTargets().size(); i++){
@@ -49,6 +52,10 @@ public class FilteredCameraResults{
 
     public int getNumTargets(){
         return numTargets;
+    }
+
+    public double getTimeStamp(){
+        return timeStamp;
     }
 
 }
