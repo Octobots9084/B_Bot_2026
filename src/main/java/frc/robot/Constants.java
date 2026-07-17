@@ -2,6 +2,8 @@ package frc.robot;
 
 import com.ctre.phoenix6.CANBus;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -16,8 +18,17 @@ public class Constants {
     public static double outpostTrenchY = 7.4375;
     public static double depotTrenchY = 0.625;
 
+    //TODO set to real values
+    public static double robotToCamFrontRight = 1;
+    public static double robotToCamFrontLeft = 1;
+    public static double robotToCamRight = 1;
+    public static double robotToCamLeft = 1;
+    public static double robotToCamBack = 1;
+
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+    public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
+
 
     public static enum Mode {
         /** Running on a real robot. */
