@@ -40,7 +40,8 @@ public class RobotContainer {
                 shooter = new ShooterSubsystem();
                 superstructure = new Superstructure();
             }
-            case REPLAY: throw new UnsupportedOperationException("Replay mode not set up yet!");
+            case REPLAY:
+            //laugh
         }
     autoChooser = AutoBuilder.buildAutoChooser();
     // NAMED COMMANDS IN SWERVE

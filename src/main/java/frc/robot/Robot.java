@@ -17,9 +17,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Subsystems.Superstructure.Superstructure;
 import frc.robot.Subsystems.Superstructure.SuperstructureStates;
 
+import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
@@ -51,8 +53,13 @@ public class Robot extends LoggedRobot {
       case SIM:
         Logger.addDataReceiver(new NT4Publisher());
       case REPLAY:
-        throw new UnsupportedOperationException("Not supported until a bunch more stuff is finished, sorry!");
-    }
+     // Replaying a log, set up replay source
+        setUseTiming(false); // Run as fast as possible
+        String logPath = LogFileUtil.findReplayLog();
+        Logger.setReplaySource(new WPILOGReader(logPath));
+        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        break;
+       }
     
   }
 
@@ -127,11 +134,12 @@ public class Robot extends LoggedRobot {
 
   
   public static Boolean wonAuto() {
-  String gameData = DriverStation.getGameSpecificMessage();
-  if (gameData.length() < 0) return null;
-  boolean blueVictory = gameData.charAt(0) == 'B';
-  return blueVictory == Constants.isBlueAlliance;
+    String gameData = DriverStation.getGameSpecificMessage();
+    if (gameData.length() < 0) return null;
+    boolean blueVictory = gameData.charAt(0) == 'B';
+    return blueVictory == Constants.isBlueAlliance;
   }
+
   /**Degrees for some reason. */
   public static boolean onRamp(double wanted, double tolerance) {
     tolerance = Units.degreesToRadians(tolerance);
