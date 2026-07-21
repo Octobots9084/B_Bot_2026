@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Shooter.Flywheel.FlywheelSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
 import frc.robot.Subsystems.Superstructure.SuperstructureStates;
+import yams.mechanisms.velocity.FlyWheel;
 
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -65,7 +67,7 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
-
+    FlywheelSubsystem.getInstance().flywheelPeriodic();
     CommandScheduler.getInstance().run();
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
   }
@@ -157,5 +159,7 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    FlywheelSubsystem.getInstance().flywheelSimPeriodic();
+  }
 }
