@@ -19,7 +19,6 @@ import frc.robot.Constants;
 public class IntakeIOSystem extends IntakeIO {
     public TalonFX rollerMover;
     public TalonFX rollerSpinner;
-    public TalonFX rollerMoverF;
     public TalonFX rollerSpinnerF;
 
     MotionMagicVoltage moverMagic; 
@@ -29,10 +28,9 @@ public class IntakeIOSystem extends IntakeIO {
     Follower rollerSpinnerFollower;
 
     public IntakeIOSystem() {
-        //todo get actual devide ids that probably arent taken
+        //todo get actual device ids that probably arent taken
         rollerMover = new TalonFX(0, Constants.krakenBus);
         rollerSpinner = new TalonFX(1, Constants.krakenBus);
-        rollerMoverF = new TalonFX(2, Constants.krakenBus);
         rollerSpinnerF = new TalonFX(3, Constants.krakenBus);
 
         rollerMoverFollower = new Follower(0, MotorAlignmentValue.Opposed); //todo this is my guess but idk
@@ -46,7 +44,6 @@ public class IntakeIOSystem extends IntakeIO {
         rollerMover.setControl(moverMagic);
         rollerSpinner.setControl(spinnerMagic);
 
-        rollerMoverF.setControl(rollerMoverFollower);
         rollerSpinnerF.setControl(rollerSpinnerFollower);
     }
 
@@ -82,7 +79,7 @@ public class IntakeIOSystem extends IntakeIO {
     /**TODO figure out actual positions */
     @Override
     public void moveRollerToPos(Double pos) {
-        moverMagic.Position = pos / 5;
+        moverMagic.Position = pos;
         rollerSpinner.setControl(moverMagic);
     }
 
@@ -94,10 +91,6 @@ public class IntakeIOSystem extends IntakeIO {
         Logger.recordOutput("spinner/", rollerSpinner.getDeviceTemp().getValueAsDouble());
         Logger.recordOutput("spinner/", rollerSpinner.getPosition().getValueAsDouble());
         Logger.recordOutput("spinner/", rollerSpinner.getMotorVoltage().getValueAsDouble());
-
-        Logger.recordOutput("moverF/", rollerMoverF.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("moverF/", rollerMoverF.getPosition().getValueAsDouble());
-        Logger.recordOutput("moverF/", rollerMoverF.getMotorVoltage().getValueAsDouble());
 
         Logger.recordOutput("spinnerF/", rollerSpinnerF.getDeviceTemp().getValueAsDouble());
         Logger.recordOutput("spinnerF/", rollerSpinnerF.getPosition().getValueAsDouble());
