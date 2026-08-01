@@ -125,16 +125,14 @@ public class VisionIOSystem implements VisionIO{
                 result.getTimeStamp() > lastMultitag &&
                 //this result has low ambiguity
                 result.getResult().getTargets().get(0).poseAmbiguity < .2){
-
                     //we can do singletag
-
                 }else{
                     filteredResults.remove(i);
                     i--;
                 }
             }else{
                 if(result.getTimeStamp() > lastMultitag){
-                lastMultitag = result.getTimeStamp();
+                    lastMultitag = result.getTimeStamp();
                 }
             }
         }
@@ -143,6 +141,7 @@ public class VisionIOSystem implements VisionIO{
     //send the arraylist to the pose estimator, and any other relative information
     public void sendResults(){
         //call to estimate robot pose method
+        //Swerve.addVisionEstimate(filteredResults);
     }
 }
 
