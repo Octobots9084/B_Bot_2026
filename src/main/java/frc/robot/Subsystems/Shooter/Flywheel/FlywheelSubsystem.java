@@ -1,42 +1,15 @@
 package frc.robot.Subsystems.Shooter.Flywheel;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.DegreesPerSecond;
-import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static edu.wpi.first.units.Units.Feet;
+
+import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Pounds;
-import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Second;
-import static edu.wpi.first.units.Units.Seconds;
-import static edu.wpi.first.units.Units.Volts;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-
-import edu.wpi.first.math.controller.ArmFeedforward;
-import yams.gearing.GearBox;
-import yams.gearing.MechanismGearing;
-import yams.mechanisms.SmartMechanism;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
-import yams.motorcontrollers.SmartMotorController;
-import yams.motorcontrollers.SmartMotorControllerConfig;
-import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
-import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
-import yams.motorcontrollers.remote.TalonFXWrapper;
 
 
 public class FlywheelSubsystem extends SubsystemBase{
@@ -44,6 +17,7 @@ public class FlywheelSubsystem extends SubsystemBase{
 
     public static FlywheelSubsystem instance;
     public static double FlywheelCustomVelocity = 0.0;
+    public static double FlywheelDiameter = 10.16;
     public FlywheelTalonFX TX = new FlywheelTalonFX();
 
     public FlywheelSubsystem(){}
@@ -52,7 +26,7 @@ public class FlywheelSubsystem extends SubsystemBase{
       return instance;
     }
     private final FlyWheelConfig flyWheelConfig = new FlyWheelConfig()
-    .withDiameter(Inches.of(4))
+    .withDiameter(Centimeters.of(FlywheelDiameter))
     .withTelemetry("flywheelMech", TelemetryVerbosity.HIGH);
 
      public FlyWheel shooterFlywheel = new FlyWheel(flyWheelConfig, TX.flywheelTalonSMC);
