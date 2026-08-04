@@ -46,7 +46,7 @@ public class Robot extends LoggedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    container = new RobotContainer();
+    container = new RobotContainer(this);
 
     switch(Constants.currentMode) { //TODO log
       case REAL:

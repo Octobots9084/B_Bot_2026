@@ -27,12 +27,12 @@ public class RobotContainer {
     public ShooterSubsystem shooter;
     public Superstructure superstructure;
 
-    ButtonConfig buttons;
+    public ButtonConfig buttons;
 
     public final SendableChooser<Command> autoChooser; //dont touch this
 
 
-    public RobotContainer() {
+    public RobotContainer(Robot robot) {
 
         buttons = new ButtonConfig();
 
@@ -54,45 +54,10 @@ public class RobotContainer {
             case REPLAY:
             //laugh
         }
-    autoChooser = AutoBuilder.buildAutoChooser();
+   autoChooser = /* AutoBuilder.buildAutoChooser() */ null; //TODO put back when an auto decides excistence is a good idea
     // NAMED COMMANDS IN SWERVE
-    SmartDashboard.putData("Auto", autoChooser);
+  // SmartDashboard.putData("Auto", autoChooser); //TODO same here
     buttons.initTeleop();
-
-    if (Constants.currentMode == Mode.REPLAY) return;
-    
-    ButtonConfig.driverController.a().whileTrue(new Command() {
-        @Override
-            public void execute() {
-                intake.pivotYAM.setAngle(Degrees.of(0));
-            }
-
-    });
-
-    ButtonConfig.driverController.b().whileTrue(new Command() {
-        @Override
-            public void execute() {
-                intake.pivotYAM.setAngle(Degrees.of(90));
-            }
-
-    });
-
-    ButtonConfig.driverController.x().whileTrue(new Command() {
-        @Override
-            public void execute() {
-                intake.rollerYAM.setMechanismVelocitySetpoint(AngularVelocity.ofBaseUnits(0, AngularVelocityUnit.combine(Rotations, Second)));
-            }
-
-    });
-
-    ButtonConfig.driverController.y().whileTrue(new Command() {
-        @Override
-            public void execute() {
-                intake.rollerYAM.setMechanismVelocitySetpoint(AngularVelocity.ofBaseUnits(2, AngularVelocityUnit.combine(Rotations, Second)));
-            }
-
-    });
-
 
 
     }
