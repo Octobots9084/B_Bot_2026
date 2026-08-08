@@ -31,15 +31,15 @@ public class FlywheelSubsystem extends SubsystemBase{
 
      public FlyWheel shooterFlywheel = new FlyWheel(flyWheelConfig, TX.flywheelTalonSMC);
 
-     public AngularVelocity getVelocity() {
+     public AngularVelocity getFlywheelVelocity() {
         return shooterFlywheel.getSpeed();
      }
 
-     public Command run(AngularVelocity speed){
+     public Command FlywheelRun(AngularVelocity speed){
         return shooterFlywheel.run(speed);
      }
 
-     public void setVelocitySetpoint(AngularVelocity speed){
+     public void setFlywheelVelocitySetpoint(AngularVelocity speed){
         shooterFlywheel.setMechanismVelocitySetpoint(speed);
      }
      public void flywheelPeriodic(){
