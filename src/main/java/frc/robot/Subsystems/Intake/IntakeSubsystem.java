@@ -42,75 +42,19 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeStates state = IntakeStates.SAFE;
     public IntakeStates wantedIntakeState = IntakeStates.ZERO;
     public IntakeStates currentIntakeState = IntakeStates.ZERO;
-    public IntakeIO io = new IntakeIOSystem();
+    public IntakeIOTalonFX io = new IntakeIOTalonFX();
     public static IntakeSubsystem instance;
     
-        private SmartMotorControllerConfig smcConfigPivot = new SmartMotorControllerConfig(this)
-            .withControlMode(ControlMode.CLOSED_LOOP)
-            // Feedback Constants (PID Constants)
-            .withClosedLoopController(50, 0, 0)
-            .withTrapezoidalProfile(DegreesPerSecond.of(90), DegreesPerSecondPerSecond.of(45))
-            .withSimClosedLoopController(50, 0, 0)
-            // Feedforward Constants (? TODO no clue what these are)
-            // Telemetry name and verbosity level
-            .withTelemetry("IntakePivot", TelemetryVerbosity.HIGH)
-            // Gearing from the motor rotor to final shaft.
-            // In this example GearBox.fromReductionStages(3,4) is the same as GearBox.fromStages("3:1","4:1") which corresponds to the gearbox attached to your motor.
-            .withGearing(new MechanismGearing(GearBox.fromReductionStages(5, 4)))
-            // Motor properties to prevent over currenting.
-            .withMotorInverted(false)
-            .withIdleMode(MotorMode.COAST)
-            .withStatorCurrentLimit(Amps.of(40))
-            .withClosedLoopRampRate(Seconds.of(0.25))
-            .withOpenLoopRampRate(Seconds.of(0.25))
-            // Starting position is where your arm starts
-            .withStartingPosition(Degrees.of(0));
-            // Soft limit is applied to the SmartMotorControllers PID
-            //screw soft limits, this is a roller
-            //.withSoftLimits(Degrees.of(-20), Degrees.of(10));
-    
-    private SmartMotorControllerConfig smcConfigRoller = new SmartMotorControllerConfig(this)
-            .withControlMode(ControlMode.CLOSED_LOOP)
-            // Feedback Constants (PID Constants)
-            .withClosedLoopController(50, 0, 0)
-            .withTrapezoidalProfile(DegreesPerSecond.of(90), DegreesPerSecondPerSecond.of(45))
-            .withSimClosedLoopController(50, 0, 0)
-            // Feedforward Constants (? TODO no clue what these are)
-            // Telemetry name and verbosity level
-            .withTelemetry("IntakePivot", TelemetryVerbosity.HIGH)
-            // Gearing from the motor rotor to final shaft.
-            // In this example GearBox.fromReductionStages(3,4) is the same as GearBox.fromStages("3:1","4:1") which corresponds to the gearbox attached to your motor.
-            .withGearing(new MechanismGearing(GearBox.fromReductionStages(30, 1)))
-            // Motor properties to prevent over currenting.
-            .withMotorInverted(false)
-            .withIdleMode(MotorMode.COAST)
-            .withStatorCurrentLimit(Amps.of(40))
-            .withClosedLoopRampRate(Seconds.of(0.25))
-            .withOpenLoopRampRate(Seconds.of(0.25))
-            // Starting position is where your arm starts
-            .withStartingPosition(Degrees.of(0))
-            .withFollowers(Pair.of(((IntakeIOSystem) io).rollerSpinner, false));
-    
-        // Create our SmartMotorController from our Spark and config with the NEO.
-        public SmartMotorController pivotSMC = new TalonFXWrapper(((IntakeIOSystem) io).rollerMover,DCMotor.getKrakenX60(1),smcConfigPivot);
-        public SmartMotorController rollerSMC = new TalonFXWrapper(((IntakeIOSystem) io).rollerMover,DCMotor.getKrakenX60(1),smcConfigRoller);
-    
-        private PivotConfig config = new PivotConfig()
-        // Hard limit is applied to the simulation.
-        // Length and mass of your arm for sim.
-        // Telemetry name and verbosity for the arm.
-        .withHardLimits(Degrees.of(0), Degrees.of(360))
-        .withTelemetry("Intake", TelemetryVerbosity.HIGH);
-        
-    
-        public yams.mechanisms.positional.Pivot pivotYAM = new Pivot(config, pivotSMC);
-        public yams.mechanisms.positional.Pivot rollerYAM = new Pivot(config.clone(), rollerSMC);
+        public Pivot pivotYAM;
+        public Pivot rollerYAM;
     
     
     
-    
-    
-        public IntakeSubsystem() {instance = this;}
+        public IntakeSubsystem() {
+            instance = this;
+            pivotYAM = io.motorInstPivot(this);
+            rollerYAM = io.motorInstRoller(this);
+        }
     
         public void rotateP(double d) {
             pivotYAM.setAngle(Rotation.of(d));
@@ -193,8 +137,8 @@ public class IntakeSubsystem extends SubsystemBase {
             Logger.recordOutput("currState", currentIntakeState);
             Logger.recordOutput("wantState", wantedIntakeState);
     
-            Logger.recordOutput("currRPS", ((IntakeIOSystem) io).rollerSpinner.getVelocity().getValueAsDouble());
-            Logger.recordOutput("currAngle (0-130)", ((IntakeIOSystem) io).rollerMover.getPosition().getValueAsDouble());
+            Logger.recordOutput("currRPS", ((IntakeIOTalonFX) io).rollerSpinner.getVelocity().getValueAsDouble());
+            Logger.recordOutput("currAngle (0-130)", ((IntakeIOTalonFX) io).rollerMover.getPosition().getValueAsDouble());
     
             io.log();
         }

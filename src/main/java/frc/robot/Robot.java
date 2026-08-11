@@ -62,7 +62,7 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
        }
-    
+      CommandScheduler.getInstance().enable();
   }
 
   /**
