@@ -10,6 +10,61 @@ public class ShooterCalculator{
     double degreesCounterClockwiseToTarget;
     double wantedDegree;
     double currentDegree;
+
+
+    //velocity is relative to hub towards hub is potive away is negative left is negative right is positve
+    public void calculateShot(double xDistanceToTarget, double yDistanceToTarget, double robotVelocityY, double robotVelocityX){
+        double timeOfFlight = -1;
+        double timeOfFlightDifference = 1;
+        double virtualTargetXAdjustment;
+        double virtualTargetYAdjustment ;                               
+        double rotationRadians;
+        double shortestDistanceToTarget;
+        //the shot will be occilating from over shooting to under shooting because of the way time of flight changes, this conteracts that
+
+        //start with a time of flight 
+        //
+
+        while(timeOfFlightDifference > 0.01){
+            //we keep track of was time of flight last time, unless this is the first time the loop is running
+            double oldTimeOfFlight;
+            //what we thought the time of flight should be
+            if(timeOfFlight != -1){
+                oldTimeOfFlight = timeOfFlight;
+            }else{
+                oldTimeOfFlight = ;
+            }
+            virtualTargetXAdjustment = -1 * oldTimeOfFlight * robotVelocityX;
+            virtualTargetYAdjustment = -1* oldTimeOfFlight * robotVelocityY;
+            shortestDistanceToTarget = Math.hypot(xDistanceToTarget + virtualTargetXAdjustment, yDistanceToTarget+ virtualTargetYAdjustment);
+            //acutal time of flight acording to lut
+            //timeOfFlight = Lut.getTimeOfFlight(shortestDistanceToTarget);
+            //timeOfFlightDifference = timeOFFLight - oldTimeOfFlight
+
+            //get the old time of flight 
+           //generate a virtual target and get its time of flight
+           //subtract the time of flights and do some calculaus 
+           //once the time of flights stop changing end the loop
+           //check the latest time of flight in the lut
+           //get the values            
+          
+
+            timeOfFlightDifference = Math.abs(oldTimeOfFlight - timeOfFlight);
+        }
+
+        rotationRadians = Math.atan2(yDistanceToTarget + virtualTargetYAdjustment, xDistanceToTarget + virtualTargetXAdjustment);
+
+        //Rotation = rotationRradians
+        //hoodAngle = lut.get(shortestDistanceToTarget).getHoodAngle();
+        //flywheelSpeed = lut.get(shortestDistanceToTarget).getflywheelSpeed();
+    }
+
+
+
+
+
+
+
     
     /*
     use yToTarget and xToTarget to create a triangle than uses the pythagorian theorom to find the shortest distance
