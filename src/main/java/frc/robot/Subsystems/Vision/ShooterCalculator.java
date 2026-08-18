@@ -1,27 +1,72 @@
 package frc.robot.Subsystems.Vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
+import edu.wpi.first.math.interpolation.InverseInterpolator;
 
 //calculates where the robot needs to turn to and what angle and speed the hood needs
 public class ShooterCalculator{
+    
     private double rotation;
     private double hoodAngle;
     private double flywheelSpeed;
-
-    double degreeToTarget;
-    double distanceToTarget;
-    double degreesClockwiseToTarget;
-    double degreesCounterClockwiseToTarget;
-    double wantedDegree;
-    double currentDegree;
     //log this
-    int noSolutionCount =0;
-
+    public boolean noSolutionFound;
 
     public ShooterCalculator(double rotation, double hoodAngle, double flywheelSpeed){
         this.rotation = rotation;
         this.hoodAngle = hoodAngle;
         this.flywheelSpeed = flywheelSpeed;
+    }
+
+    //lut!!
+
+    //takes in distance, returns time of flight
+    public static final InterpolatingDoubleTreeMap timeOfFlightMapFerry =
+        new InterpolatingDoubleTreeMap();
+
+    //takes in time of flight, returns flywheel speed
+    public static final InterpolatingDoubleTreeMap flywheelSpeedMapFerry =
+        new InterpolatingDoubleTreeMap();
+
+    //takes in time of flight, returns hood angle 
+    public static final InterpolatingTreeMap<Double, Rotation2d> hoodAngleMapFerry =
+        new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
+
+    //takes in distance returns time of flight
+    public static final InterpolatingDoubleTreeMap timeOfFlightMapHub =
+        new InterpolatingDoubleTreeMap();
+
+    //takes in time of flight, returns flywheel speed
+    public static final InterpolatingDoubleTreeMap flywheelSpeedMapHub =
+        new InterpolatingDoubleTreeMap();
+
+    //takes in distance returns time of flight
+    public static final InterpolatingTreeMap<Double, Rotation2d> hoodAngleMapHub =
+        new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
+
+
+    //actual lut values
+     static {
+        //takes in distance, returns time of flight
+        timeOfFlightMapFerry.put(1.47,0.772);
+
+        //takes in time of flight, returns flywheel speed
+        flywheelSpeedMapFerry.put(1.47,14.0);
+
+        //takes in time of flight, returns hood angle 
+        hoodAngleMapFerry.put(1.47,new Rotation2d(58.0*Math.PI/180.0));
+
+        //takes tof, returns hood angle
+        hoodAngleMapHub.put(1.442809759,new Rotation2d(75.0*Math.PI/180.0));
+
+        //takes in time of flight, returns flywheel speed
+        flywheelSpeedMapHub.put(1.442809759,26.0);
+
+        //takes in distance, returns time of flight
+        timeOfFlightMapHub.put(1.442809759,1.103235);
     }
 
     public double getRotation(){
@@ -56,10 +101,10 @@ public class ShooterCalculator{
             virtualTargetYAdjustment = -1* timeOfFlight * robotVelocityY;
             shortestDistanceToTarget = Math.hypot(xDistanceToTarget + virtualTargetXAdjustment, yDistanceToTarget+ virtualTargetYAdjustment);
             //timeOfFlightLut = Lut.getTimeOfFlight(shortestDistanceToTarget);
-            //projectileSpeed = Lut.getProjectileSpeed(shortestDistanceToTarget);
+            //projectileSpeed = Lut.getShooterSpeed(timeOfFlight);
             timeOfFlightDifference = timeOfFlight - timeOfFlightLut;
             timeOfFlightDifferenceDerivative = 1 + (((xDistanceToTarget + virtualTargetXAdjustment) *robotVelocityX) + ((yDistanceToTarget + virtualTargetYAdjustment) * robotVelocityY))/
-            (shortestDistanceToTarget*projectileSpeed); 
+                (shortestDistanceToTarget*projectileSpeed); 
             
             previousTimeOfFlight = timeOfFlight;
             timeOfFlight = previousTimeOfFlight - timeOfFlightDifference/timeOfFlightDifferenceDerivative;
@@ -69,7 +114,10 @@ public class ShooterCalculator{
         }
         //log this
         if(iterations > 25){
-            noSolutionCount++;
+            //think about what to do if true
+            noSolutionFound = true;
+        }else{
+            noSolutionFound = false;
         }
 
         rotationRadians = Math.atan2(yDistanceToTarget + virtualTargetYAdjustment, xDistanceToTarget + virtualTargetXAdjustment);
