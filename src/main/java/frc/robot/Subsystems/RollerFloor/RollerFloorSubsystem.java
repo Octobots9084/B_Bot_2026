@@ -7,11 +7,22 @@ public class RollerFloorSubsystem extends SubsystemBase {
     public RollerFloorStates state = RollerFloorStates.SAFE;
     public RollerFloorStates wantedRollerState = RollerFloorStates.SAFE;
     public RollerFloorStates currentRollerState = RollerFloorStates.SAFE;
+    public static RollerFloorSubsystem inst = new RollerFloorSubsystem();
+
     @Override
     public void periodic() {
         handleStateTransitions();
         applyStates();
         logging();
+    }
+
+
+public RollerFloorSubsystem() {
+    inst = this;
+}
+
+    public static RollerFloorSubsystem getInstance() {
+        return inst;
     }
 
     private void handleStateTransitions() {
