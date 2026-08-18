@@ -13,10 +13,9 @@ import org.photonvision.PhotonCamera;
          return false;
      }
 
-     public default ArrayList<ArrayList<FilteredCameraResults>> chooseResults(ArrayList<ArrayList<FilteredCameraResults>> FilteredResults){
-            return FilteredResults;
+     public default void chooseResults(ArrayList<FilteredCameraResults> filteredResults){
      }
 
-     public default void sendResults(ArrayList<ArrayList<FilteredCameraResults>> FilteredResults){
+     public default void sendResults(ArrayList<FilteredCameraResults> filteredResults){
      }
  }

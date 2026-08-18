@@ -30,18 +30,15 @@ public class FilteredCameraResults{
         this.result = result;
         timeStamp = result.getTimestampSeconds();
 
-
-        //the list of targets from the result gets filled with targets that are not to ambiguis
+        //the list of targets from the result gets filled with targets
         for(int i = 0; i< result.getTargets().size(); i++){
-            if(result.getTargets().get(i).poseAmbiguity<0.2){
                 targets.add((result.getTargets()).get(i));
-            }
         }        
 
         numTargets = targets.size();
 
         //calculate pose based on if your single or multitag
-        if(numTargets >1){
+        if(numTargets > 1){
             visionEst = photonEstimator.estimateCoprocMultiTagPose(result);
         }
 
@@ -58,4 +55,7 @@ public class FilteredCameraResults{
         return timeStamp;
     }
 
+    public PhotonPipelineResult getResult(){
+        return result;
+    }
 }

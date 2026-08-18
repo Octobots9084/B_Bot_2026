@@ -2,14 +2,24 @@ package frc.robot.Subsystems.Vision;
 
 // Represents a PhotonVision camera
 import org.photonvision.PhotonCamera;
+//i lowkey forgot why this is here
+import java.nio.file.DirectoryStream.Filter;
+//holds data types, more specific then list
 import java.util.ArrayList;
+//holds data types, needed for unread results
 import java.util.List;
 //Contains all vision detections from a single camera frame
 import org.photonvision.targeting.PhotonPipelineResult;
 // Represents one detected target (AprilTag, reflective tape, etc.)
 import org.photonvision.targeting.PhotonTrackedTarget;
+//timer that starts when the match starts
+import edu.wpi.first.wpilibj.Timer;
 // Calculates robot position on the field using detected AprilTags
 import org.photonvision.PhotonPoseEstimator;
+//the constants we made
+import frc.robot.Constants;
+
+
 
 public class VisionIOSystem implements VisionIO{
 
@@ -21,6 +31,14 @@ public class VisionIOSystem implements VisionIO{
 
     private final PhotonCamera[] cameras;
     private final PhotonPoseEstimator[] photonEstimators;
+    public static double lastMultitag = -1;
+    //all the filteredResults from every camera from every unread reading
+    public ArrayList<FilteredCameraResults> filteredResults = new ArrayList<>();
+    //an arraylist of all of the unread results from each camera is created 
+    public ArrayList<List<PhotonPipelineResult>> cameraResults = new ArrayList<>();
+
+    public List<PhotonPipelineResult> unreadResults = new ArrayList<>();
+
 
     //constructor for cameras and pose estimator
     public VisionIOSystem(){
@@ -31,39 +49,39 @@ public class VisionIOSystem implements VisionIO{
             new PhotonCamera("Camera 4"), 
             new PhotonCamera("Camera 5")
     };
-
+    //need the real values in constants
     photonEstimators = new PhotonPoseEstimator[] {
-    //         new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight), 
-    //         new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontLeft),
-    //         new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamLeft),
-    //         new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight),  
-    //         new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamBack)
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight), 
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontLeft),
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamLeft),
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight),  
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamBack)
     };
 
     }
 
     public void periodic(){
-        PhotonPoseEstimator photonEstimator;
-        //all the filteredResults from every camera from every unread reading
-        ArrayList<ArrayList<FilteredCameraResults>> FilteredResults = new ArrayList<>();
-        //an arraylist of all of the unread results from each camera is created 
-        List<List<PhotonPipelineResult>> cameraResults = new ArrayList<>();
+        //previous arraylists get emptied
+        cameraResults.clear();
+        filteredResults.clear();
+        unreadResults.clear();    
+
 
         //all the unread results for each camera get added to a list
-        for(int i= 0; i < cameras.length; i++){
-            cameraResults.add(cameras[i].getAllUnreadResults());
+        for(int h= 0; h < cameras.length; h++){
+            unreadResults = cameras[h].getAllUnreadResults();
+            cameraResults.add(unreadResults);
         }
 
         
         //fill FilteredResults with FilteredCameraResultsObjects
-        //FilteredResults = filterResults(cameraResults, FilteredResults, photonEstimator);
+        filterResults(cameraResults, photonEstimators);
 
-        //remove FilteredCameraResults objects that see less tags than any of the other cameras
-        FilteredResults = chooseResults(FilteredResults);
+        chooseResults();
        
 
         //send the FilteredCameraResults arraylist to the pose esimator
-        sendResults(FilteredResults);
+        sendResults();
 
         //log numTags, if the cameras were connected, and the confidence
     }
@@ -83,50 +101,47 @@ public class VisionIOSystem implements VisionIO{
         }
 
     //turns results into filtered results objects
-    public static ArrayList<ArrayList<FilteredCameraResults>> filterResults(ArrayList<ArrayList<PhotonPipelineResult>> results, ArrayList<ArrayList<FilteredCameraResults>> FilteredResults, PhotonPoseEstimator photonEstimator){
-        for(int h = 0; h < results.size(); h++){
-            ArrayList<FilteredCameraResults> unreadResults = new ArrayList<>();
-            for(int i = 0; i < results.get(h).size(); i++){
-                PhotonPipelineResult result = results.get(h).get(i);
-                FilteredCameraResults filteredResult = new FilteredCameraResults(result, photonEstimator);
-                unreadResults.add(filteredResult);
+    public void filterResults(ArrayList<List<PhotonPipelineResult>> results, PhotonPoseEstimator[] photonEstimator){
+        for(int c =0; c < results.size(); c++){
+            for(int i = 0; i < results.get(c).size(); i++){
+                PhotonPipelineResult result = results.get(c).get(i);
+                FilteredCameraResults filteredResult = new FilteredCameraResults(result, photonEstimator[c]);
+                filteredResults.add(filteredResult);
             }
-            FilteredResults.add(unreadResults);
         }
-        return FilteredResults;
     }
 
-    public ArrayList<ArrayList<FilteredCameraResults>> chooseResults(ArrayList<ArrayList<FilteredCameraResults>> FilteredResults){
-        int numOfResultsPerCamera = FilteredResults.get(0).size();
-        //loops through once for each unreadResult
-        for(int h = 0; h<numOfResultsPerCamera;h++){
-            //needs to get logged
-            int mostTargets = 0;
-            //figures out whats the most amount of targets any camera saw
-            for(int i = 0; i < FilteredResults.size(); i++){
-                if(FilteredResults.get(i).get(h).getNumTargets() > mostTargets){
-                    mostTargets = FilteredResults.get(i).get(h).getNumTargets();
+    //keeps all multitag targets and removes single tag targets unless we dont have a multitag target from within .1
+    public void chooseResults(){
+        for(int i =0; i< filteredResults.size(); i++){
+            FilteredCameraResults result = filteredResults.get(i);
+            if(result.getNumTargets() == 0){
+                filteredResults.remove(i);
+                i--;
+            }else if(result.getNumTargets() == 1){
+                //there hasn't been a multitag in .1 seconds
+                if(Timer.getFPGATimestamp() -0.1 > lastMultitag && 
+                //this result comes after the last multitag
+                result.getTimeStamp() > lastMultitag &&
+                //this result has low ambiguity
+                result.getResult().getTargets().get(0).poseAmbiguity < .2){
+                    //we can do singletag
+                }else{
+                    filteredResults.remove(i);
+                    i--;
                 }
-            }
-            //none of the cameras saw any targets )=
-            if(mostTargets == 0){
-                //TODO put something special here or delete it WILL CAUSE ERRORS OTHERWISE!!!!
-            }
-            else{
-                //only keeps results that have the most amount of targets
-                for(int i = 0; i < FilteredResults.size(); i++){
-                    if(FilteredResults.get(i).get(h).getNumTargets() != mostTargets){
-                        FilteredResults.get(i).remove(h);
-                    }
+            }else{
+                if(result.getTimeStamp() > lastMultitag){
+                    lastMultitag = result.getTimeStamp();
                 }
             }
         }
-        return FilteredResults;
     }
-    
+
     //send the arraylist to the pose estimator, and any other relative information
-    public void sendResults(ArrayList<ArrayList<FilteredCameraResults>> FilteredResults){
-
+    public void sendResults(){
+        //call to estimate robot pose method
+        //Swerve.addVisionEstimate(filteredResults);
     }
 }
 
