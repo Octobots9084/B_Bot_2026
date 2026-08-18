@@ -100,23 +100,23 @@ public class Superstructure {
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
             case AUTOHUB:
-                shooter.wantedShooterState = ShooterStates.SHOOT;
+                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
                 intake.wantedIntakeState = IntakeStates.ELEPHANTIASIS;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
             case BUMP:
-                shooter.wantedShooterState = ShooterStates.PRELOAD;
+                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
                 intake.wantedIntakeState = IntakeStates.SAFE;
                 floor.wantedRollerState = RollerFloorStates.SAFE;
                 
             case FERRY:
-                shooter.wantedShooterState = ShooterStates.SHOOT;
+                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
                 intake.wantedIntakeState = IntakeStates.ELEPHANTIASIS;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
                 break;
 
             case HUB:
-                shooter.wantedShooterState = ShooterStates.SHOOT;
+                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
                 intake.wantedIntakeState = IntakeStates.ELEPHANTIASIS;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
                 break;

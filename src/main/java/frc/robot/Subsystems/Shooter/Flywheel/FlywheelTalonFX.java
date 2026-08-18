@@ -29,6 +29,7 @@ public class FlywheelTalonFX{
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,3)))
     .withMotorInverted(false)
     .withIdleMode(MotorMode.COAST)
+    .withTrapezoidalProfile(FlywheelSubsystem.maxVelocity, FlywheelSubsystem.maxAcceleration)
     .withStatorCurrentLimit(Amps.of(FlywheelSubsystem.FlywheelStatorLimit));
     public SmartMotorController flywheelTalon2 = new TalonFXWrapper(new TalonFX(2), DCMotor.getKrakenX60(1), flywheelFollowerSmc);
     public SmartMotorController flywheelTalon3 = new TalonFXWrapper(new TalonFX(3), DCMotor.getKrakenX60(1), flywheelFollowerSmc);

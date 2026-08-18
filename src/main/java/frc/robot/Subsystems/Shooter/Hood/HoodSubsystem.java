@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.Shooter.Hood;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Pounds;
@@ -13,7 +14,8 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class HoodSubsystem extends SubsystemBase{
     public static double HoodStatorLimit = 40; //TODO replace with real stuff
-
+    public static Angle hoodTolerance = Degrees.of(0);
+    
     public HoodTalonFX HoodTX = new HoodTalonFX();
     public static HoodSubsystem instance;
     public double HoodCustomVelocity = 0d;
