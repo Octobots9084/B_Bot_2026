@@ -1,6 +1,7 @@
 package frc.robot.Subsystems.Shooter.Feeder;
 
 import static edu.wpi.first.units.Units.Centimeters;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
@@ -12,11 +13,15 @@ import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class FeederSubsystem extends SubsystemBase{
+  public static double feederShootVelocity = 0;
+  public static double feederReverseVelocity = -0;
+  public FeederStates wantedFeederState = FeederStates.SAFE;
+  public FeederStates FeederState = FeederStates.SAFE;
   public static double feederStatorLimit = 40; //TODO replace
   private Distance FeederDiameter = Centimeters.of(60);
   public FeederTalonFX FeederTX = new FeederTalonFX();
   public static FeederSubsystem instance;
-  public static FeederSubsystem GetFeederInstance(){
+  public static FeederSubsystem getInstance(){
     return instance;
   }
   private final FlyWheelConfig FeederConfig = new FlyWheelConfig()
@@ -37,9 +42,18 @@ public class FeederSubsystem extends SubsystemBase{
      }
      public void feederPeriodic(){
       feederFlywheel.updateTelemetry();
+      setFeederVelocitySetpoint(RPM.of(FeederState.enumVelocity));
      }
    public void feederSimPeriodic(){
       feederFlywheel.simIterate();
+      FeederRun(RPM.of(FeederState.enumVelocity));
      }
-  
+      @Override
+    public void periodic() {
+        logging();
+    }
+    public void logging() {
+
+    }
 }
+

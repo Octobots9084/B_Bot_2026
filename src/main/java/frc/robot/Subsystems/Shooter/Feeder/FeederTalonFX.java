@@ -15,7 +15,7 @@ import yams.motorcontrollers.remote.TalonFXWrapper;
 public class FeederTalonFX {
     private TalonFX MainMotor = new TalonFX(6);
     private TalonFX FollowerMotor = new TalonFX(7);
-    public SmartMotorControllerConfig FeederFollowerSMCConfig = new SmartMotorControllerConfig(FeederSubsystem.GetFeederInstance())
+    public SmartMotorControllerConfig FeederFollowerSMCConfig = new SmartMotorControllerConfig(FeederSubsystem.getInstance())
     .withClosedLoopController(0.1,0,0)
     .withSimClosedLoopController(0.1,0,0)
     .withControlMode(ControlMode.CLOSED_LOOP)

@@ -15,6 +15,13 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public enum FeederStates {
-    
-    
+
+    SAFE(0),
+    FIRE(FeederSubsystem.feederShootVelocity),
+    REVERSE(FeederSubsystem.feederReverseVelocity);
+    public final double enumVelocity;
+    private FeederStates(double enumVelocity){
+        this.enumVelocity = enumVelocity;
+    }
+
 }
