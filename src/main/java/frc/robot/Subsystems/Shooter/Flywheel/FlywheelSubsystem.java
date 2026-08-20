@@ -50,15 +50,14 @@ public class FlywheelSubsystem extends SubsystemBase{
      public void setFlywheelVelocitySetpoint(AngularVelocity speed){
         shooterFlywheel.setMechanismVelocitySetpoint(speed);
      }
-     public void flywheelPeriodic(){
+     public void periodic(){
       currentState = wantedFlywheelState;
       if(currentState != FlywheelStates.CUSTOMFIRE){
          setFlywheelVelocitySetpoint(RPM.of(currentState.enumVelocity));
       }
-      
       shooterFlywheel.updateTelemetry();
      }
-   public void flywheelSimPeriodic(){
+   public void simulationPeriodic(){
       currentState = wantedFlywheelState;
       if(currentState != FlywheelStates.CUSTOMFIRE){
          FlywheelRun(RPM.of(currentState.enumVelocity));

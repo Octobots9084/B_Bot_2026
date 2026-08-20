@@ -74,7 +74,6 @@ public class Robot extends LoggedRobot {
    */
   @Override
   public void robotPeriodic() {
-    FlywheelSubsystem.getInstance().flywheelPeriodic();
     CommandScheduler.getInstance().run();
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
   }
@@ -168,6 +167,5 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
-    FlywheelSubsystem.getInstance().flywheelSimPeriodic();
   }
 }

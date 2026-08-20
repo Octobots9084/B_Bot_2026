@@ -30,7 +30,15 @@ public class RollerFloorSubsystem extends SubsystemBase {
 
         
         RollerFlywheel.updateTelemetry();
-        setFeederVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
+        setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
+                handleStateTransitions();
+                applyStates();
+                logging();
+            }
+    public void simulationPeriodic() {
+        RollerFlywheel.updateTelemetry();
+        RollerFlywheel.simIterate();
+        setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
         handleStateTransitions();
         applyStates();
         logging();
@@ -67,7 +75,7 @@ public class RollerFloorSubsystem extends SubsystemBase {
     }
 
     private void applyStates () {
-        
+        setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
     }
     
     private void logging() {
@@ -87,16 +95,16 @@ public class RollerFloorSubsystem extends SubsystemBase {
     return RollerFlywheel;
    }
 
-     public AngularVelocity getFeederVelocity() {
-        return getRollerFlywheel().getSpeed();
+     public AngularVelocity getRollerVelocity() {
+        return RollerFlywheel.getSpeed();
      }
 
-     public Command FeederRun(AngularVelocity speed){
-        return getRollerFlywheel().run(speed);
+     public Command Run(AngularVelocity speed){
+        return RollerFlywheel.run(speed);
      }
 
-     public void setFeederVelocitySetpoint(AngularVelocity speed){
-        getRollerFlywheel().setMechanismVelocitySetpoint(speed);
+     public void setRollorFloorVelocitySetpoint(AngularVelocity speed){
+        RollerFlywheel.setMechanismVelocitySetpoint(speed);
      }
 
 }

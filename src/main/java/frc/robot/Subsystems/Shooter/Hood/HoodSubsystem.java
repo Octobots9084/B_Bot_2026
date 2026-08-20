@@ -37,10 +37,10 @@ public class HoodSubsystem extends SubsystemBase{
    public Angle getAngle(){
     return hood.getAngle();
    }
-   public void hoodPeriodic(){
+   public void periodic(){
     hood.updateTelemetry();
    }
-   public void hoodSimPeriodic(){
+   public void  simulationPeriodic(){
     hood.simIterate();
    }
 }
