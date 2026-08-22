@@ -10,6 +10,7 @@ import frc.robot.Subsystems.Shooter.Flywheel.FlywheelStates;
 import frc.robot.Subsystems.Shooter.Flywheel.FlywheelSubsystem;
 import frc.robot.Subsystems.Shooter.Hood.HoodStates;
 import frc.robot.Subsystems.Shooter.Hood.HoodSubsystem;
+import frc.robot.Subsystems.Vision.ShooterCalculator;
 
 public class ShooterSubsystem extends SubsystemBase {
     public ShooterStates wantedShooterState = ShooterStates.SAFE;
@@ -46,8 +47,6 @@ public class ShooterSubsystem extends SubsystemBase {
             break;
             }
         }
-
-    
 
     public void applyStates () {
         switch(currentShooterState){

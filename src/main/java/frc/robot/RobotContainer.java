@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Second;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.AngularVelocityUnit;
 import edu.wpi.first.units.measure.Angle;
@@ -29,7 +28,8 @@ public class RobotContainer {
 
     public ButtonConfig buttons;
 
-    public final SendableChooser<Command> autoChooser; //dont touch this
+// Dashboard inputs
+  final SendableChooser<Command> autoChooser;
 
 
     public RobotContainer(Robot robot) {
@@ -54,12 +54,28 @@ public class RobotContainer {
             case REPLAY:
             //laugh
         }
-   autoChooser = /* AutoBuilder.buildAutoChooser() */ null; //TODO put back when an auto decides excistence is a good idea
-    // NAMED COMMANDS IN SWERVE
-  // SmartDashboard.putData("Auto", autoChooser); //TODO same here
+  
     buttons.initTeleop();
 
 
-    }
+
+       autoChooser = AutoBuilder.buildAutoChooser();
+    // NAMED COMMANDS IN SWERVE
+    SmartDashboard.putData("Auto", autoChooser);
+    ButtonConfig buttons = new ButtonConfig();
+    buttons.initTeleop();
+
+  }
+
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+    // return new InstantCommand();
+  }
 }
 

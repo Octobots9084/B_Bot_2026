@@ -45,17 +45,14 @@ public class VisionIOSystem implements VisionIO{
     cameras = new PhotonCamera[] {
             new PhotonCamera("Camera 1"), 
             new PhotonCamera("Camera 2"),
-            new PhotonCamera("Camera 3"), 
-            new PhotonCamera("Camera 4"), 
-            new PhotonCamera("Camera 5")
+            new PhotonCamera("Camera 3")
     };
     //need the real values in constants
     photonEstimators = new PhotonPoseEstimator[] {
-            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight), 
-            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontLeft),
+            
             new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamLeft),
             new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight),  
-            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamBack)
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.shooterCam)
     };
 
     }

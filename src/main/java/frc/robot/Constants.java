@@ -26,18 +26,13 @@ public class Constants {
    private static final double highCamPitch = Units.degreesToRadians(20);
   private static final double LowCamPitch = Units.degreesToRadians(28.5);
 
-    //TODO set to real values i lowkey stole this from rui
-    public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.28,0.195,0.41),
-      new Rotation3d(0, -highCamPitch, (-30/180.0)*Math.PI+Math.PI));
-  //-20 +30
-  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.135,0.24),
-      new Rotation3d(0, -LowCamPitch, (30/180.0)*Math.PI + Math.PI));
-  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.265, 0.36, .465),
+    //thank you ethan
+  public static final Transform3d shooterCam = new Transform3d(new Translation3d(0,0.32,0.29162),
+      new Rotation3d(0, -highCamPitch, 0));
+  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.349,0.092,0.215),
+      new Rotation3d(0, -highCamPitch, 3*(Math.PI)/2));
+  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(0.349, 0.092, 0.215),
       new Rotation3d(0, -highCamPitch, Math.PI/2));
-  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.27,-0.36, 0.245),
-      new Rotation3d(0, -LowCamPitch, 3.0*Math.PI/2.0));
-  public static final Transform3d robotToCamBack = new Transform3d(new Translation3d(-0.28,0.09, 0.42), //set these values
-      new Rotation3d(0, -highCamPitch,0));
 
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
