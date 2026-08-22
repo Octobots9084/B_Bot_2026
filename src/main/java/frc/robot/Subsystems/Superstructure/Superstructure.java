@@ -24,7 +24,9 @@ public class Superstructure {
 
     //@Override
      public void periodic() {
-         handleStateTransitions();
+
+        if (currentState != wantedState)        
+            handleStateTransitions();
          applyStates();
 
         Logger.recordOutput("wantedState", this.wantedState);
@@ -63,18 +65,22 @@ public class Superstructure {
     private void handleStateTransitions() {
         switch (wantedState) {
             case AUTOFERRY:
+                if (intake.currentIntakeState == IntakeStates.REVERSEINTAKE) intake.wantedIntakeState = IntakeStates.INTAKING;
                 currentState = wantedState;
                 break;
             case AUTOHUB:
+                if (intake.currentIntakeState == IntakeStates.REVERSEINTAKE) intake.wantedIntakeState = IntakeStates.INTAKING;
                 currentState = wantedState;
                 break;
             case BUMP:
                 currentState = wantedState;
                 break;
             case FERRY:
+                if (intake.currentIntakeState == IntakeStates.REVERSEINTAKE) intake.wantedIntakeState = IntakeStates.INTAKING;
                 currentState = wantedState;
                 break;
             case HUB:
+                if (intake.currentIntakeState == IntakeStates.REVERSEINTAKE) intake.wantedIntakeState = IntakeStates.INTAKING;
                 currentState = wantedState;
                 break;
             case SAFE:
@@ -96,41 +102,102 @@ public class Superstructure {
         switch (currentState) {
             case AUTOFERRY:
                 shooter.wantedShooterState = ShooterStates.SAFE;
-                intake.wantedIntakeState = IntakeStates.ELEPHANTIASIS;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
             case AUTOHUB:
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
-                intake.wantedIntakeState = IntakeStates.ELEPHANTIASIS;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
+                floor.wantedRollerState = switch(shooter.currentShooterState) {
+                    case FERRY -> RollerFloorStates.SHOOT;
+                    case FIXEDFIRE -> RollerFloorStates.SHOOT;
+                    case HUB -> RollerFloorStates.SHOOT;
+                    case SAFE -> RollerFloorStates.SAFE;
+                    case TRENCH -> RollerFloorStates.SAFE;
+                    case ZEROING -> RollerFloorStates.SAFE;
+                    default -> floor.wantedRollerState;        
+                };
+
             case BUMP:
-                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
-                intake.wantedIntakeState = IntakeStates.SAFE;
+                if (shooter.currentShooterState == ShooterStates.FIXEDFIRE || shooter.currentShooterState == ShooterStates.FERRY)
+                    shooter.wantedShooterState = ShooterStates.SAFE;
+                    
                 floor.wantedRollerState = RollerFloorStates.SAFE;
+
+                floor.wantedRollerState = switch(intake.currentIntakeState) {
+                    case ELEPHANTIASIS -> RollerFloorStates.SAFE;
+                    case EXTENDED -> RollerFloorStates.SAFE;
+                    case INTAKING -> RollerFloorStates.SAFE;
+                    case REVERSEINTAKE -> RollerFloorStates.REVERSE;
+                    case SAFE -> RollerFloorStates.SAFE;
+                    case ZERO -> RollerFloorStates.SAFE;
+                    default -> floor.wantedRollerState;
+            
+                };
                 
             case FERRY:
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
-                intake.wantedIntakeState = IntakeStates.ELEPHANTIASIS;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
+                
+                floor.wantedRollerState = switch(shooter.currentShooterState) {
+                    case FERRY -> RollerFloorStates.SHOOT;
+                    case FIXEDFIRE -> RollerFloorStates.SHOOT;
+                    case HUB -> RollerFloorStates.SHOOT;
+                    case SAFE -> RollerFloorStates.SAFE;
+                    case TRENCH -> RollerFloorStates.SAFE;
+                    case ZEROING -> RollerFloorStates.SAFE;
+                    default -> floor.wantedRollerState;        
+                };
+
+                //"unless intake commanded otherwise no reverse intake" isnt that the only way the intake reverses
                 break;
 
             case HUB:
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
-                intake.wantedIntakeState = IntakeStates.ELEPHANTIASIS;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
+
+                floor.wantedRollerState = switch(shooter.currentShooterState) {
+                    case FERRY -> RollerFloorStates.SHOOT;
+                    case FIXEDFIRE -> RollerFloorStates.SHOOT;
+                    case HUB -> RollerFloorStates.SHOOT;
+                    case SAFE -> RollerFloorStates.SAFE;
+                    case TRENCH -> RollerFloorStates.SAFE;
+                    case ZEROING -> RollerFloorStates.SAFE;
+                    default -> floor.wantedRollerState;        
+                };
+
                 break;
 
             case SAFE:
                 shooter.wantedShooterState = ShooterStates.SAFE;
-                intake.wantedIntakeState = IntakeStates.SAFE;
                 floor.wantedRollerState = RollerFloorStates.SAFE;
+
+                floor.wantedRollerState = switch(intake.currentIntakeState) {
+                    case ELEPHANTIASIS -> RollerFloorStates.SAFE;
+                    case EXTENDED -> RollerFloorStates.SAFE;
+                    case INTAKING -> RollerFloorStates.SAFE;
+                    case REVERSEINTAKE -> RollerFloorStates.REVERSE;
+                    case SAFE -> RollerFloorStates.SAFE;
+                    case ZERO -> RollerFloorStates.SAFE;
+                    default -> floor.wantedRollerState;
+            
+                };
+
                 break;
 
             case TRENCH:
-                shooter.wantedShooterState = ShooterStates.SAFE;
-                intake.wantedIntakeState = IntakeStates.INTAKING;
-                floor.wantedRollerState = RollerFloorStates.SAFE;
+                shooter.wantedShooterState = ShooterStates.TRENCH;
+                
+                floor.wantedRollerState = switch(intake.currentIntakeState) {
+                    case ELEPHANTIASIS -> RollerFloorStates.SAFE;
+                    case EXTENDED -> RollerFloorStates.SAFE;
+                    case INTAKING -> RollerFloorStates.SAFE;
+                    case REVERSEINTAKE -> RollerFloorStates.REVERSE;
+                    case SAFE -> RollerFloorStates.SAFE;
+                    case ZERO -> RollerFloorStates.SAFE;
+                    default -> floor.wantedRollerState;
+            
+                };
                 break;
             case ZEROING:
                 //TODO when something actually exists for the zeroing algorithm
