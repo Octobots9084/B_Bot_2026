@@ -59,12 +59,11 @@ public class RobotContainer {
 
 
 
-       autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser();
     // NAMED COMMANDS IN SWERVE
     SmartDashboard.putData("Auto", autoChooser);
     ButtonConfig buttons = new ButtonConfig();
     buttons.initTeleop();
-
   }
 
 

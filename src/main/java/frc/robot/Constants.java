@@ -24,7 +24,6 @@ public class Constants {
     public static double depotTrenchY = 0.625;
 
    private static final double highCamPitch = Units.degreesToRadians(20);
-  private static final double LowCamPitch = Units.degreesToRadians(28.5);
 
     //thank you ethan
   public static final Transform3d shooterCam = new Transform3d(new Translation3d(0,0.32,0.29162),
