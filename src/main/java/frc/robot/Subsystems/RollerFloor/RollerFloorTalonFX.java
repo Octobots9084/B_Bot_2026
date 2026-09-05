@@ -28,12 +28,13 @@ public class RollerFloorTalonFX {
     .withClosedLoopRampRate(Seconds.of(0.25))
     .withOpenLoopRampRate(Seconds.of(0.25))
     .withIdleMode(MotorMode.BRAKE);
-    public SmartMotorController FloorFollowerSmc = new TalonFXWrapper(FollowerMotor, DCMotor.getKrakenX60(1), FloorFollowerSMCConfig);
+    public SmartMotorController FloorFollowerSmc;
     public SmartMotorControllerConfig FloorSMCConfig = FloorFollowerSMCConfig.clone()
     .withLooselyCoupledFollowers(FloorFollowerSmc);
     public SmartMotorController FloorMotor;
 
     public void init() {
-        FloorMotor = new TalonFXWrapper(MainMotor, DCMotor.getKrakenX60(1), FloorSMCConfig);
+        FloorMotor = new TalonFXWrapper(MainMotor, DCMotor.getKrakenX44(1), FloorSMCConfig);
+        FloorFollowerSmc = new TalonFXWrapper(FollowerMotor, DCMotor.getKrakenX44(1), FloorFollowerSMCConfig);
     }
 }

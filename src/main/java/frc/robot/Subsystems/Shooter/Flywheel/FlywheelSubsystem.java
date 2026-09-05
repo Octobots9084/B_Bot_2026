@@ -23,21 +23,25 @@ public class FlywheelSubsystem extends SubsystemBase{
     public static double FlywheelStatorLimit = 40; //replace with real
     public static FlywheelStates currentState = FlywheelStates.SAFE;
     public static FlywheelStates wantedFlywheelState = FlywheelStates.SAFE;
-    public static FlywheelSubsystem instance;
+    public static FlywheelSubsystem instance = null;
     public static double FlywheelCustomVelocity = 0.0;
     public static double FlywheelDiameter = 10.16;
-    public FlywheelTalonFX TX = new FlywheelTalonFX();
-
-    public FlywheelSubsystem(){}
-
+ public FlyWheel shooterFlywheel;
+ private final FlyWheelConfig flyWheelConfig;
+   public FlywheelTalonFX TX;
+   
+    public FlywheelSubsystem(){
+      instance = this;
+      TX = new FlywheelTalonFX();
+     flyWheelConfig = new FlyWheelConfig()
+    .withDiameter(Centimeters.of(FlywheelDiameter))
+    .withTelemetry("flywheelMech", TelemetryVerbosity.HIGH);
+    shooterFlywheel = new FlyWheel(flyWheelConfig, TX.flywheelTalonSMC);
+   
+    }
     public static FlywheelSubsystem getInstance(){
       return instance;
     }
-    private final FlyWheelConfig flyWheelConfig = new FlyWheelConfig()
-    .withDiameter(Centimeters.of(FlywheelDiameter))
-    .withTelemetry("flywheelMech", TelemetryVerbosity.HIGH);
-
-     public FlyWheel shooterFlywheel = new FlyWheel(flyWheelConfig, TX.flywheelTalonSMC);
 
      public AngularVelocity getFlywheelVelocity() {
         return shooterFlywheel.getSpeed();
@@ -50,20 +54,21 @@ public class FlywheelSubsystem extends SubsystemBase{
      public void setFlywheelVelocitySetpoint(AngularVelocity speed){
         shooterFlywheel.setMechanismVelocitySetpoint(speed);
      }
+     @Override
      public void periodic(){
-      currentState = wantedFlywheelState;
-      if(currentState != FlywheelStates.CUSTOMFIRE){
-         setFlywheelVelocitySetpoint(RPM.of(currentState.enumVelocity));
-      }
+      // currentState = wantedFlywheelState;
+      // if(currentState != FlywheelStates.CUSTOMFIRE){
+      //    setFlywheelVelocitySetpoint(RPM.of(currentState.enumVelocity));
+      // }
       shooterFlywheel.updateTelemetry();
      }
+     @Override
    public void simulationPeriodic(){
-      currentState = wantedFlywheelState;
-      if(currentState != FlywheelStates.CUSTOMFIRE){
-         FlywheelRun(RPM.of(currentState.enumVelocity));
-      }
+      // currentState = wantedFlywheelState;
+      // if(currentState != FlywheelStates.CUSTOMFIRE){
+      //    FlywheelRun(RPM.of(currentState.enumVelocity));
+      // }
       shooterFlywheel.simIterate();
-      
-     }
+        }
    
 }     

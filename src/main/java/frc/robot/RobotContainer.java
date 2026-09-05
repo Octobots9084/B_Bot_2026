@@ -18,6 +18,9 @@ import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.RollerFloor.RollerFloorSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
+import frc.robot.Subsystems.Shooter.Feeder.FeederSubsystem;
+import frc.robot.Subsystems.Shooter.Flywheel.FlywheelSubsystem;
+import frc.robot.Subsystems.Shooter.Hood.HoodSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
 
 public class RobotContainer {
@@ -25,6 +28,7 @@ public class RobotContainer {
     public RollerFloorSubsystem rollerFloor;
     public ShooterSubsystem shooter;
     public Superstructure superstructure;
+    private FlywheelSubsystem flywheel;
 
     public ButtonConfig buttons;
 
@@ -43,6 +47,7 @@ public class RobotContainer {
                 rollerFloor = new RollerFloorSubsystem();
                 shooter = new ShooterSubsystem();
                 superstructure = new Superstructure();
+                flywheel = new FlywheelSubsystem();
             }
 
             case SIM: {
@@ -50,6 +55,7 @@ public class RobotContainer {
                 rollerFloor = new RollerFloorSubsystem();
                 shooter = new ShooterSubsystem();
                 superstructure = new Superstructure();
+                flywheel = new FlywheelSubsystem();
             }
             case REPLAY:
             //laugh

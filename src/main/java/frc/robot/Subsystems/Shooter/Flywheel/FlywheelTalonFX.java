@@ -19,7 +19,7 @@ import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class FlywheelTalonFX{
     private TalonFX flywheelTalonFX = new TalonFX(1);
-    public SmartMotorControllerConfig flywheelFollowerSmc = new SmartMotorControllerConfig(FlywheelSubsystem.getInstance())
+    public SmartMotorControllerConfig flywheelFollowerSmc = new SmartMotorControllerConfig()
     .withControlMode(ControlMode.CLOSED_LOOP)                                                   
     .withClosedLoopController(50,0,0)
     .withSimClosedLoopController(50,0,0)
@@ -29,6 +29,7 @@ public class FlywheelTalonFX{
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,3)))
     .withMotorInverted(false)
     .withIdleMode(MotorMode.COAST)
+    .withSubsystem(FlywheelSubsystem.getInstance())
     .withTrapezoidalProfile(FlywheelSubsystem.maxVelocity, FlywheelSubsystem.maxAcceleration)
     .withStatorCurrentLimit(Amps.of(FlywheelSubsystem.FlywheelStatorLimit));
     public SmartMotorController flywheelTalon2 = new TalonFXWrapper(new TalonFX(2), DCMotor.getKrakenX60(1), flywheelFollowerSmc);
