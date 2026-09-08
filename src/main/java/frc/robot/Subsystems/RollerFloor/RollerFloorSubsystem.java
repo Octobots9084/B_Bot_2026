@@ -22,23 +22,33 @@ public class RollerFloorSubsystem extends SubsystemBase {
     public RollerFloorStates state = RollerFloorStates.SAFE;
     public RollerFloorStates wantedRollerState = RollerFloorStates.SAFE;
     public RollerFloorStates currentRollerState = RollerFloorStates.SAFE;
-    public RollerFloorTalonFX TX = new RollerFloorTalonFX();
+    public RollerFloorTalonFX TX;
     public static RollerFloorSubsystem instance;
+    private FlyWheel RollerFlywheel;
+    private final FlyWheelConfig RollerFloorConfig;
+    public FlyWheel floorFlyWheel;
 
-    @Override
+    public RollerFloorSubsystem() {
+        instance = this;
+
+        TX = new RollerFloorTalonFX();
+        TX.init();
+
+        RollerFloorConfig = new FlyWheelConfig()
+        .withDiameter(RollerDiameter)
+        .withTelemetry("rollerFloorMech", TelemetryVerbosity.HIGH);
+        floorFlyWheel = new FlyWheel(RollerFloorConfig, TX.FloorMotor);
+    }
+      @Override
     public void periodic() {
-
-        
         RollerFlywheel.updateTelemetry();
-        setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
-                handleStateTransitions();
-                applyStates();
-                logging();
-            }
+        handleStateTransitions();
+        applyStates();
+        logging();
+    }
     public void simulationPeriodic() {
         RollerFlywheel.updateTelemetry();
         RollerFlywheel.simIterate();
-        setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
         handleStateTransitions();
         applyStates();
         logging();
@@ -46,11 +56,6 @@ public class RollerFloorSubsystem extends SubsystemBase {
     public static RollerFloorSubsystem getInstance(){
         return instance;
     }
-
-    public RollerFloorSubsystem() {
-        TX.init();
-    }
-
     private void handleStateTransitions() {
  switch (wantedRollerState) {
             case SAFE:
@@ -81,19 +86,15 @@ public class RollerFloorSubsystem extends SubsystemBase {
     private void logging() {
 
     }
-     private final FlyWheelConfig RollerFloorConfig = new FlyWheelConfig()
-  .withDiameter(RollerDiameter)
-  .withTelemetry("rollerFloorMech", TelemetryVerbosity.HIGH);
 
 
 
   
-   private FlyWheel RollerFlywheel = null;
 
-   public FlyWheel getRollerFlywheel() {
-    if (RollerFlywheel == null) RollerFlywheel = new FlyWheel(RollerFloorConfig, TX.FloorMotor);
-    return RollerFlywheel;
-   }
+    public FlyWheel getRollerFlywheel() {
+        if (RollerFlywheel == null) RollerFlywheel = new FlyWheel(RollerFloorConfig, TX.FloorMotor);
+        return RollerFlywheel;
+    }
 
      public AngularVelocity getRollerVelocity() {
         return RollerFlywheel.getSpeed();

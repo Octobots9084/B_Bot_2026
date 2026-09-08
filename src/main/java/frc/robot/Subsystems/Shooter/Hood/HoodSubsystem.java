@@ -15,19 +15,29 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 public class HoodSubsystem extends SubsystemBase{
     public static double HoodStatorLimit = 40; //TODO replace with real stuff
     public static Angle hoodTolerance = Degrees.of(0);
-    
-    public HoodTalonFX HoodTX = new HoodTalonFX();
+    public Arm hood;
+    public HoodTalonFX TX;
     public static HoodSubsystem instance;
     public double HoodCustomVelocity = 0d;
+
+    public HoodSubsystem(){
+        instance = this;
+        TX = new HoodTalonFX();
+        TX.init();
+        ArmConfig HoodConfig = new ArmConfig()
+        .withLength(Feet.of(TX.hoodRadius))
+        .withHardLimits(Degrees.of(0), Degrees.of(0))//TODO replace
+        .withTelemetry("HoodMech", TelemetryVerbosity.HIGH);
+        
+        hood = new Arm(HoodConfig, TX.HoodMotorSMC);
+        
+    }
+
     public static HoodSubsystem getInstanceHood(){
         return instance;
     }
 
-    ArmConfig HoodConfig = new ArmConfig()
-    .withLength(Feet.of(HoodTX.hoodRadius))
-    .withTelemetry("HoodMech", TelemetryVerbosity.HIGH);
-    public Arm hood = new Arm(HoodConfig, HoodTX.HoodMotorSMC);
-    
+
     public Command setAngle(Angle angle){
         return hood.setAngle(angle);
     }
@@ -41,6 +51,7 @@ public class HoodSubsystem extends SubsystemBase{
     hood.updateTelemetry();
    }
    public void  simulationPeriodic(){
+    hood.updateTelemetry();
     hood.simIterate();
    }
 }
