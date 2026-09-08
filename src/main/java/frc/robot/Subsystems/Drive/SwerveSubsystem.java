@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.Drive;
 
+<<<<<<< HEAD
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
@@ -9,26 +10,37 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PPLTVController;
+=======
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
+>>>>>>> 936cb99 (resolved merge conflicts)
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+<<<<<<< HEAD
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+=======
+import edu.wpi.first.wpilibj.XboxController;
+>>>>>>> 936cb99 (resolved merge conflicts)
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import frc.robot.Constants;
+<<<<<<< HEAD
 import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
+=======
+>>>>>>> 936cb99 (resolved merge conflicts)
 
 public class SwerveSubsystem extends SubsystemBase {
     public SwerveStates wantedState = SwerveStates.IDLE;
@@ -50,14 +62,21 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 936cb99 (resolved merge conflicts)
     long timer = 0l;
 
     boolean debounce = true;
 
+<<<<<<< HEAD
     public static SwerveSubsystem instance;
     
     //santi is a nerd🤓
+=======
+    
+>>>>>>> 936cb99 (resolved merge conflicts)
     
         
     
@@ -68,6 +87,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this.maxAngularVelocity = maxAngularVelocity;
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
         initCommandSwerveDrivetrain();
+<<<<<<< HEAD
         instance = this;
     }
 
@@ -101,6 +121,10 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
     
+=======
+    }
+
+>>>>>>> 936cb99 (resolved merge conflicts)
 
     public void periodic() {
         handleStateTransitions();
@@ -109,7 +133,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void handleStateTransitions() {
         switch (wantedState) {
+<<<<<<< HEAD
             case ALIGNHUB:
+=======
+            case ALIGNCLIMB:
+>>>>>>> 936cb99 (resolved merge conflicts)
                 break;
             case IDLE:
                 break;
@@ -132,10 +160,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void applyStates() {
         switch (currentState) {
+<<<<<<< HEAD
             case ALIGNHUB:
             
 
 
+=======
+            case ALIGNCLIMB:
+>>>>>>> 936cb99 (resolved merge conflicts)
                 break;
             case IDLE:
                 break;
@@ -183,6 +215,7 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
+<<<<<<< HEAD
 
     public void registerNamedCommands () {
 
@@ -193,6 +226,8 @@ public class SwerveSubsystem extends SubsystemBase {
     NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.EXTENDED;}));
     }
 
+=======
+>>>>>>> 936cb99 (resolved merge conflicts)
     public void shouldXLock() {
         if (MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || 
             MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0 ||
@@ -270,10 +305,13 @@ public class SwerveSubsystem extends SubsystemBase {
         return commandSwerveDrivetrain.getPose2d();
     }
 
+<<<<<<< HEAD
     public  static SwerveSubsystem getInstance(){
         return instance;
     }
 
+=======
+>>>>>>> 936cb99 (resolved merge conflicts)
     public void initCommandSwerveDrivetrain() {
 
         SwerveDrivetrainConstants dtC = new SwerveDrivetrainConstants()

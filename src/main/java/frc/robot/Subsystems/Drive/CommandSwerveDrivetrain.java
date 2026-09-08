@@ -10,10 +10,13 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+<<<<<<< HEAD
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+=======
+>>>>>>> 936cb99 (resolved merge conflicts)
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -266,6 +269,7 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
 
+<<<<<<< HEAD
     private void configureAutoBuilder() {
         // SwerveSubsystem.getInstance().registerNamedCommands();
         try {
@@ -294,11 +298,24 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder",
                     ex.getStackTrace());
         }
+=======
+    /**
+     * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
+     * while still accounting for measurement noise.
+     *
+     * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
+     * @param timestampSeconds The timestamp of the vision measurement in seconds.
+     */
+    @Override
+    public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds) {
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds));
+>>>>>>> 936cb99 (resolved merge conflicts)
     }
 
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
      * while still accounting for measurement noise.
+<<<<<<< HEAD
      *
      * @param visionRobotPoseMeters The pose of the robot as measured by the vision camera.
      * @param timestampSeconds The timestamp of the vision measurement in seconds.
@@ -311,6 +328,8 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
     /**
      * Adds a vision measurement to the Kalman Filter. This will correct the odometry pose estimate
      * while still accounting for measurement noise.
+=======
+>>>>>>> 936cb99 (resolved merge conflicts)
      * <p>
      * Note that the vision measurement standard deviations passed into this method
      * will continue to apply to future measurements until a subsequent call to
