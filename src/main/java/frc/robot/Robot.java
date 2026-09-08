@@ -77,6 +77,7 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
+    DriverCommunications.pushToElastic();
   }
 
   /**
