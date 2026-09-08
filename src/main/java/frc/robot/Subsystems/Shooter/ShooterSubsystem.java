@@ -51,6 +51,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void applyStates () {
         switch(currentShooterState){
             case SAFE:
+            HoodSubsystem.getInstanceHood().setAngleWithTolerance(HoodStates.SAFE.enumAngle, HoodSubsystem.hoodTolerance);
             FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(FlywheelStates.SAFE.enumVelocity));
             FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.SAFE.enumVelocity));
             break;
@@ -65,6 +66,8 @@ public class ShooterSubsystem extends SubsystemBase {
             //HoodSubsystem.getInstanceHood().setAngleWithTolerance(Degrees.of(visionStuff), HoodSubsystem.HoodTolerance);
             break;
             case TRENCH:
+            FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.SAFE.enumVelocity));
+            FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(FlywheelStates.SAFE.enumVelocity));
             HoodSubsystem.getInstanceHood().setAngleWithTolerance(HoodStates.SAFE.enumAngle, HoodSubsystem.hoodTolerance);
             break;  
             case ZEROING:
@@ -73,10 +76,12 @@ public class ShooterSubsystem extends SubsystemBase {
             case FIXEDFIRE:
             FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(FlywheelStates.FIXEDFIRE.enumVelocity));
             FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.FIRE.enumVelocity));
+            HoodSubsystem.getInstanceHood().setAngleWithTolerance(HoodStates.FIXEDFIRE.enumAngle, HoodSubsystem.hoodTolerance);
             break;
             default:
             FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(FlywheelStates.SAFE.enumVelocity));
             FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.SAFE.enumVelocity));
+            HoodSubsystem.getInstanceHood().setAngleWithTolerance(HoodStates.SAFE.enumAngle, HoodSubsystem.hoodTolerance);
             break;
             }
     }

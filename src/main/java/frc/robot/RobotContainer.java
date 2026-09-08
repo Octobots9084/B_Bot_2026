@@ -28,12 +28,14 @@ public class RobotContainer {
     public RollerFloorSubsystem rollerFloor;
     public ShooterSubsystem shooter;
     public Superstructure superstructure;
-    private FlywheelSubsystem flywheel;
-
+    public FlywheelSubsystem flywheel;
+    public FeederSubsystem feeder;
+    public HoodSubsystem hood;
     public ButtonConfig buttons;
 
+
 // Dashboard inputs
-  final SendableChooser<Command> autoChooser;
+  //final SendableChooser<Command> autoChooser;
 
 
     public RobotContainer(Robot robot) {
@@ -48,6 +50,8 @@ public class RobotContainer {
                 shooter = new ShooterSubsystem();
                 superstructure = new Superstructure();
                 flywheel = new FlywheelSubsystem();
+                feeder = new FeederSubsystem();
+                hood = new HoodSubsystem();
             }
 
             case SIM: {
@@ -56,6 +60,8 @@ public class RobotContainer {
                 shooter = new ShooterSubsystem();
                 superstructure = new Superstructure();
                 flywheel = new FlywheelSubsystem();
+                feeder = new FeederSubsystem();
+                hood = new HoodSubsystem();
             }
             case REPLAY:
             //laugh
@@ -65,11 +71,11 @@ public class RobotContainer {
 
 
 
-    autoChooser = AutoBuilder.buildAutoChooser();
-    // NAMED COMMANDS IN SWERVE
-    SmartDashboard.putData("Auto", autoChooser);
-    ButtonConfig buttons = new ButtonConfig();
-    buttons.initTeleop();
+    // autoChooser = AutoBuilder.buildAutoChooser();
+    // // NAMED COMMANDS IN SWERVE
+    // SmartDashboard.putData("Auto", autoChooser);
+    // ButtonConfig buttons = new ButtonConfig();
+    // buttons.initTeleop();
   }
 
 
@@ -78,9 +84,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-    // return new InstantCommand();
-  }
+  // public Command getAutonomousCommand() {
+  //   return autoChooser.getSelected();
+  //   // return new InstantCommand();
+  // }
 }
 

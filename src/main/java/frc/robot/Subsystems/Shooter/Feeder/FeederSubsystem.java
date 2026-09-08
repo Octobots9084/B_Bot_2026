@@ -13,46 +13,59 @@ import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class FeederSubsystem extends SubsystemBase{
-  public static double feederShootVelocity = 0;
-  public static double feederReverseVelocity = -0;
-  public FeederStates wantedFeederState = FeederStates.SAFE;
-  public FeederStates FeederState = FeederStates.SAFE;
-  public static double feederStatorLimit = 40; //TODO replace
-  private Distance FeederDiameter = Centimeters.of(60);
-  public FeederTalonFX FeederTX = new FeederTalonFX();
-  public static FeederSubsystem instance;
+   public static double feederShootVelocity = 0;
+   public static double feederReverseVelocity = -0;
+   public FeederStates wantedFeederState = FeederStates.SAFE;
+   public FeederStates FeederState = FeederStates.SAFE;
+   public static double feederStatorLimit = 40; //TODO replace
+   private Distance FeederDiameter = Centimeters.of(60);
+   public FeederTalonFX TX;
+   public static FeederSubsystem instance;
+   FlyWheel feederFlywheel;
+
+   public FeederSubsystem(){
+      instance = this;
+      TX = new FeederTalonFX();
+      TX.init();
+      final FlyWheelConfig FeederConfig = new FlyWheelConfig()
+      .withDiameter(FeederDiameter)
+      .withTelemetry("feederMech", TelemetryVerbosity.HIGH);
+      FlyWheel feederFlywheel = new FlyWheel(FeederConfig, TX.FeederMotor);
+
+   }
   public static FeederSubsystem getInstance(){
     return instance;
   }
-  private final FlyWheelConfig FeederConfig = new FlyWheelConfig()
-  .withDiameter(FeederDiameter)
-  .withTelemetry("feederMech", TelemetryVerbosity.HIGH);
-   public FlyWheel feederFlywheel = new FlyWheel(FeederConfig, FeederTX.FeederMotor);
 
-     public AngularVelocity getFeederVelocity() {
-        return feederFlywheel.getSpeed();
-     }
 
-     public Command FeederRun(AngularVelocity speed){
-        return feederFlywheel.run(speed);
-     }
 
-     public void setFeederVelocitySetpoint(AngularVelocity speed){
-        feederFlywheel.setMechanismVelocitySetpoint(speed);
-     }
-     @Override
-     public void periodic(){
+
+   public AngularVelocity getFeederVelocity() {
+      return feederFlywheel.getSpeed();
+   }
+
+   public Command FeederRun(AngularVelocity speed){
+      return feederFlywheel.run(speed);
+   }
+
+   public void setFeederVelocitySetpoint(AngularVelocity speed){
+      feederFlywheel.setMechanismVelocitySetpoint(speed);
+   }
+
+   @Override
+   public void periodic(){
       feederFlywheel.updateTelemetry();
       setFeederVelocitySetpoint(RPM.of(FeederState.enumVelocity));
       logging();
-    }
+   }
      
    public void simulationPeriodic(){
       feederFlywheel.simIterate();
       FeederRun(RPM.of(FeederState.enumVelocity));
-     }
-    public void logging() {
-//TODO log stuff
+   }
+
+   public void logging() {
+      //TODO log stuff
     }
 }
 
