@@ -36,6 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
 
 
+
     long timer = 0l;
 
     boolean debounce = true;
@@ -61,7 +62,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void handleStateTransitions() {
         switch (wantedState) {
-            case ALIGNCLIMB:
+            case ALIGNHUB:
                 break;
             case IDLE:
                 break;
@@ -84,7 +85,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void applyStates() {
         switch (currentState) {
-            case ALIGNCLIMB:
+            case ALIGNHUB:
+            
+
+
                 break;
             case IDLE:
                 break;
