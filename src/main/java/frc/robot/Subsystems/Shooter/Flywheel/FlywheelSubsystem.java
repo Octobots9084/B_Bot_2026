@@ -19,7 +19,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class FlywheelSubsystem extends SubsystemBase{
    public static LinearAcceleration maxAcceleration = MetersPerSecondPerSecond.of(0);
-   public static LinearVelocity maxVelocity = MetersPerSecond.of(0);
+   public static LinearVelocity maxVelocity = MetersPerSecond.of(20);
    public static double FlywheelStatorLimit = 40; //replace with real
    public static FlywheelStates currentState = FlywheelStates.SAFE;
    public static FlywheelStates wantedFlywheelState = FlywheelStates.SAFE;

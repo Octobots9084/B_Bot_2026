@@ -55,13 +55,11 @@ public class FeederSubsystem extends SubsystemBase{
    @Override
    public void periodic(){
       feederFlywheel.updateTelemetry();
-      setFeederVelocitySetpoint(RPM.of(FeederState.enumVelocity));
       logging();
    }
      
    public void simulationPeriodic(){
       feederFlywheel.simIterate();
-      FeederRun(RPM.of(FeederState.enumVelocity));
    }
 
    public void logging() {

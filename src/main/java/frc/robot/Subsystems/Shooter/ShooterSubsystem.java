@@ -16,7 +16,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterStates wantedShooterState = ShooterStates.SAFE;
     public ShooterStates currentShooterState = ShooterStates.SAFE;
     public static ShooterSubsystem inst = new ShooterSubsystem();
-     
+    ShooterCalculator hubShot;
+    ShooterCalculator ferryShot;
     @Override
     public void periodic() {
         handleStateTransitions();
@@ -56,14 +57,16 @@ public class ShooterSubsystem extends SubsystemBase {
             FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.SAFE.enumVelocity));
             break;
             case HUB:
-            //FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(visionStuff));
+            hubShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+            FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(hubShot.getflywheelSpeed()));
             FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.FIRE.enumVelocity));
-            //HoodSubsystem.getInstanceHood().setAngleWithTolerance(Degrees.of(visionStuff), HoodSubsystem.HoodTolerance);
+            HoodSubsystem.getInstanceHood().setAngleWithTolerance(Degrees.of(hubShot.getHoodAngle()), HoodSubsystem.hoodTolerance);
             break;     
             case FERRY:
-            //FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(visionStuff));
+            ferryShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+            FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(ferryShot.getflywheelSpeed()));
             FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.FIRE.enumVelocity));
-            //HoodSubsystem.getInstanceHood().setAngleWithTolerance(Degrees.of(visionStuff), HoodSubsystem.HoodTolerance);
+            HoodSubsystem.getInstanceHood().setAngleWithTolerance(Degrees.of(ferryShot.getHoodAngle()), HoodSubsystem.hoodTolerance);
             break;
             case TRENCH:
             FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.SAFE.enumVelocity));
