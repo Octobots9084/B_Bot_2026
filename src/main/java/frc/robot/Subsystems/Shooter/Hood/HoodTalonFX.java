@@ -23,22 +23,25 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class HoodTalonFX {
-    public TalonFX hoodTalonFX = new TalonFX(5);
     public static double hoodRadius = 15.24; //TODO harass jett about ts
     public static double hoodMass = 1;
     public SmartMotorControllerConfig HoodSMC = new SmartMotorControllerConfig(HoodSubsystem.getInstanceHood())
     .withControlMode(ControlMode.CLOSED_LOOP)
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,1)))
     .withClosedLoopController(0.5,0,0.01)
+    //.withClosedLoopTolerance(Degrees.of(2))
     .withFeedforward(new ArmFeedforward(0.1, 0, 0))
     //.withSoftLimit()
     //withMomentOfInertia()
+    .withStartingPosition(Degrees.of(0))
     .withStatorCurrentLimit(Amps.of(HoodSubsystem.HoodStatorLimit))
-    .withClosedLoopTolerance(Degrees.of(2))
     .withIdleMode(MotorMode.BRAKE)
     .withMomentOfInertia(Centimeters.of(hoodRadius), Pounds.of(hoodMass))
     .withTelemetry("armMotor", TelemetryVerbosity.HIGH);
-    public SmartMotorController HoodMotorSMC = new TalonFXWrapper(hoodTalonFX, DCMotor.getKrakenX60(1), HoodSMC);
+    public SmartMotorController HoodMotorSMC;
 
+    public void init(){
+        HoodMotorSMC = new TalonFXWrapper(new TalonFX(5), DCMotor.getKrakenX60(1), HoodSMC);
+    }
 
 }

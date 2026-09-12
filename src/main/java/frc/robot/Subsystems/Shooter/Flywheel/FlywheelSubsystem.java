@@ -20,23 +20,24 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 public class FlywheelSubsystem extends SubsystemBase{
    public static LinearAcceleration maxAcceleration = MetersPerSecondPerSecond.of(0);
    public static LinearVelocity maxVelocity = MetersPerSecond.of(0);
-    public static double FlywheelStatorLimit = 40; //replace with real
-    public static FlywheelStates currentState = FlywheelStates.SAFE;
-    public static FlywheelStates wantedFlywheelState = FlywheelStates.SAFE;
-    public static FlywheelSubsystem instance = null;
-    public static double FlywheelCustomVelocity = 0.0;
-    public static double FlywheelDiameter = 10.16;
- public FlyWheel shooterFlywheel;
- private final FlyWheelConfig flyWheelConfig;
+   public static double FlywheelStatorLimit = 40; //replace with real
+   public static FlywheelStates currentState = FlywheelStates.SAFE;
+   public static FlywheelStates wantedFlywheelState = FlywheelStates.SAFE;
+   public static FlywheelSubsystem instance = null;
+   public static double FlywheelCustomVelocity = 0.0;
+   public static double FlywheelDiameter = 10.16;
+   public FlyWheel shooterFlywheel;
+   private final FlyWheelConfig flyWheelConfig;
    public FlywheelTalonFX TX;
    
     public FlywheelSubsystem(){
       instance = this;
       TX = new FlywheelTalonFX();
-     flyWheelConfig = new FlyWheelConfig()
-    .withDiameter(Centimeters.of(FlywheelDiameter))
-    .withTelemetry("flywheelMech", TelemetryVerbosity.HIGH);
-    shooterFlywheel = new FlyWheel(flyWheelConfig, TX.flywheelTalonSMC);
+      TX.init();
+      flyWheelConfig = new FlyWheelConfig()
+      .withDiameter(Centimeters.of(FlywheelDiameter))
+      .withTelemetry("flywheelMech", TelemetryVerbosity.HIGH);
+      shooterFlywheel = new FlyWheel(flyWheelConfig, TX.flywheelTalonSMC);
    
     }
     public static FlywheelSubsystem getInstance(){

@@ -77,6 +77,7 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
+    DriverCommunications.pushToElastic();
   }
 
   /**
@@ -95,7 +96,7 @@ public class Robot extends LoggedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-    if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().schedule(container.autoChooser.getSelected()); //awkward command
+    //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().schedule(container.autoChooser.getSelected()); //awkward command
   }
 
   /** This function is called periodically during autonomous. */
@@ -107,7 +108,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
-    if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
+    //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
   }
 
   /** This function is called periodically during operator control. */
