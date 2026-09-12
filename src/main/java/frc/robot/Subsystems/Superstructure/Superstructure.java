@@ -101,11 +101,11 @@ public class Superstructure {
     
         switch (currentState) {
             case AUTOFERRY:
-                shooter.wantedShooterState = ShooterStates.SAFE;
+                shooter.wantedShooterState = ShooterStates.FERRY;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
             case AUTOHUB:
-                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                shooter.wantedShooterState = ShooterStates.HUB;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
                 floor.wantedRollerState = switch(shooter.currentShooterState) {
@@ -136,7 +136,7 @@ public class Superstructure {
                 };
                 
             case FERRY:
-                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                shooter.wantedShooterState = ShooterStates.FERRY;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
                 
                 floor.wantedRollerState = switch(shooter.currentShooterState) {
@@ -153,7 +153,7 @@ public class Superstructure {
                 break;
 
             case HUB:
-                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                shooter.wantedShooterState = ShooterStates.HUB;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
                 floor.wantedRollerState = switch(shooter.currentShooterState) {
