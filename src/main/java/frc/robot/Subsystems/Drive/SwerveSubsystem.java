@@ -30,6 +30,7 @@ import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
+import frc.robot.Subsystems.Vision.ShooterCalculator;
 
 public class SwerveSubsystem extends SubsystemBase {
     public SwerveStates wantedState = SwerveStates.IDLE;
@@ -50,13 +51,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
 
-
+    public ShooterCalculator calculator;
 
     long timer = 0l;
 
     boolean debounce = true;
 
     public static SwerveSubsystem instance;
+
+    PIDController rotationPidController = new PIDController(0, 0, 0);
+
     
     public SwerveSubsystem(XboxController driverController, XboxController coDriverController, double maxVelocity, double maxAngularVelocity) {
         this.driverController = driverController;
@@ -66,6 +70,8 @@ public class SwerveSubsystem extends SubsystemBase {
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
         initCommandSwerveDrivetrain();
         instance = this;
+
+        
     }
 
 
@@ -100,11 +106,24 @@ public class SwerveSubsystem extends SubsystemBase {
     public void applyStates() {
         switch (currentState) {
             case ALIGNHUB:
+                Translation2d pos = new Translation2d();
+                Pose2d robotPose = SwerveSubsystem.getInstance().getRobotPose();
+                double globalAngle = Math.toDegrees(Math.atan2(pos.getY() - robotPose.getY(), pos.getX() - robotPose.getX()));
+                double change = globalAngle - robotPose.getRotation().getDegrees();
             
-                commandSwerveDrivetrain.setSwerveState(
-                    new SwerveRequest.ApplyFieldSpeeds().withCenterOfRotation(new Translation2d()).withSpeeds(null));
+                calculator = ShooterCalculator.getInstance().calculateShot(rotLockAngle, maxAngularVelocity, maxVelocity, maxVelocity); // TODO get done later
+                double calc = calculator.calculateShot(rotLockAngle, maxAngularVelocity, maxVelocity, maxVelocity).getRotation();
 
-                    
+            //double absoluteRotation = calculator.getRotation();
+
+
+                        
+            ;
+
+                commandSwerveDrivetrain.setSwerveState(
+                    new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, rotationPidController.calculate(getRobotPose().getRotation().getRadians(), calc) * 1 /*todo tune */)));
+                
+
 
                 break;
             case IDLE:
