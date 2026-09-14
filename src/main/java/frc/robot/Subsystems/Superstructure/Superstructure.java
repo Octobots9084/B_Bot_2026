@@ -2,6 +2,9 @@ package frc.robot.Subsystems.Superstructure;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.Constants;
+import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.RollerFloor.RollerFloorStates;
@@ -17,6 +20,8 @@ public class Superstructure {
     public IntakeSubsystem intake = IntakeSubsystem.getInstance();
     public ShooterSubsystem shooter = ShooterSubsystem.getInstance();
     public RollerFloorSubsystem floor = RollerFloorSubsystem.getInstance();
+    public boolean InAlignedZone = true;
+    public IntakeStates driverRequestedIntakeState = null;
 
 
     public static Superstructure currentInstance;
@@ -36,6 +41,27 @@ public class Superstructure {
 
     public Superstructure() {
         currentInstance = this;
+    }
+
+    public void IsInAllianceZone(){
+        //TODO Owen please add get instance to swerve
+        Pose2d robotPose = SwerveSubsystem.getInstance().getRobotPose();
+        if(Constants.isBlueAlliance){
+            if(robotPose.getX() < Constants.blueTrenchX){
+                InAlignedZone = true;
+            }
+            else{
+                InAlignedZone = false;
+            }
+        }
+        else{
+            if(robotPose.getX() > Constants.redTrenchX) {
+                InAlignedZone = true;   
+            }
+            else{
+                InAlignedZone = false;
+            }
+        }
     }
 
     public static void setInstance(Superstructure instance) {

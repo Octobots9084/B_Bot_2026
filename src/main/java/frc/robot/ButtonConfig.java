@@ -10,10 +10,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
+import frc.robot.Subsystems.Superstructure.SuperstructureStates;
 
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
@@ -21,6 +24,58 @@ public class ButtonConfig {
     Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
+        driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
+            superstructure.setWantedState(SuperstructureStates.HUB)), 
+            new InstantCommand(()->superstructure.setWantedState(SuperstructureStates.FERRY)), ()->superstructure.InAlignedZone))
+            .onTrue(new ConditionalCommand(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS), null, ()->superstructure.driverRequestedIntakeState!=IntakeStates.INTAKING))
+            .onFalse(new InstantCommand(()->
+            superstructure.setWantedState(SuperstructureStates.SAFE)));
+
+        driverController.leftTrigger().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.INTAKING))
+        .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
+
+        driverController.leftBumper().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.REVERSEINTAKE))
+        .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //TODO button maps arent decided yet. Technically we haven't chosen what the joysticks do as of the time of writing this.
     //         SmartDashboard.putBoolean("AAAAA", false);
 
