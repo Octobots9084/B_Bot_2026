@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Mode;
+import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.RollerFloor.RollerFloorSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
@@ -33,12 +34,19 @@ public class RobotContainer {
     public HoodSubsystem hood;
     public ButtonConfig buttons;
 
+    private SwerveSubsystem swerve;
+
+
 
 // Dashboard inputs
-  //final SendableChooser<Command> autoChooser;
+  final SendableChooser<Command> autoChooser;
 
 
     public RobotContainer(Robot robot) {
+
+
+      this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController,
+          Constants.maxAngularVelocity, Constants.maxVelocity);
 
         buttons = new ButtonConfig();
 
@@ -76,6 +84,11 @@ public class RobotContainer {
     // SmartDashboard.putData("Auto", autoChooser);
     // ButtonConfig buttons = new ButtonConfig();
     // buttons.initTeleop();
+
+     autoChooser = AutoBuilder.buildAutoChooser();
+    // NAMED COMMANDS IN SWERVE
+    SmartDashboard.putData("Auto", autoChooser);
+
   }
 
 
@@ -84,9 +97,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   return autoChooser.getSelected();
-  //   // return new InstantCommand();
-  // }
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+    // return new InstantCommand();
+  }
 }
 

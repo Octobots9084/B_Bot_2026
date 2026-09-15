@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "center to depot"
@@ -15,11 +21,17 @@
           "data": {
             "pathName": "depot to score"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Center",
   "choreoAuto": false
 }

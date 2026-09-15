@@ -1,8 +1,11 @@
 package frc.robot.Subsystems.Drive;
 
 
+import frc.robot.Subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
@@ -19,8 +22,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
@@ -31,7 +38,9 @@ import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 
-public class SwerveSubsystem extends SubsystemBase {
+public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
+
+    private static final double kSimLoopPeriod = 0.005; // 5 ms
     public SwerveStates wantedState = SwerveStates.IDLE;
     public SwerveStates currentState = SwerveStates.IDLE;
 
@@ -58,7 +67,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public static SwerveSubsystem instance;
     
+    //santi is a nerd🤓
+    
+    private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+
+    
     public SwerveSubsystem(XboxController driverController, XboxController coDriverController, double maxVelocity, double maxAngularVelocity) {
+        super(TunerConstants.DrivetrainConstants, maxAngularVelocity, null, null, null);
         this.driverController = driverController;
         this.coDriverController = driverController;
         this.maxVelocity = maxVelocity;
@@ -66,8 +81,39 @@ public class SwerveSubsystem extends SubsystemBase {
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
         initCommandSwerveDrivetrain();
         instance = this;
+        configureAutoBuilder();
     }
 
+    private void configureAutoBuilder() {
+        // SwerveSubsystem.getInstance().registerNamedCommands();
+        try {
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                    () -> getState().Pose, // Supplier of current robot pose
+                    this::resetPose, // Consumer for seeding pose against auto
+                    () -> getState().Speeds, // Supplier of current robot speeds
+                    // Consumer of ChassisSpeeds and feedforwards to drive the robot
+                    (speeds, feedforwards) -> setControl(
+                            m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                                    .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                                    .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
+                    new PPHolonomicDriveController(
+                            // PID constants for translation
+                            new PIDConstants(10, 0, 0),
+                            // PID constants for rotation
+                            new PIDConstants(7, 0, 0)),
+                    config,
+                    // Assume the path needs to be flipped for Red vs Blue, this is normally the
+                    // case
+                    () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                    this // Subsystem for requirements
+            );
+        } catch (Exception ex) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder",
+                    ex.getStackTrace());
+        }
+    }
+    
 
     public void periodic() {
         handleStateTransitions();
@@ -101,10 +147,7 @@ public class SwerveSubsystem extends SubsystemBase {
         switch (currentState) {
             case ALIGNHUB:
             
-                commandSwerveDrivetrain.setSwerveState(
-                    new SwerveRequest.ApplyFieldSpeeds().withCenterOfRotation(new Translation2d()).withSpeeds(null));
 
-                    
 
                 break;
             case IDLE:
