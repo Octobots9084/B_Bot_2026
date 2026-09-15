@@ -40,8 +40,8 @@ import yams.gearing.GearBox;
 
 public class IntakeSubsystem extends SubsystemBase {
     public IntakeStates state = IntakeStates.SAFE;
-    public IntakeStates wantedIntakeState = IntakeStates.ZERO;
-    public IntakeStates currentIntakeState = IntakeStates.ZERO;
+    public static IntakeStates wantedIntakeState = IntakeStates.SAFE;
+    public IntakeStates currentIntakeState = IntakeStates.SAFE;
     public IntakeIOTalonFX io = new IntakeIOTalonFX();
     public static IntakeSubsystem instance;
     
@@ -73,7 +73,6 @@ public class IntakeSubsystem extends SubsystemBase {
         public void handleStateTransitions() {
              switch (wantedIntakeState) {
                 case SAFE:
-                    
                     currentIntakeState = wantedIntakeState;
                 break;
                 case ZERO:

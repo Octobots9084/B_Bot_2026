@@ -13,10 +13,9 @@ public enum SuperstructureStates{
     BUMP,
     HUB,
     FERRY,
-    AUTOHUB,
     TRENCH,
     ZEROING,
     SAFE,
-    AUTOFERRY;
+    FIXEDFIRE, AUTOHUB, AUTOFERRY,
 
 }

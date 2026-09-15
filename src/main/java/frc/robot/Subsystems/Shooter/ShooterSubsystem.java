@@ -12,6 +12,7 @@ import frc.robot.Subsystems.Shooter.Flywheel.FlywheelStates;
 import frc.robot.Subsystems.Shooter.Flywheel.FlywheelSubsystem;
 import frc.robot.Subsystems.Shooter.Hood.HoodStates;
 import frc.robot.Subsystems.Shooter.Hood.HoodSubsystem;
+import frc.robot.Subsystems.Vision.Alignment;
 import frc.robot.Subsystems.Vision.ShooterCalculator;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -58,10 +59,12 @@ public class ShooterSubsystem extends SubsystemBase {
             break;
             case HUB:
                 hubShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+                Alignment.getInstance().getRotation(hubShot.getRotation());
                 shooterPartsControl(hubShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, Degrees.of(hubShot.getHoodAngle()));
             break;     
             case FERRY:
                 ferryShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+                Alignment.getInstance().getRotation(ferryShot.getRotation());
                 shooterPartsControl(ferryShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, Degrees.of(ferryShot.getHoodAngle()));
             break;
             case TRENCH:
