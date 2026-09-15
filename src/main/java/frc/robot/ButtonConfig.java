@@ -24,56 +24,18 @@ public class ButtonConfig {
     Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
-        driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
-            superstructure.setWantedState(SuperstructureStates.HUB)), 
-            new InstantCommand(()->superstructure.setWantedState(SuperstructureStates.FERRY)), ()->superstructure.InAlignedZone))
-            .onTrue(new ConditionalCommand(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS), null, ()->superstructure.driverRequestedIntakeState!=IntakeStates.INTAKING))
-            .onFalse(new InstantCommand(()->
-            superstructure.setWantedState(SuperstructureStates.SAFE)));
+        // driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
+        //     superstructure.setWantedState(SuperstructureStates.HUB)), 
+        //     new InstantCommand(()->superstructure.setWantedState(SuperstructureStates.FERRY)), ()->superstructure.InAlignedZone))
+        //     .onTrue(new ConditionalCommand(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS), null, ()->superstructure.driverRequestedIntakeState!=IntakeStates.INTAKING))
+        //     .onFalse(new InstantCommand(()->
+        //     superstructure.setWantedState(SuperstructureStates.SAFE)));
 
-        driverController.leftTrigger().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.INTAKING))
-        .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
+        // driverController.leftTrigger().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.INTAKING))
+        // .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
 
-        driverController.leftBumper().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.REVERSEINTAKE))
-        .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        // driverController.leftBumper().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.REVERSEINTAKE))
+        // .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
 
 
         //TODO button maps arent decided yet. Technically we haven't chosen what the joysticks do as of the time of writing this.
