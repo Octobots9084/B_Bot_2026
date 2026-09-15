@@ -18,7 +18,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class RollerFloorSubsystem extends SubsystemBase {
-    private Distance RollerDiameter = Centimeters.of(0);//TODO replace
+    private Distance RollerDiameter = Centimeters.of(20);//TODO replace all of these values
     public RollerFloorStates state = RollerFloorStates.SAFE;
     public RollerFloorStates wantedRollerState = RollerFloorStates.SAFE;
     public RollerFloorStates currentRollerState = RollerFloorStates.SAFE;
@@ -65,7 +65,7 @@ public class RollerFloorSubsystem extends SubsystemBase {
                 currentRollerState = RollerFloorStates.PRELOAD;
             break;
             case SHOOT:
-              //  if(shootable){
+              //  if(shootable){ TODO
                     currentRollerState = RollerFloorStates.SHOOT;
                // }
             break;

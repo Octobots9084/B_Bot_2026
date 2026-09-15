@@ -1,20 +1,35 @@
 package frc.robot.Subsystems.Drive;
 
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PPLTVController;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import frc.robot.Constants;
+import frc.robot.Subsystems.Intake.IntakeStates;
+import frc.robot.Subsystems.Intake.IntakeSubsystem;
+import frc.robot.Subsystems.Shooter.ShooterStates;
+import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 
 public class SwerveSubsystem extends SubsystemBase {
     public SwerveStates wantedState = SwerveStates.IDLE;
@@ -36,13 +51,12 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
 
 
+
     long timer = 0l;
 
     boolean debounce = true;
 
-    
-    
-        
+    public static SwerveSubsystem instance;
     
     public SwerveSubsystem(XboxController driverController, XboxController coDriverController, double maxVelocity, double maxAngularVelocity) {
         this.driverController = driverController;
@@ -51,6 +65,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this.maxAngularVelocity = maxAngularVelocity;
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
         initCommandSwerveDrivetrain();
+        instance = this;
     }
 
 
@@ -61,7 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void handleStateTransitions() {
         switch (wantedState) {
-            case ALIGNCLIMB:
+            case ALIGNHUB:
                 break;
             case IDLE:
                 break;
@@ -84,7 +99,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void applyStates() {
         switch (currentState) {
-            case ALIGNCLIMB:
+            case ALIGNHUB:
+            
+                commandSwerveDrivetrain.setSwerveState(
+                    new SwerveRequest.ApplyFieldSpeeds().withCenterOfRotation(new Translation2d()).withSpeeds(null));
+
+                    
+
                 break;
             case IDLE:
                 break;
@@ -130,6 +151,16 @@ public class SwerveSubsystem extends SubsystemBase {
             default:
                 break;
         }
+    }
+
+
+    public void registerNamedCommands () {
+
+    NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {ShooterSubsystem.getInstance().wantedShooterState = ShooterStates.HUB;}));
+    NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {ShooterSubsystem.getInstance().wantedShooterState = ShooterStates.SAFE;}));
+
+    NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;}));
+    NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.EXTENDED;}));
     }
 
     public void shouldXLock() {
@@ -207,6 +238,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     public Pose2d getRobotPose() {
         return commandSwerveDrivetrain.getPose2d();
+    }
+
+    public  static SwerveSubsystem getInstance(){
+        return instance;
     }
 
     public void initCommandSwerveDrivetrain() {

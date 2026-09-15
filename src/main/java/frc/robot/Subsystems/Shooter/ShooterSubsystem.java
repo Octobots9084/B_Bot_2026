@@ -3,6 +3,8 @@ package frc.robot.Subsystems.Shooter;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
 
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Subsystems.Shooter.Feeder.FeederStates;
 import frc.robot.Subsystems.Shooter.Feeder.FeederSubsystem;
@@ -16,7 +18,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public ShooterStates wantedShooterState = ShooterStates.SAFE;
     public ShooterStates currentShooterState = ShooterStates.SAFE;
     public static ShooterSubsystem inst = new ShooterSubsystem();
-     
+    ShooterCalculator hubShot;
+    ShooterCalculator ferryShot;
     @Override
     public void periodic() {
         handleStateTransitions();
@@ -31,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 currentShooterState = ShooterStates.SAFE;
             break;
             case HUB:
-                //if(swerve.isInAllianceZone()){
+                //if(swerve.isInAllianceZone()){ TODO
                 currentShooterState = ShooterStates.HUB;
                // }
             break;     
@@ -51,39 +54,34 @@ public class ShooterSubsystem extends SubsystemBase {
     public void applyStates () {
         switch(currentShooterState){
             case SAFE:
-            HoodSubsystem.getInstanceHood().setAngleWithTolerance(HoodStates.SAFE.enumAngle, HoodSubsystem.hoodTolerance);
-            FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(FlywheelStates.SAFE.enumVelocity));
-            FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.SAFE.enumVelocity));
+                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
             break;
             case HUB:
-            //FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(visionStuff));
-            FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.FIRE.enumVelocity));
-            //HoodSubsystem.getInstanceHood().setAngleWithTolerance(Degrees.of(visionStuff), HoodSubsystem.HoodTolerance);
+                hubShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+                shooterPartsControl(hubShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, Degrees.of(hubShot.getHoodAngle()));
             break;     
             case FERRY:
-            //FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(visionStuff));
-            FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.FIRE.enumVelocity));
-            //HoodSubsystem.getInstanceHood().setAngleWithTolerance(Degrees.of(visionStuff), HoodSubsystem.HoodTolerance);
+                ferryShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+                shooterPartsControl(ferryShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, Degrees.of(ferryShot.getHoodAngle()));
             break;
             case TRENCH:
-            FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.SAFE.enumVelocity));
-            FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(FlywheelStates.SAFE.enumVelocity));
-            HoodSubsystem.getInstanceHood().setAngleWithTolerance(HoodStates.SAFE.enumAngle, HoodSubsystem.hoodTolerance);
+                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
             break;  
             case ZEROING:
             //TODO zeroing stuff
             break;    
             case FIXEDFIRE:
-            FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(FlywheelStates.FIXEDFIRE.enumVelocity));
-            FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.FIRE.enumVelocity));
-            HoodSubsystem.getInstanceHood().setAngleWithTolerance(HoodStates.FIXEDFIRE.enumAngle, HoodSubsystem.hoodTolerance);
+                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
             break;
             default:
-            FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(FlywheelStates.SAFE.enumVelocity));
-            FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(FeederStates.SAFE.enumVelocity));
-            HoodSubsystem.getInstanceHood().setAngleWithTolerance(HoodStates.SAFE.enumAngle, HoodSubsystem.hoodTolerance);
+                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
             break;
             }
+    }
+    public static void shooterPartsControl(double flywheelSpeed, double feederSpeed, Angle angle){
+        FlywheelSubsystem.getInstance().setFlywheelVelocitySetpoint(RPM.of(flywheelSpeed));
+        FeederSubsystem.getInstance().setFeederVelocitySetpoint(RPM.of(feederSpeed));
+        HoodSubsystem.getInstanceHood().setAngleWithTolerance(angle, HoodSubsystem.hoodTolerance);
     }
     
     public void logging() {

@@ -14,11 +14,13 @@ public class ShooterCalculator{
     private double flywheelSpeed;
     //log this
     public boolean noSolutionFound;
+    public static ShooterCalculator instance;
 
     public ShooterCalculator(double rotation, double hoodAngle, double flywheelSpeed){
         this.rotation = rotation;
         this.hoodAngle = hoodAngle;
         this.flywheelSpeed = flywheelSpeed;
+        instance = this;
     }
 
     //lut!!
@@ -79,6 +81,11 @@ public class ShooterCalculator{
 
     public double getflywheelSpeed(){
         return flywheelSpeed;
+    }
+
+    //sebby didnt even add this
+    public static ShooterCalculator getInstance(){
+        return instance;
     }
 
 
