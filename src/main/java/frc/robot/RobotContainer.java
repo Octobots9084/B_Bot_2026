@@ -13,6 +13,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
@@ -45,8 +46,7 @@ public class RobotContainer {
     public RobotContainer(Robot robot) {
 
 
-      this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController,
-          Constants.maxAngularVelocity, Constants.maxVelocity);
+      this.swerve = new SwerveSubsystem(new CommandXboxController(0), new CommandXboxController(1), 1.0, 1.0);
 
         buttons = new ButtonConfig();
 

@@ -14,6 +14,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PPLTVController;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,11 +27,20 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+import java.lang.reflect.Array;
+
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants;
+import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 
 import frc.robot.Constants;
 import frc.robot.Subsystems.Intake.IntakeStates;
@@ -45,8 +55,8 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public SwerveStates wantedState = SwerveStates.IDLE;
     public SwerveStates currentState = SwerveStates.IDLE;
 
-    public XboxController driverController;
-    public XboxController coDriverController;
+    public CommandXboxController driverController;
+    public CommandXboxController coDriverController;
 
     public double maxVelocity;
     public double maxAngularVelocity;
@@ -63,21 +73,47 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public ShooterCalculator calculator;
 
     long timer = 0l;
-
     boolean debounce = true;
 
     public static SwerveSubsystem instance;
 
     PIDController rotationPidController = new PIDController(0, 0, 0);
-
-    
-    //santi is a nerd🤓
-    
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
+
+    //TODO get constants
+    private synchronized static SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> swerveModuleConstants() {
+        SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> factory = new SwerveModuleConstantsFactory<>();
+        SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants = 
+        factory.createModuleConstants( 
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false,
+            false,
+            false
+        );
+        constants.DriveMotorGearRatio = 1;
+        constants.SteerMotorGearRatio = 1;
+        constants.CouplingGearRatio = 1;
+
+    //    if (1==1) throw new RuntimeException(constants.CouplingGearRatio + "");
+
+        return constants;
+    }
     
-    public SwerveSubsystem(XboxController driverController, XboxController coDriverController, double maxVelocity, double maxAngularVelocity) {
-        super(TunerConstants.DrivetrainConstants, maxAngularVelocity, null, null, null);
+    public SwerveSubsystem(CommandXboxController driverController, CommandXboxController coDriverController, double maxVelocity, double maxAngularVelocity) {
+        super(TunerConstants.DrivetrainConstants, 0,swerveModuleConstants(),swerveModuleConstants());
+
+      
+        
+    
+
+
+
         this.driverController = driverController;
         this.coDriverController = driverController;
         this.maxVelocity = maxVelocity;
@@ -309,6 +345,8 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
             .withCANBusName(Constants.krakenBus.getName())
             .withPigeon2Id(0)
             .withPigeon2Configs(null);
+            
+            
 
 
         commandSwerveDrivetrain = new CommandSwerveDrivetrain(

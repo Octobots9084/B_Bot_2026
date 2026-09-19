@@ -77,6 +77,9 @@ public class Constants {
 
   private static final SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constantCreator =
         new SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>()
+        .withDriveMotorGearRatio(1)
+        .withCouplingGearRatio(1)
+        .withSteerMotorGearRatio(1);
 
         //TODO tune please
             // .withDriveMotorGearRatio(0)
@@ -172,5 +175,39 @@ public class Constants {
         );
 
  
+//ill-advised        
+/*
+    public static SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> massDriveMotorConfiguration(boolean front, boolean left) {
+        String sfront = front ? "Front" : "Back"; 
+        String sleft = left ? "Left" : "Right";
+        String s = sfront + sleft;
+        String ks = "k" + s;
+        
+        try {
+            SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants = 
+            constantCreator.createModuleConstants(
+                (Integer)  Constants.class.getField(ks + "SteerMotorId")            .get(null),
+                (Integer)  Constants.class.getField(ks + "DriveMotorId")            .get(null),
+                (Integer)  Constants.class.getField(ks + "EncoderId")               .get(null),
+                (Angle)    Constants.class.getField(ks + "EncoderOffset")           .get(null),
+                (Distance) Constants.class.getField(ks + "XPos")                    .get(null),
+                (Distance) Constants.class.getField(ks + "YPos")                    .get(null),
+                (Boolean)  Constants.class.getField("kInvert" + sleft + "RightSide").get(null),
+                (Boolean)  Constants.class.getField(ks + "SteerMotorInverted")      .get(null),
+                (Boolean)  Constants.class.getField(ks + "EncoderInverted")         .get(null)
+                );
 
+                constants.CouplingGearRatio = 1;
+                constants.DriveMotorGearRatio = 1;
+                constants.SteerMotorGearRatio = 1;
+
+                return constants;
+        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+ 
+ */
 }
