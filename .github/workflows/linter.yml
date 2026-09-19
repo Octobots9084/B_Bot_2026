@@ -59,8 +59,8 @@ jobs:
         run: ./gradlew build
   deploy:
     name: Deploy (future placeholder)
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest    
     steps:
       - name: Deploy
         run: echo "TODO: Run deploy and capture logs for confirming successful deployment."
