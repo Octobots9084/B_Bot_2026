@@ -1,0 +1,66 @@
+name: Pull Request Tasks
+
+on:
+  pull_request:
+
+jobs:
+  linter:
+    name: Run lint operations
+    runs-on: ubuntu-latest    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v6
+        with:
+          java-version: '17' # Change this to match your project's Java version if needed
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 1. Run Spotless Check independently
+      - name: Run Spotless Check
+        id: spotless
+        continue-on-error: true
+        run: ./gradlew spotlessCheck
+
+      # 3. Custom Error Hint for Spotless Failures
+      - name: Spotless Error Notice
+        if: steps.spotless.outcome == 'failure'
+        run: |
+          echo "========================================================="
+          echo "❌ Formatting violation detected by Spotless!"
+          echo "👉 Run './gradlew spotlessApply' locally to fix automatically."
+          echo "========================================================="
+
+      # 5. Fail the job if either tool failed
+      - name: Finalize Build Status
+        if: steps.spotless.outcome == 'failure' || steps.checkstyle.outcome == 'failure'
+        run: exit 1
+  build:
+    name: Gradle Build
+    needs: linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v6
+        with:
+          distribution: 'temurin'
+          java-version: '17' # Update to your project's Java version
+          cache: 'gradle'
+
+      - name: Run Gradle Build
+        run: ./gradlew build
+  # future-reminder:
+  #   name: Future Task (Placeholder)
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: TODO Reminder
+  #       run: echo "TODO: Implement future steps here later."
