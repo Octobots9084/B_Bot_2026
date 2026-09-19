@@ -1,4 +1,4 @@
-name: Java Linter
+name: Pull Request Tasks
 
 on:
   pull_request:
@@ -56,3 +56,5 @@ jobs:
 
       - name: Run Gradle Build
         run: ./gradlew build
+  deploy:
+    # placeholder
