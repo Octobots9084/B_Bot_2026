@@ -160,15 +160,11 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
             //double absoluteRotation = calculator.getRotation();
 
-
-                        
-            ;
+            //idk if this math is right i dont remember waht these angles are
 
                 commandSwerveDrivetrain.setSwerveState(
-                    new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, rotationPidController.calculate(getRobotPose().getRotation().getRadians(), calc) * 1 /*todo tune */)));
+                    new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, rotationPidController.calculate(getRobotPose().getRotation().getRadians(), calc - change) * 1 /*todo tune */)));
                 
-
-
                 break;
             case IDLE:
                 break;
