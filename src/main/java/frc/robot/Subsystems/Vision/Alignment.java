@@ -8,6 +8,14 @@ public class Alignment {
     public static PIDController rotationPidController = new PIDController(0,0,0);
     double wantedDegree;
     double currentDegree;
+    public static Alignment instance;
+
+    public Alignment(){
+        instance = this;
+    }
+    public static Alignment getInstance(){
+        return instance;
+    }
 
     public ChassisSpeeds getRotation(double wantedDegree){
         //currentDegree = Pose2d.direction();

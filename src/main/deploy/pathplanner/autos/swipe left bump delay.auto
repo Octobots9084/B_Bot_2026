@@ -11,15 +11,27 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "center to depot"
+            "waitTime": 4.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "depot to score"
+            "pathName": "trench to neutral left delay"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "swipe neutral left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "delay left swipe to score bump"
           }
         },
         {
@@ -32,6 +44,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Center",
+  "folder": "Left",
   "choreoAuto": false
 }

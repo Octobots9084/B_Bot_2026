@@ -13,8 +13,8 @@ import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class FeederSubsystem extends SubsystemBase{
-   public static double feederShootVelocity = 0;
-   public static double feederReverseVelocity = -0;
+   public static double feederShootVelocity = 200;
+   public static double feederReverseVelocity = -100;
    public FeederStates wantedFeederState = FeederStates.SAFE;
    public FeederStates FeederState = FeederStates.SAFE;
    public static double feederStatorLimit = 40; //TODO replace
@@ -36,9 +36,6 @@ public class FeederSubsystem extends SubsystemBase{
   public static FeederSubsystem getInstance(){
     return instance;
   }
-
-
-
 
    public AngularVelocity getFeederVelocity() {
       return feederFlywheel.getSpeed();

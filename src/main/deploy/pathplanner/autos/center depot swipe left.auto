@@ -13,19 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "trench to neutral right"
+            "pathName": "(Flipped) center to depot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "swipe neutral right"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "right swipe to score trench"
+            "pathName": "(Flipped) depot to score"
           }
         },
         {
@@ -37,7 +31,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 3.0
           }
         },
         {
@@ -49,25 +43,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "double swipe connection"
+            "pathName": "(Flipped) depot score to swipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "trench to neutral right"
+            "pathName": "trench to neutral left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "swipe neutral right"
+            "pathName": "swipe neutral left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "right swipe to score trench"
+            "pathName": "delay left swipe to score trench"
           }
         },
         {
@@ -80,6 +74,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Right",
+  "folder": "Left",
   "choreoAuto": false
 }

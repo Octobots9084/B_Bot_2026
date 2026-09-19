@@ -13,13 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "center to depot"
+            "pathName": "trench to neutral left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "depot to score"
+            "pathName": "swipe neutral left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "left swipe to score bump"
           }
         },
         {
@@ -32,6 +38,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Center",
+  "folder": "Left",
   "choreoAuto": false
 }

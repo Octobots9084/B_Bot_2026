@@ -35,6 +35,7 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    public static CommandSwerveDrivetrain instance;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -128,6 +129,8 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        instance = this;
+
     }
 
     /**
@@ -152,6 +155,8 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
+
     }
 
     /**
@@ -306,8 +311,9 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
     public Optional<Pose2d> samplePoseAt(double timestampSeconds) {
         return super.samplePoseAt(Utils.fpgaToCurrentTime(timestampSeconds));
     }
-    
-    
 
+    public static CommandSwerveDrivetrain getInstance(){
+        return instance;
+    }
 }
 

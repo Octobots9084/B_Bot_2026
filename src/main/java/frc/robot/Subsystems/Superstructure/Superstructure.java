@@ -2,6 +2,9 @@ package frc.robot.Subsystems.Superstructure;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.Constants;
+import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.RollerFloor.RollerFloorStates;
@@ -13,10 +16,13 @@ import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 public class Superstructure {
     public SuperstructureStates currentState = SuperstructureStates.ZEROING;
     public SuperstructureStates wantedState = SuperstructureStates.ZEROING;
+    public IntakeStates superstructureWantedIntakeState = IntakeStates.SAFE;
 
     public IntakeSubsystem intake = IntakeSubsystem.getInstance();
     public ShooterSubsystem shooter = ShooterSubsystem.getInstance();
     public RollerFloorSubsystem floor = RollerFloorSubsystem.getInstance();
+    public boolean InAlignedZone = true;
+    public IntakeStates driverRequestedIntakeState = null;
 
 
     public static Superstructure currentInstance;
@@ -36,6 +42,27 @@ public class Superstructure {
 
     public Superstructure() {
         currentInstance = this;
+    }
+
+    public void IsInAllianceZone(){
+        //TODO Owen please add get instance to swerve
+        Pose2d robotPose = SwerveSubsystem.getInstance().getRobotPose();
+        if(Constants.isBlueAlliance){
+            if(robotPose.getX() < Constants.blueTrenchX){
+                InAlignedZone = true;
+            }
+            else{
+                InAlignedZone = false;
+            }
+        }
+        else{
+            if(robotPose.getX() > Constants.redTrenchX) {
+                InAlignedZone = true;   
+            }
+            else{
+                InAlignedZone = false;
+            }
+        }
     }
 
     public static void setInstance(Superstructure instance) {
@@ -64,34 +91,50 @@ public class Superstructure {
 
     private void handleStateTransitions() {
         switch (wantedState) {
-            case AUTOFERRY:
-                if (intake.currentIntakeState == IntakeStates.REVERSEINTAKE) intake.wantedIntakeState = IntakeStates.INTAKING;
-                currentState = wantedState;
-                break;
-            case AUTOHUB:
-                if (intake.currentIntakeState == IntakeStates.REVERSEINTAKE) intake.wantedIntakeState = IntakeStates.INTAKING;
-                currentState = wantedState;
-                break;
             case BUMP:
-                currentState = wantedState;
+                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
+                    currentState = wantedState;
+                }
                 break;
             case FERRY:
-                if (intake.currentIntakeState == IntakeStates.REVERSEINTAKE) intake.wantedIntakeState = IntakeStates.INTAKING;
-                currentState = wantedState;
+                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.HUB){
+                    currentState = wantedState;
+                }
                 break;
             case HUB:
-                if (intake.currentIntakeState == IntakeStates.REVERSEINTAKE) intake.wantedIntakeState = IntakeStates.INTAKING;
-                currentState = wantedState;
+                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.FERRY){
+                    currentState = wantedState;
+                }
                 break;
             case SAFE:
                 currentState = wantedState;
                 break;
             case TRENCH:
-                currentState = wantedState;
+                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.BUMP){
+                    currentState = wantedState;
+                }
                 break;
             case ZEROING:
-                currentState = wantedState;
+                if (currentState == SuperstructureStates.SAFE){
+                    currentState = wantedState;
+                }
                 break;
+            case FIXEDFIRE:
+                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
+                    currentState = wantedState;
+                }
+    
+            break;
+            case AUTOHUB:
+                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
+                    currentState = wantedState;
+                }
+            break;
+            case AUTOFERRY:
+                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
+                    currentState = wantedState;
+                }
+            break;
             default: 
                 if (wantedState != null) currentState = wantedState;
                 break;
@@ -100,109 +143,84 @@ public class Superstructure {
     private void applyStates() {
     
         switch (currentState) {
-            case AUTOFERRY:
-                shooter.wantedShooterState = ShooterStates.SAFE;
-                floor.wantedRollerState = RollerFloorStates.SHOOT;
-
-            case AUTOHUB:
-                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
-                floor.wantedRollerState = RollerFloorStates.SHOOT;
-
-                floor.wantedRollerState = switch(shooter.currentShooterState) {
-                    case FERRY -> RollerFloorStates.SHOOT;
-                    case FIXEDFIRE -> RollerFloorStates.SHOOT;
-                    case HUB -> RollerFloorStates.SHOOT;
-                    case SAFE -> RollerFloorStates.SAFE;
-                    case TRENCH -> RollerFloorStates.SAFE;
-                    case ZEROING -> RollerFloorStates.SAFE;
-                    default -> floor.wantedRollerState;        
-                };
-
             case BUMP:
-                if (shooter.currentShooterState == ShooterStates.FIXEDFIRE || shooter.currentShooterState == ShooterStates.FERRY)
+                if (shooter.currentShooterState == ShooterStates.FIXEDFIRE || shooter.currentShooterState == ShooterStates.FERRY){
                     shooter.wantedShooterState = ShooterStates.SAFE;
+                }
                     
-                floor.wantedRollerState = RollerFloorStates.SAFE;
+                floor.wantedRollerState = RollerFloorStates.PRELOAD;
 
-                floor.wantedRollerState = switch(intake.currentIntakeState) {
-                    case ELEPHANTIASIS -> RollerFloorStates.SAFE;
-                    case EXTENDED -> RollerFloorStates.SAFE;
-                    case INTAKING -> RollerFloorStates.SAFE;
-                    case REVERSEINTAKE -> RollerFloorStates.REVERSE;
-                    case SAFE -> RollerFloorStates.SAFE;
-                    case ZERO -> RollerFloorStates.SAFE;
-                    default -> floor.wantedRollerState;
-            
-                };
+                if(superstructureWantedIntakeState != IntakeSubsystem.wantedIntakeState){
+                    if(superstructureWantedIntakeState != null){
+                        IntakeSubsystem.getInstance().setWantedIntakeState(superstructureWantedIntakeState);
+                    }
+                }
+                break;
                 
             case FERRY:
-                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                shooter.wantedShooterState = ShooterStates.FERRY;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
                 
-                floor.wantedRollerState = switch(shooter.currentShooterState) {
-                    case FERRY -> RollerFloorStates.SHOOT;
-                    case FIXEDFIRE -> RollerFloorStates.SHOOT;
-                    case HUB -> RollerFloorStates.SHOOT;
-                    case SAFE -> RollerFloorStates.SAFE;
-                    case TRENCH -> RollerFloorStates.SAFE;
-                    case ZEROING -> RollerFloorStates.SAFE;
-                    default -> floor.wantedRollerState;        
-                };
+                if(superstructureWantedIntakeState != IntakeSubsystem.wantedIntakeState){
+                    if(superstructureWantedIntakeState != null){
+                        IntakeSubsystem.getInstance().setWantedIntakeState(superstructureWantedIntakeState);
+                    }
+                }
 
                 //"unless intake commanded otherwise no reverse intake" isnt that the only way the intake reverses
                 break;
 
             case HUB:
-                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                shooter.wantedShooterState = ShooterStates.HUB;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
-                floor.wantedRollerState = switch(shooter.currentShooterState) {
-                    case FERRY -> RollerFloorStates.SHOOT;
-                    case FIXEDFIRE -> RollerFloorStates.SHOOT;
-                    case HUB -> RollerFloorStates.SHOOT;
-                    case SAFE -> RollerFloorStates.SAFE;
-                    case TRENCH -> RollerFloorStates.SAFE;
-                    case ZEROING -> RollerFloorStates.SAFE;
-                    default -> floor.wantedRollerState;        
-                };
+                if(superstructureWantedIntakeState != IntakeSubsystem.wantedIntakeState){
+                    if(superstructureWantedIntakeState != null){
+                        IntakeSubsystem.getInstance().setWantedIntakeState(superstructureWantedIntakeState);
+                    }
+                }
 
                 break;
 
             case SAFE:
                 shooter.wantedShooterState = ShooterStates.SAFE;
-                floor.wantedRollerState = RollerFloorStates.SAFE;
+                floor.wantedRollerState = RollerFloorStates.PRELOAD;
 
-                floor.wantedRollerState = switch(intake.currentIntakeState) {
-                    case ELEPHANTIASIS -> RollerFloorStates.SAFE;
-                    case EXTENDED -> RollerFloorStates.SAFE;
-                    case INTAKING -> RollerFloorStates.SAFE;
-                    case REVERSEINTAKE -> RollerFloorStates.REVERSE;
-                    case SAFE -> RollerFloorStates.SAFE;
-                    case ZERO -> RollerFloorStates.SAFE;
-                    default -> floor.wantedRollerState;
             
-                };
-
+                IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.SAFE);
                 break;
 
             case TRENCH:
                 shooter.wantedShooterState = ShooterStates.TRENCH;
                 
-                floor.wantedRollerState = switch(intake.currentIntakeState) {
-                    case ELEPHANTIASIS -> RollerFloorStates.SAFE;
-                    case EXTENDED -> RollerFloorStates.SAFE;
-                    case INTAKING -> RollerFloorStates.SAFE;
-                    case REVERSEINTAKE -> RollerFloorStates.REVERSE;
-                    case SAFE -> RollerFloorStates.SAFE;
-                    case ZERO -> RollerFloorStates.SAFE;
-                    default -> floor.wantedRollerState;
-            
-                };
+                if(superstructureWantedIntakeState != IntakeSubsystem.wantedIntakeState){
+                    if(superstructureWantedIntakeState != null){
+                        IntakeSubsystem.getInstance().setWantedIntakeState(superstructureWantedIntakeState);
+                    }
+                }
                 break;
             case ZEROING:
                 //TODO when something actually exists for the zeroing algorithm
                 break;
+            case AUTOHUB:
+                shooter.wantedShooterState = ShooterStates.HUB;
+                RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;
 
+                if(superstructureWantedIntakeState != IntakeStates.INTAKING || superstructureWantedIntakeState != IntakeStates.ZERO){
+                    if(superstructureWantedIntakeState != null){
+                        IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.ELEPHANTIASIS);
+                    }
+                }
+            break;
+            case AUTOFERRY:
+                shooter.wantedShooterState = ShooterStates.HUB;
+                RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;
+                if(superstructureWantedIntakeState != IntakeStates.INTAKING || superstructureWantedIntakeState != IntakeStates.ZERO){
+                    if(superstructureWantedIntakeState != null){
+                        IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.ELEPHANTIASIS);
+                    }
+                }
+            break;
             default: throw new IllegalStateException("Illegal current state for Superstructure! State: " + currentState);   
         }
                 

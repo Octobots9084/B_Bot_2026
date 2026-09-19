@@ -13,19 +13,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "trench to neutral right"
+            "pathName": "trench to neutral left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "swipe neutral right"
+            "pathName": "swipe neutral left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "right swipe to score trench"
+            "pathName": "left swipe to score trench"
           }
         },
         {
@@ -49,25 +49,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "double swipe connection"
+            "pathName": "(Flipped) double swipe connection"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "trench to neutral right"
+            "pathName": "trench to neutral left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "swipe neutral right"
+            "pathName": "swipe neutral left"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "right swipe to score trench"
+            "pathName": "left swipe to score trench"
           }
         },
         {
@@ -80,6 +80,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Right",
+  "folder": "Left",
   "choreoAuto": false
 }

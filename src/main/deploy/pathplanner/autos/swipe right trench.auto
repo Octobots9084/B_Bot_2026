@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "trench to neutral right"
@@ -21,11 +27,17 @@
           "data": {
             "pathName": "right swipe to score trench"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Right",
   "choreoAuto": false
 }

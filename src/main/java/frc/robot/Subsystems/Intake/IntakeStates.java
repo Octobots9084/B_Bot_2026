@@ -8,6 +8,7 @@ public enum IntakeStates{
     ELEPHANTIASIS(null, 0d),//MK 3!
     ZERO(0d,0d),
     REVERSEINTAKE(1d,-1d);
+    
 
 
     public final Double pos;

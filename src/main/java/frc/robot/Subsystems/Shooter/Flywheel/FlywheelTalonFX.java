@@ -27,7 +27,7 @@ public class FlywheelTalonFX{
     .withTelemetry("Shooter Motor", TelemetryVerbosity.HIGH)
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,3)))
     .withMotorInverted(false)
-    .withIdleMode(MotorMode.COAST)
+    .withIdleMode(MotorMode.BRAKE)
     .withSubsystem(FlywheelSubsystem.getInstance())
     .withTrapezoidalProfile(FlywheelSubsystem.maxVelocity, FlywheelSubsystem.maxAcceleration)
     .withStatorCurrentLimit(Amps.of(FlywheelSubsystem.FlywheelStatorLimit));
