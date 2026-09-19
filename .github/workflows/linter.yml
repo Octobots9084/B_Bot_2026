@@ -5,6 +5,7 @@ on:
 
 jobs:
   linter:
+    name: Run lint operations
     runs-on: ubuntu-latest    
     steps:
       - name: Checkout code
@@ -57,4 +58,9 @@ jobs:
       - name: Run Gradle Build
         run: ./gradlew build
   deploy:
-    # placeholder
+    name: Deploy (future placeholder)
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy
+        run: echo "TODO: Run deploy and capture logs for confirming successful deployment."
