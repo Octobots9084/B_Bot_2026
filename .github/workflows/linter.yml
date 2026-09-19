@@ -4,9 +4,8 @@ on:
   pull_request:
 
 jobs:
-  linterJob:
-    runs-on: ubuntu-latest
-    
+  linter:
+    runs-on: ubuntu-latest    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,3 +39,20 @@ jobs:
       - name: Finalize Build Status
         if: steps.spotless.outcome == 'failure' || steps.checkstyle.outcome == 'failure'
         run: exit 1
+  build:
+    name: Gradle Build
+    needs: spotless
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17' # Update to your project's Java version
+          cache: 'gradle'
+
+      - name: Run Gradle Build
+        run: ./gradlew build
