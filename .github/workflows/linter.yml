@@ -41,7 +41,7 @@ jobs:
         run: exit 1
   build:
     name: Gradle Build
-    needs: spotless
+    needs: linter
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
