@@ -1,0 +1,42 @@
+name: Java Linter
+
+on:
+  pull_request:
+
+jobs:
+  linterJob:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17' # Change this to match your project's Java version if needed
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 1. Run Spotless Check independently
+      - name: Run Spotless Check
+        id: spotless
+        continue-on-error: true
+        run: ./gradlew spotlessCheck
+
+      # 3. Custom Error Hint for Spotless Failures
+      - name: Spotless Error Notice
+        if: steps.spotless.outcome == 'failure'
+        run: |
+          echo "========================================================="
+          echo "❌ Formatting violation detected by Spotless!"
+          echo "👉 Run './gradlew spotlessApply' locally to fix automatically."
+          echo "========================================================="
+
+      # 5. Fail the job if either tool failed
+      - name: Finalize Build Status
+        if: steps.spotless.outcome == 'failure' || steps.checkstyle.outcome == 'failure'
+        run: exit 1
