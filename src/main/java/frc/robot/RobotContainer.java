@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Mode;
+import frc.robot.Subsystems.Drive.CompConstants;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Drive.TunerConstants;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
@@ -45,8 +46,7 @@ public class RobotContainer {
     public RobotContainer(Robot robot) {
 
 
-      SwerveSubsystem swerve = new SwerveSubsystem(ButtonConfig.driverController, ButtonConfig.coDriverController, Constants.maxVelocity,
-          Constants.maxAngularVelocity);
+      SwerveSubsystem swerve = new SwerveSubsystem(ButtonConfig.driverController, ButtonConfig.coDriverController, Constants.maxVelocity, Constants.maxAngularVelocity);
 
         buttons = new ButtonConfig();
 

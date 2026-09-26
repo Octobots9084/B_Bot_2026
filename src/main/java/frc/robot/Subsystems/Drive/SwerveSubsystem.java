@@ -1,7 +1,7 @@
 package frc.robot.Subsystems.Drive;
 
 
-import frc.robot.Subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.Subsystems.Drive.CompConstants.TunerSwerveDrivetrain;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
@@ -73,7 +73,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
     
     public SwerveSubsystem(XboxController driverController, XboxController coDriverController, double maxVelocity, double maxAngularVelocity) {
-        super(TunerConstants.DrivetrainConstants, TunerConstants.FrontLeft, TunerConstants.FrontRight, TunerConstants.BackLeft, TunerConstants.BackRight);
+        super(CompConstants.DrivetrainConstants, maxAngularVelocity, null, null, null);
         this.driverController = driverController;
         this.coDriverController = driverController;
         this.maxVelocity = maxVelocity;
