@@ -6,5 +6,7 @@ public enum ShooterStates {
     TRENCH,
     FIXEDFIRE,
     HUB,
-    FERRY
+    FERRY,
+    UNJAM,
+    SPINUP
 }

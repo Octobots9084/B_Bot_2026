@@ -47,6 +47,12 @@ public class ShooterSubsystem extends SubsystemBase {
             break;    
             case FIXEDFIRE:
             break;
+            case UNJAM:
+            currentShooterState = ShooterStates.UNJAM;
+            break;
+            case SPINUP:
+            currentShooterState = ShooterStates.SPINUP;
+            break;
             default:
             break;
             }
@@ -75,6 +81,12 @@ public class ShooterSubsystem extends SubsystemBase {
             break;    
             case FIXEDFIRE:
                 shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
+            break;
+            case UNJAM:
+                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.REVERSE.enumVelocity, null);//TODO
+            break;
+            case SPINUP:
+                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.SAFE.enumVelocity, null);//TODO not null
             break;
             default:
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);

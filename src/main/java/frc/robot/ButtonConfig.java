@@ -17,25 +17,42 @@ import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
 import frc.robot.Subsystems.Superstructure.SuperstructureStates;
+import frc.robot.Subsystems.Vision.Alignment;
+import frc.robot.Subsystems.Vision.ShooterCalculator;
 
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
     public static CommandXboxController coDriverController = new CommandXboxController(1);
     Superstructure superstructure = Superstructure.getInstance();
+    private ShooterCalculator alignRotation;
 
     public void initTeleop() {
-        // driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
-        //     superstructure.setWantedState(SuperstructureStates.HUB)), 
-        //     new InstantCommand(()->superstructure.setWantedState(SuperstructureStates.FERRY)), ()->superstructure.InAlignedZone))
-        //     .onTrue(new ConditionalCommand(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS), null, ()->superstructure.driverRequestedIntakeState!=IntakeStates.INTAKING))
-        //     .onFalse(new InstantCommand(()->
-        //     superstructure.setWantedState(SuperstructureStates.SAFE)));
+        driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
+            superstructure.setWantedState(SuperstructureStates.HUB)), 
+            new InstantCommand(()->superstructure.setWantedState(SuperstructureStates.FERRY)), ()->superstructure.InAlignedZone))
+            .onTrue(new ConditionalCommand(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS), null, ()->superstructure.driverRequestedIntakeState!=IntakeStates.INTAKING))
+            .onFalse(new InstantCommand(()->
+            superstructure.setWantedState(SuperstructureStates.SAFE)));
 
-        // driverController.leftTrigger().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.INTAKING))
-        // .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
+        driverController.leftTrigger().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.INTAKING))
+        .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
 
-        // driverController.leftBumper().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.REVERSEINTAKE))
-        // .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
+        driverController.leftBumper().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.REVERSEINTAKE))
+        .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
+        
+        alignRotation = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+        driverController.rightBumper().onTrue(new InstantCommand(() -> Alignment.getInstance().getRotation(alignRotation.getRotation())));
+
+        driverController.y().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDFIRE)));
+
+        driverController.a().onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.SAFE));
+
+        driverController.b().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.UNJAM)));
+
+        driverController.x().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SPINUP)));
+
+
+
 
 
         //TODO button maps arent decided yet. Technically we haven't chosen what the joysticks do as of the time of writing this.

@@ -135,6 +135,12 @@ public class Superstructure {
                     currentState = wantedState;
                 }
             break;
+            case UNJAM:
+            currentState = wantedState;
+            break;
+            case SPINUP:
+            currentState = wantedState;
+            break;
             default: 
                 if (wantedState != null) currentState = wantedState;
                 break;
@@ -211,6 +217,13 @@ public class Superstructure {
                         IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.ELEPHANTIASIS);
                     }
                 }
+            break;
+            case UNJAM:
+            shooter.wantedShooterState = ShooterStates.UNJAM;
+
+            break;
+            case SPINUP:
+            shooter.wantedShooterState = ShooterStates.SPINUP;
             break;
             case AUTOFERRY:
                 shooter.wantedShooterState = ShooterStates.HUB;
