@@ -73,13 +73,12 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
     
     public SwerveSubsystem(XboxController driverController, XboxController coDriverController, double maxVelocity, double maxAngularVelocity) {
-        super(TunerConstants.DrivetrainConstants, maxAngularVelocity, null, null, null);
+        super(TunerConstants.DrivetrainConstants, TunerConstants.FrontLeft, TunerConstants.FrontRight, TunerConstants.BackLeft, TunerConstants.BackRight);
         this.driverController = driverController;
         this.coDriverController = driverController;
         this.maxVelocity = maxVelocity;
         this.maxAngularVelocity = maxAngularVelocity;
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
-        initCommandSwerveDrivetrain();
         instance = this;
         configureAutoBuilder();
     }
@@ -286,19 +285,5 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public  static SwerveSubsystem getInstance(){
         return instance;
     }
-
-    public void initCommandSwerveDrivetrain() {
-
-        SwerveDrivetrainConstants dtC = new SwerveDrivetrainConstants()
-            .withCANBusName(Constants.krakenBus.getName())
-            .withPigeon2Id(0)
-            .withPigeon2Configs(null);
-
-
-        commandSwerveDrivetrain = new CommandSwerveDrivetrain(
-            dtC, Constants.FrontLeft, Constants.FrontRight, Constants.BackLeft, Constants.BackRight);
-        }
-
-
 }
 
