@@ -30,8 +30,11 @@ public class Constants {
 
     public static double redTrenchX = 11.7;
     public static double blueTrenchX = 4.8;
-    public static double outpostTrenchY = 7.4375;
-    public static double depotTrenchY = 0.625;
+    public static double outpostTrenchY = 6.8;
+    public static double depotTrenchY = 1.2;
+    public static double fieldMidline = 8.25;
+    public static double trenchDangerZone = 0.1016;
+    public static double shooterLoweringTime = 0.25;
     public static double leftYDeadband;
     public static double leftXDeadband;
     public static double rightXDeadband;

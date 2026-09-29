@@ -1,11 +1,24 @@
 package frc.robot.Subsystems.Shooter;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Seconds;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.DistanceUnit;
+import edu.wpi.first.units.LinearVelocityUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Per;
+import edu.wpi.first.units.measure.Distance.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Shooter.Feeder.FeederStates;
 import frc.robot.Subsystems.Shooter.Feeder.FeederSubsystem;
 import frc.robot.Subsystems.Shooter.Flywheel.FlywheelStates;
@@ -23,6 +36,9 @@ public class ShooterSubsystem extends SubsystemBase {
     ShooterCalculator ferryShot;
     @Override
     public void periodic() {
+        if(InTrenchLane() && inDangerOfTrench()){
+            wantedShooterState = ShooterStates.TRENCH;
+        }
         handleStateTransitions();
         applyStates();
         logging();

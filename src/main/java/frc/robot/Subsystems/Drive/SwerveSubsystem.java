@@ -19,6 +19,8 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,6 +28,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 
@@ -245,7 +251,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
         if (Constants.isBlueAlliance) {   
             return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
-        }
+        } 
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
     }
 
@@ -285,5 +291,61 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public  static SwerveSubsystem getInstance(){
         return instance;
     }
+
+    public void initCommandSwerveDrivetrain() {
+
+        SwerveDrivetrainConstants dtC = new SwerveDrivetrainConstants()
+            .withCANBusName(Constants.krakenBus.getName())
+            .withPigeon2Id(0)
+            .withPigeon2Configs(null);
+
+
+        commandSwerveDrivetrain = new CommandSwerveDrivetrain(
+            dtC, Constants.FrontLeft, Constants.FrontRight, Constants.BackLeft, Constants.BackRight);
+        }
+    public ChassisSpeeds getChassisSpeeds() {
+        return commandSwerveDrivetrain.getState().Speeds;
+    } 
+    public static boolean InTrenchLane(){
+        Pose2d robPose = SwerveSubsystem.getInstance().getRobotPose();
+        if(robPose.getY() > Constants.outpostTrenchY || robPose.getY() < Constants.depotTrenchY){
+            return true;
+        }
+        return false;
+    }
+
+    public static LinearVelocity trenchVelocity() {
+        Pose2d robPose = SwerveSubsystem.getInstance().getRobotPose();
+        ChassisSpeeds speeds = SwerveSubsystem.getInstance().getChassisSpeeds();
+        if(robPose.getX() <= Constants.blueTrenchX || robPose.getX() >= Constants.fieldMidline && robPose.getX() <= Constants.redTrenchX ) {
+            return MetersPerSecond.of(speeds.vxMetersPerSecond);
+        }
+        else if ((robPose.getX()>= Constants.blueTrenchX && robPose.getX()<= Constants.fieldMidline) || robPose.getX() > Constants.redTrenchX){
+            return (MetersPerSecond.of(speeds.vxMetersPerSecond)).times(-1);
+        }
+        else{
+            return MetersPerSecond.of(0);
+        }
+    }
+
+    public static boolean inDangerOfTrench(){
+        LinearVelocity robTrenchVelocity = trenchVelocity();
+
+        Distance baseDistanceRelationship = robTrenchVelocity.times(Seconds.of(Constants.shooterLoweringTime));
+        Distance minimumTrenchDist = baseDistanceRelationship.plus(Meters.of(Constants.trenchDangerZone));
+        return minimumTrenchDist.gte(distanceFromTrench());
+        // y=(x/t) + 0.1016
+    }
+
+    public static Distance distanceFromTrench() {
+        Pose2d robPose = SwerveSubsystem.getInstance().getRobotPose();
+
+        if(robPose.getY() > Constants.fieldMidline) {
+            return Meters.of( Math.abs(robPose.getX() - Constants.redTrenchX));
+        } 
+        return Meters.of( Math.abs(robPose.getX() - Constants.blueTrenchX));
+
+    }
+
 }
 
