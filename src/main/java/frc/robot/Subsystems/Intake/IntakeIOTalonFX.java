@@ -118,17 +118,17 @@ public class IntakeIOTalonFX {
     }
 
     public void log() {
-        Logger.recordOutput("mover/", rollerMover.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("mover/", rollerMover.getPosition().getValueAsDouble());
-        Logger.recordOutput("mover/", rollerMover.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Roller Temp/", rollerMover.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Roller Position/", rollerMover.getPosition().getValueAsDouble());
+        Logger.recordOutput("Roller Voltage/", rollerMover.getMotorVoltage().getValueAsDouble());
 
-        Logger.recordOutput("spinner/", rollerSpinner.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("spinner/", rollerSpinner.getPosition().getValueAsDouble());
-        Logger.recordOutput("spinner/", rollerSpinner.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Spinner Temp", rollerSpinner.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Spinner Position", rollerSpinner.getPosition().getValueAsDouble());
+        Logger.recordOutput("Spinner Voltage", rollerSpinner.getMotorVoltage().getValueAsDouble());
 
-        Logger.recordOutput("spinnerF/", rollerSpinnerF.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("spinnerF/", rollerSpinnerF.getPosition().getValueAsDouble());
-        Logger.recordOutput("spinnerF/", rollerSpinnerF.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("SpinnerF Temp", rollerSpinnerF.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("SpinnerF Position", rollerSpinnerF.getPosition().getValueAsDouble());
+        Logger.recordOutput("SpinnerF Voltage", rollerSpinnerF.getMotorVoltage().getValueAsDouble());
     }
 
     public Pivot motorInstPivot(IntakeSubsystem sub) {

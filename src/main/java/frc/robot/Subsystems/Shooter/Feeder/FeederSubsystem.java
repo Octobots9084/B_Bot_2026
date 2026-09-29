@@ -3,6 +3,8 @@ package frc.robot.Subsystems.Shooter.Feeder;
 import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.RPM;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,15 +54,21 @@ public class FeederSubsystem extends SubsystemBase{
    @Override
    public void periodic(){
       feederFlywheel.updateTelemetry();
-      logging();
+      log();
    }
      
    public void simulationPeriodic(){
       feederFlywheel.simIterate();
    }
 
-   public void logging() {
-      //TODO log stuff
+    public void log() {
+        Logger.recordOutput("wantedState", wantedFeederState);
+        Logger.recordOutput("currentState", FeederState);
+        Logger.recordOutput("Feeder Velocity", getFeederVelocity());
+        Logger.recordOutput("Motor Voltage", TX.FeederMotor.getVoltage());
+        Logger.recordOutput("Motor Temperature", TX.FeederMotor.getTemperature());
+        Logger.recordOutput("Motor Position", TX.FeederMotor.getRotorPosition());
     }
+
 }
 

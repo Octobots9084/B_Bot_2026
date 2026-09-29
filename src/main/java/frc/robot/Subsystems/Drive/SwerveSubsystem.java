@@ -5,6 +5,7 @@ import frc.robot.Subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
+import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -28,6 +29,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
@@ -89,6 +92,11 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         configureAutoBuilder();
     }
 
+    public Pose2d getPose2d()
+    {
+     return commandSwerveDrivetrain.getPose2d();   
+    }
+
     private void configureAutoBuilder() {
         // SwerveSubsystem.getInstance().registerNamedCommands();
         try {
@@ -123,6 +131,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public void periodic() {
         handleStateTransitions();
         applyStates();
+        log();
     }
 
     public void handleStateTransitions() {
@@ -291,6 +300,31 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public  static SwerveSubsystem getInstance(){
         return instance;
     }
+
+
+        //states, motor voltage
+        public void log() {
+        Logger.recordOutput("Pose X", commandSwerveDrivetrain.getPose2d().getX());
+        Logger.recordOutput("Pose Y", commandSwerveDrivetrain.getPose2d().getY());
+        Logger.recordOutput("Pose Rotation (Degrees)", commandSwerveDrivetrain.getPose2d().getRotation().getDegrees());
+        Logger.recordOutput("Pose Rotation (Radians)", commandSwerveDrivetrain.getPose2d().getRotation().getRadians());
+        ChassisSpeeds mango = calculateSpeedsBasedOnJoystickInputs();
+        Logger.recordOutput("X Velocity", mango.vxMetersPerSecond);
+        Logger.recordOutput("Y Velocity", mango.vyMetersPerSecond);
+        Logger.recordOutput("Rotational Velocity (Degrees)", Math.toDegrees(mango.omegaRadiansPerSecond));
+        Logger.recordOutput("Rotational Velocity (Radians)", mango.omegaRadiansPerSecond);
+        Logger.recordOutput("currentState", currentState);
+        Logger.recordOutput("wantedState", wantedState);
+        Logger.recordOutput("Front Left Drive Motor Voltage", commandSwerveDrivetrain.getModule(0).getDriveMotor().getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Front Right Drive Motor Voltage", commandSwerveDrivetrain.getModule(1).getDriveMotor().getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Back Left Drive Motor Voltage", commandSwerveDrivetrain.getModule(2).getDriveMotor().getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Back Right Drive Motor Voltage", commandSwerveDrivetrain.getModule(3).getDriveMotor().getMotorVoltage().getValueAsDouble());
+         //front left, fr, bl, br
+    }
+
+        
+
+
 
     public void initCommandSwerveDrivetrain() {
 

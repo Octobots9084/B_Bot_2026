@@ -12,6 +12,8 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 
+import org.littletonrobotics.junction.Logger;
+
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
@@ -62,6 +64,7 @@ public class FlywheelSubsystem extends SubsystemBase{
       //    setFlywheelVelocitySetpoint(RPM.of(currentState.enumVelocity));
       // }
       shooterFlywheel.updateTelemetry();
+      log();
      }
      @Override
    public void simulationPeriodic(){
@@ -71,5 +74,15 @@ public class FlywheelSubsystem extends SubsystemBase{
       // }
       shooterFlywheel.simIterate();
         }
+
+   public void log() {
+        Logger.recordOutput("wantedState", wantedFlywheelState);
+        Logger.recordOutput("currentState", currentState);
+        Logger.recordOutput("Flywheel Velocity", getFlywheelVelocity());
+        Logger.recordOutput("Motor Temperature", TX.flywheelTalonSMC.getTemperature());
+        Logger.recordOutput("Motor Voltage", TX.flywheelTalonSMC.getVoltage());
+        Logger.recordOutput("Motor Position", TX.flywheelTalonSMC.getRotorPosition());
+        
+   }
    
 }     
