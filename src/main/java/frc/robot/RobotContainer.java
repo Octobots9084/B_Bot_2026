@@ -52,7 +52,7 @@ public class RobotContainer {
         buttons = new ButtonConfig();
 
         
-        switch(Constants.currentMode)
+        switch(Constants.currentMode){
             case REAL: {
                 intake = new IntakeSubsystem();
                 rollerFloor = new RollerFloorSubsystem();

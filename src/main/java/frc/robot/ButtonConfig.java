@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -21,8 +22,8 @@ import frc.robot.Subsystems.Vision.Alignment;
 import frc.robot.Subsystems.Vision.ShooterCalculator;
 
 public class ButtonConfig {
-    public static XboxController driverController = new XboxController(0);
-    public static XboxController coDriverController = new XboxController(1);
+    public static CommandXboxController driverController = new CommandXboxController(0);
+    public static CommandXboxController coDriverController = new CommandXboxController(1);
     Superstructure superstructure = Superstructure.getInstance();
     private ShooterCalculator alignRotation;
 

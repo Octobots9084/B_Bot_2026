@@ -57,9 +57,9 @@ public class ShooterSubsystem extends SubsystemBase {
     ShooterCalculator ferryShot;
     @Override
     public void periodic() {
-        if(InTrenchLane() && inDangerOfTrench()){
-            wantedShooterState = ShooterStates.TRENCH;
-        }
+       // if(InTrenchLane() && inDangerOfTrench()){
+         //   wantedShooterState = ShooterStates.TRENCH;
+        //}
         handleStateTransitions();
         applyStates();
         log();

@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -53,8 +54,8 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public SwerveStates wantedState = SwerveStates.IDLE;
     public SwerveStates currentState = SwerveStates.IDLE;
 
-    public XboxController driverController;
-    public XboxController coDriverController;
+    public CommandXboxController driverController;
+    public CommandXboxController coDriverController;
 
     public double maxVelocity;
     public double maxAngularVelocity;
@@ -81,10 +82,10 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
     
-    public SwerveSubsystem(XboxController driverController, XboxController coDriverController, double maxVelocity, double maxAngularVelocity) {
+    public SwerveSubsystem(CommandXboxController driverController2, CommandXboxController coDriverController2, double maxVelocity, double maxAngularVelocity) {
         super(TunerConstants.DrivetrainConstants, TunerConstants.FrontLeft, TunerConstants.FrontRight, TunerConstants.BackLeft, TunerConstants.BackRight);
-        this.driverController = driverController;
-        this.coDriverController = driverController;
+        this.driverController = driverController2;
+        //this.coDriverController = driverController2;
         this.maxVelocity = maxVelocity;
         this.maxAngularVelocity = maxAngularVelocity;
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
@@ -334,8 +335,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
             .withPigeon2Configs(null);
 
 
-        commandSwerveDrivetrain = new CommandSwerveDrivetrain(
-            dtC, Constants.FrontLeft, Constants.FrontRight, Constants.BackLeft, Constants.BackRight);
+        TunerConstants.createDrivetrain();
         }
     public ChassisSpeeds getChassisSpeeds() {
         return commandSwerveDrivetrain.getState().Speeds;
