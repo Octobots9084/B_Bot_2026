@@ -1,8 +1,15 @@
 package frc.robot.Subsystems.Superstructure;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Intake.IntakeStates;
@@ -30,7 +37,9 @@ public class Superstructure {
 
     //@Override
      public void periodic() {
-
+        if(SwerveSubsystem.InTrenchLane() && SwerveSubsystem.inDangerOfTrench()){
+            wantedState = SuperstructureStates.TRENCH;
+        }
         if (currentState != wantedState)        
             handleStateTransitions();
          applyStates();
@@ -135,6 +144,12 @@ public class Superstructure {
                     currentState = wantedState;
                 }
             break;
+            case UNJAM:
+            currentState = wantedState;
+            break;
+            case SPINUP:
+            currentState = wantedState;
+            break;
             default: 
                 if (wantedState != null) currentState = wantedState;
                 break;
@@ -211,6 +226,13 @@ public class Superstructure {
                         IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.ELEPHANTIASIS);
                     }
                 }
+            break;
+            case UNJAM:
+            shooter.wantedShooterState = ShooterStates.UNJAM;
+
+            break;
+            case SPINUP:
+            shooter.wantedShooterState = ShooterStates.SPINUP;
             break;
             case AUTOFERRY:
                 shooter.wantedShooterState = ShooterStates.HUB;

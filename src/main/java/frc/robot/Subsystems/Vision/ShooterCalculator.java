@@ -127,6 +127,7 @@ public class ShooterCalculator{
             noSolutionFound = false;
         }
 
+        //field relative
         rotationRadians = Math.atan2(yDistanceToTarget + virtualTargetYAdjustment, xDistanceToTarget + virtualTargetXAdjustment);
         //double hoodAngle = lut.get(shortestDistanceToTarget).getHoodAngle();
         //double flywheelSpeed = lut.get(shortestDistanceToTarget).getflywheelSpeed();

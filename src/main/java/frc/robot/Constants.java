@@ -14,6 +14,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.trajectory.constraint.MaxVelocityConstraint;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.math.util.Units;
@@ -29,8 +30,11 @@ public class Constants {
 
     public static double redTrenchX = 11.7;
     public static double blueTrenchX = 4.8;
-    public static double outpostTrenchY = 7.4375;
-    public static double depotTrenchY = 0.625;
+    public static double outpostTrenchY = 6.8;
+    public static double depotTrenchY = 1.2;
+    public static double fieldMidline = 8.25;
+    public static double trenchDangerZone = 0.1016;
+    public static double shooterLoweringTime = 0.25;
     public static double leftYDeadband;
     public static double leftXDeadband;
     public static double rightXDeadband;
@@ -75,6 +79,8 @@ public class Constants {
   }
 
 
+public static final double maxAngularVelocity = 540;
+public static final double maxVelocity = 4.5;
   private static final SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constantCreator =
         new SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>()
         .withDriveMotorGearRatio(1)

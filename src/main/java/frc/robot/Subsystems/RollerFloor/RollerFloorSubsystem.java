@@ -6,6 +6,9 @@ import static edu.wpi.first.units.Units.RPM;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,14 +22,12 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class RollerFloorSubsystem extends SubsystemBase {
     private Distance RollerDiameter = Centimeters.of(20);//TODO replace all of these values
-    public RollerFloorStates state = RollerFloorStates.SAFE;
     public RollerFloorStates wantedRollerState = RollerFloorStates.SAFE;
     public RollerFloorStates currentRollerState = RollerFloorStates.SAFE;
     public RollerFloorTalonFX TX;
     public static RollerFloorSubsystem instance;
     private FlyWheel RollerFlywheel;
     private final FlyWheelConfig RollerFloorConfig;
-    public FlyWheel floorFlyWheel;
 
     public RollerFloorSubsystem() {
         instance = this;
@@ -37,7 +38,7 @@ public class RollerFloorSubsystem extends SubsystemBase {
         RollerFloorConfig = new FlyWheelConfig()
         .withDiameter(RollerDiameter)
         .withTelemetry("rollerFloorMech", TelemetryVerbosity.HIGH);
-        floorFlyWheel = new FlyWheel(RollerFloorConfig, TX.FloorMotor);
+        RollerFlywheel = new FlyWheel(RollerFloorConfig, TX.FloorMotor);
     }
       @Override
     public void periodic() {
@@ -108,4 +109,12 @@ public class RollerFloorSubsystem extends SubsystemBase {
         RollerFlywheel.setMechanismVelocitySetpoint(speed);
      }
 
+     //wantedState, currentState, state, RollerFlysheel, TX.FloorMotor, TX.getVoltage
+     public void log() {
+        Logger.recordOutput("wantedState", wantedRollerState);
+        Logger.recordOutput("currentState", currentRollerState);
+        Logger.recordOutput("Motor Voltage", TX.FloorMotor.getVoltage());
+        Logger.recordOutput("Motor Temperature", TX.FloorMotor.getTemperature());
+        Logger.recordOutput("Motor Position", TX.FloorMotor.getRotorPosition()); //someone who knows motors pls translate and verify... like verity
+     }
 }

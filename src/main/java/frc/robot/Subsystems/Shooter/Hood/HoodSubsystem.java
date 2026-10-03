@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Pounds;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -54,4 +56,13 @@ public class HoodSubsystem extends SubsystemBase{
     hood.updateTelemetry();
     hood.simIterate();
    }
+
+   public void log() {
+        Logger.recordOutput("Hood Angle", getAngle());
+        Logger.recordOutput("Motor Temperature", TX.HoodMotorSMC.getTemperature());
+        Logger.recordOutput("Motor Voltage", TX.HoodMotorSMC.getVoltage());
+        Logger.recordOutput("Motor Position", TX.HoodMotorSMC.getRotorPosition());
+        
+   }
+   
 }
