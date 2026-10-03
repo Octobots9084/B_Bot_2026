@@ -18,6 +18,9 @@ import frc.robot.Subsystems.RollerFloor.RollerFloorStates;
 import frc.robot.Subsystems.RollerFloor.RollerFloorSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
+import frc.robot.Subsystems.Lights.LightAnimations;
+import frc.robot.Subsystems.Lights.LightsSubsystem;
+
 
 
 public class Superstructure {
@@ -157,8 +160,16 @@ public class Superstructure {
     }
     private void applyStates() {
     
+    // BUMP YELLOW,
+    // HUB GREEN,
+    // FERRY BLUE,
+    // TRENCH RED,
+    // SAFE WHITE,
+
+
         switch (currentState) {
             case BUMP:
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.BUMP;
                 if (shooter.currentShooterState == ShooterStates.FIXEDFIRE || shooter.currentShooterState == ShooterStates.FERRY){
                     shooter.wantedShooterState = ShooterStates.SAFE;
                 }
@@ -173,6 +184,7 @@ public class Superstructure {
                 break;
                 
             case FERRY:
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.FERRY;
                 shooter.wantedShooterState = ShooterStates.FERRY;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
                 
@@ -186,6 +198,7 @@ public class Superstructure {
                 break;
 
             case HUB:
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.HUB;
                 shooter.wantedShooterState = ShooterStates.HUB;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
@@ -198,6 +211,7 @@ public class Superstructure {
                 break;
 
             case SAFE:
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.SAFE;
                 shooter.wantedShooterState = ShooterStates.SAFE;
                 floor.wantedRollerState = RollerFloorStates.PRELOAD;
 
@@ -206,6 +220,7 @@ public class Superstructure {
                 break;
 
             case TRENCH:
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.TRENCH;
                 shooter.wantedShooterState = ShooterStates.TRENCH;
                 
                 if(superstructureWantedIntakeState != IntakeSubsystem.wantedIntakeState){
@@ -214,10 +229,14 @@ public class Superstructure {
                     }
                 }
                 break;
+
             case ZEROING:
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.DEFAULT;
                 //TODO when something actually exists for the zeroing algorithm
                 break;
+
             case AUTOHUB:
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.HUB;
                 RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;
 
@@ -227,17 +246,26 @@ public class Superstructure {
                     }
                 }
             break;
+
             case UNJAM:
-            shooter.wantedShooterState = ShooterStates.UNJAM;
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.DEFAULT;
+                shooter.wantedShooterState = ShooterStates.UNJAM;
 
             break;
+
             case SPINUP:
-            shooter.wantedShooterState = ShooterStates.SPINUP;
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.DEFAULT;
+                shooter.wantedShooterState = ShooterStates.SPINUP;
             break;
+
             case FIXEDFIRE:
-            shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.DEFAULT;
+                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
             break;
+
             case AUTOFERRY:
+                LightsSubsystem.getInstance().lightsWantedState = LightAnimations.DEFAULT;
+
                 shooter.wantedShooterState = ShooterStates.HUB;
                 RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;
                 if(superstructureWantedIntakeState != IntakeStates.INTAKING || superstructureWantedIntakeState != IntakeStates.ZERO){
