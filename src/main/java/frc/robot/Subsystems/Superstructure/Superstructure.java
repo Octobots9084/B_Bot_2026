@@ -129,7 +129,7 @@ public class Superstructure {
                 }
                 break;
             case FIXEDFIRE:
-                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
+                {
                     currentState = wantedState;
                 }
     
