@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Seconds;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,6 +24,8 @@ import edu.wpi.first.units.measure.Distance.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.ButtonConfig;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.Mode;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
@@ -36,8 +39,8 @@ import frc.robot.Subsystems.Vision.Alignment;
 import frc.robot.Subsystems.Vision.ShooterCalculator;
 
 public class ShooterSubsystem extends SubsystemBase {
-    public ShooterStates wantedShooterState = ShooterStates.SAFE;
-    public ShooterStates currentShooterState = ShooterStates.SAFE;
+    @AutoLogOutput public ShooterStates wantedShooterState = ShooterStates.SAFE;
+    @AutoLogOutput public ShooterStates currentShooterState = ShooterStates.SAFE;
     public SwerveSubsystem swerve;
     public static ShooterSubsystem inst;
     private Translation2d hubPoseBlue = new Translation2d(4.6228, 4.02082);
@@ -92,9 +95,16 @@ public class ShooterSubsystem extends SubsystemBase {
    
  
     public void shooterPartsControl(double flywheelSpeed, double feederSpeed, Angle angle){
-        this.shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
-        this.feeder.setFeederVelocitySetpoint(RPM.of(feederSpeed));
-        this.hood.setAngleWithTolerance(angle, HoodSubsystem.hoodTolerance);
+        if(Constants.currentMode == Mode.SIM){
+            shooterFlywheel.setDutyCycle(0.3);
+            feeder.setDutyCycle(0.3);
+            hood.setAngleWithTolerance(angle, HoodSubsystem.hoodTolerance);
+        }else{
+            shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
+            feeder.setFeederVelocitySetpoint(RPM.of(feederSpeed));
+            hood.setAngleWithTolerance(angle, HoodSubsystem.hoodTolerance);
+  
+        }
     }
 
    
@@ -134,6 +144,7 @@ public class ShooterSubsystem extends SubsystemBase {
             currentShooterState = ShooterStates.ZEROING;
             break;    
             case FIXEDFIRE:
+            currentShooterState = ShooterStates.FIXEDFIRE;
             break;
             case UNJAM:
             currentShooterState = ShooterStates.UNJAM;
@@ -184,8 +195,6 @@ public class ShooterSubsystem extends SubsystemBase {
             }
     }
     public void log() {
-        Logger.recordOutput("Wanted State", wantedShooterState);
-        Logger.recordOutput("Current State", currentShooterState);
         //Logger.recordOutput("Hub Shot Angle", hubShot.getHoodAngle());
         //Logger.recordOutput("Hub Shot Rotation", hubShot.getRotation());
         //Logger.recordOutput("Hub Shot Flywheel Speed", hubShot.getflywheelSpeed());

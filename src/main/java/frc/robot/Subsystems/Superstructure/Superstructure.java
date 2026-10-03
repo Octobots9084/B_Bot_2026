@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,8 +25,10 @@ import frc.robot.Subsystems.Lights.LightsSubsystem;
 
 
 public class Superstructure {
-    public SuperstructureStates currentState = SuperstructureStates.ZEROING;
-    public SuperstructureStates wantedState = SuperstructureStates.ZEROING;
+    @AutoLogOutput
+    public SuperstructureStates currentState = SuperstructureStates.SAFE;
+    @AutoLogOutput
+    public SuperstructureStates wantedState = SuperstructureStates.SAFE;
     public IntakeStates superstructureWantedIntakeState = IntakeStates.SAFE;
 
     public IntakeSubsystem intake = IntakeSubsystem.getInstance();
@@ -45,11 +48,7 @@ public class Superstructure {
         }
         if (currentState != wantedState)        
             handleStateTransitions();
-         applyStates();
-
-        Logger.recordOutput("wantedState", this.wantedState);
-        Logger.recordOutput("currentState", this.currentState);
-        
+         applyStates();        
      }
 
     public Superstructure() {

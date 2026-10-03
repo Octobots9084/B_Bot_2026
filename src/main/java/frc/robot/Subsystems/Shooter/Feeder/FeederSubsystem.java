@@ -42,7 +42,9 @@ public class FeederSubsystem extends SubsystemBase{
    public AngularVelocity getFeederVelocity() {
       return feederFlywheel.getSpeed();
    }
-
+   public Command setDutyCycle(double cycle){
+      return feederFlywheel.set(cycle);
+   }
    public Command FeederRun(AngularVelocity speed){
       return feederFlywheel.run(speed);
    }
