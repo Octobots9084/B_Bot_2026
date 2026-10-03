@@ -43,28 +43,17 @@ public class Robot extends LoggedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  public Robot() {
+public Robot() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    container = new RobotContainer(this);
+  Logger.start();
 
-    switch(Constants.currentMode) { //TODO log
-      case REAL:
-        Logger.addDataReceiver(new WPILOGWriter());
-        Logger.addDataReceiver(new NT4Publisher());
-      case SIM:
-        Logger.addDataReceiver(new NT4Publisher());
-      case REPLAY:
-     // Replaying a log, set up replay source
-        setUseTiming(false); // Run as fast as possible
-        String logPath = LogFileUtil.findReplayLog();
-        Logger.setReplaySource(new WPILOGReader(logPath));
-        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
-        break;
-       }
-      CommandScheduler.getInstance().enable();
-  }
+    container = new RobotContainer(this);
+    
+    CommandScheduler.getInstance().enable();
+}
+
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -108,7 +97,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
-    //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
+    //ButtonConfig.getInstance().initCalculator();    //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
   }
 
   /** This function is called periodically during operator control. */
@@ -164,7 +153,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override

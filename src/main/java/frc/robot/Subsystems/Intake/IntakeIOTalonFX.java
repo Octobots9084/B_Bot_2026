@@ -65,7 +65,7 @@ public class IntakeIOTalonFX {
         //todo get actual device ids that probably arent taken
         rollerMover = new TalonFX(0, Constants.krakenBus);
         rollerSpinner = new TalonFX(1, Constants.krakenBus);
-        rollerSpinnerF = new TalonFX(3, Constants.krakenBus);
+        rollerSpinnerF = new TalonFX(2, Constants.krakenBus);
 
         rollerMoverFollower = new Follower(0, MotorAlignmentValue.Opposed); //todo this is my guess but idk
         rollerSpinnerFollower = new Follower(1, MotorAlignmentValue.Opposed); //again
