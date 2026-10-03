@@ -127,7 +127,7 @@ public Robot() {
   
   public static Boolean wonAuto() {
     String gameData = DriverStation.getGameSpecificMessage();
-    if (gameData.length() < 0) return null;
+    if (gameData.length() <= 0) return null;
     boolean blueVictory = gameData.charAt(0) == 'B';
     return blueVictory == Constants.isBlueAlliance;
   }

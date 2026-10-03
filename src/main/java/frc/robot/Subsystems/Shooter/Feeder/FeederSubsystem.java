@@ -27,7 +27,7 @@ public class FeederSubsystem extends SubsystemBase{
 
    public FeederSubsystem(){
       instance = this;
-      TX = new FeederTalonFX();
+      TX = new FeederTalonFX(this);
       TX.init();
       final FlyWheelConfig FeederConfig = new FlyWheelConfig()
       .withDiameter(FeederDiameter)

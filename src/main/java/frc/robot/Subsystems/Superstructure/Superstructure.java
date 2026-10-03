@@ -234,6 +234,9 @@ public class Superstructure {
             case SPINUP:
             shooter.wantedShooterState = ShooterStates.SPINUP;
             break;
+            case FIXEDFIRE:
+            shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+            break;
             case AUTOFERRY:
                 shooter.wantedShooterState = ShooterStates.HUB;
                 RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;

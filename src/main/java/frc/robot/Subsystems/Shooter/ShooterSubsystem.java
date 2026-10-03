@@ -92,7 +92,7 @@ public class ShooterSubsystem extends SubsystemBase {
    
  
     public void shooterPartsControl(double flywheelSpeed, double feederSpeed, Angle angle){
-        this.shooterFlywheel.setFlywheelVelocitySetpoint(RPM.of(flywheelSpeed));
+        this.shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
         this.feeder.setFeederVelocitySetpoint(RPM.of(feederSpeed));
         this.hood.setAngleWithTolerance(angle, HoodSubsystem.hoodTolerance);
     }
@@ -186,12 +186,12 @@ public class ShooterSubsystem extends SubsystemBase {
     public void log() {
         Logger.recordOutput("Wanted State", wantedShooterState);
         Logger.recordOutput("Current State", currentShooterState);
-        Logger.recordOutput("Hub Shot Angle", hubShot.getHoodAngle());
-        Logger.recordOutput("Hub Shot Rotation", hubShot.getRotation());
-        Logger.recordOutput("Hub Shot Flywheel Speed", hubShot.getflywheelSpeed());
-        Logger.recordOutput("Ferry Shot Hood Angle", ferryShot.getHoodAngle());
-        Logger.recordOutput("Ferry Shot Rotation", ferryShot.getRotation());
-        Logger.recordOutput("Ferry Shot Flywheel Speed", ferryShot.getflywheelSpeed());
+        //Logger.recordOutput("Hub Shot Angle", hubShot.getHoodAngle());
+        //Logger.recordOutput("Hub Shot Rotation", hubShot.getRotation());
+        //Logger.recordOutput("Hub Shot Flywheel Speed", hubShot.getflywheelSpeed());
+        //Logger.recordOutput("Ferry Shot Hood Angle", ferryShot.getHoodAngle());
+        //Logger.recordOutput("Ferry Shot Rotation", ferryShot.getRotation());
+        //Logger.recordOutput("Ferry Shot Flywheel Speed", ferryShot.getflywheelSpeed());
         //hood angle, rotation, flywheel
         
    }

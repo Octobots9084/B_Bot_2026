@@ -52,21 +52,14 @@ public class FlywheelSubsystem extends SubsystemBase{
         return shooterFlywheel.getSpeed();
      }
    public Command setDutyCycle(double cycle){
-         return shooterFlywheel.set(cycle)
-        .withName("FlywheelSetDutyCycle")
-        .beforeStarting(() -> System.out.println(">>> FLYWHEEL COMMAND STARTED <<<"))
-        // Safely trace execution in parallel
-        .alongWith(new edu.wpi.first.wpilibj2.command.RunCommand(
-            () -> System.out.println(">>> FLYWHEEL COMMAND RUNNING: " + cycle + " <<<")
-        ))
-        .finallyDo(interrupted -> System.out.println(">>> FLYWHEEL COMMAND ENDED, Interrupted: " + interrupted + " <<<"));
-           }
+         return shooterFlywheel.set(cycle);
+      }
      public Command FlywheelRun(double rpm){
         return shooterFlywheel.run(RPM.of(rpm));
      }
 
-     public void setFlywheelVelocitySetpoint(AngularVelocity speed){ 
-         shooterFlywheel.setMechanismVelocitySetpoint(speed);
+     public void setFlywheelVelocitySetpoint(double rpm){ 
+         shooterFlywheel.setMechanismVelocitySetpoint(RPM.of(rpm));
      }
      @Override
      public void periodic(){
