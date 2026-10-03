@@ -135,9 +135,9 @@ public class Superstructure {
     
             break;
             case AUTOHUB:
-                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
+                //if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
                     currentState = wantedState;
-                }
+                //}
             break;
             case AUTOFERRY:
                 if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){

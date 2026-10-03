@@ -23,7 +23,7 @@ public class FeederSubsystem extends SubsystemBase{
    private Distance FeederDiameter = Centimeters.of(60);
    public FeederTalonFX TX;
    public static FeederSubsystem instance;
-   FlyWheel feederFlywheel;
+   public FlyWheel feederFlywheel;
 
    public FeederSubsystem(){
       instance = this;
@@ -32,7 +32,7 @@ public class FeederSubsystem extends SubsystemBase{
       final FlyWheelConfig FeederConfig = new FlyWheelConfig()
       .withDiameter(FeederDiameter)
       .withTelemetry("feederMech", TelemetryVerbosity.HIGH);
-      FlyWheel feederFlywheel = new FlyWheel(FeederConfig, TX.FeederMotor);
+      feederFlywheel = new FlyWheel(FeederConfig, TX.FeederMotor);
 
    }
   public static FeederSubsystem getInstance(){
@@ -48,6 +48,10 @@ public class FeederSubsystem extends SubsystemBase{
    }
 
    public void setFeederVelocitySetpoint(AngularVelocity speed){
+       if (this.feederFlywheel == null) {
+        System.out.println("Warning: Feeder is lowkey null rn");
+        return; 
+    }
       feederFlywheel.setMechanismVelocitySetpoint(speed);
    }
 

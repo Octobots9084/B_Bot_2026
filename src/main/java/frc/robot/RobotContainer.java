@@ -41,66 +41,65 @@ public class RobotContainer {
 
 
 // Dashboard inputs
-  final SendableChooser<Command> autoChooser;
+ // final SendableChooser<Command> autoChooser;
 
 
     public RobotContainer(Robot robot) {
 
-
-      SwerveSubsystem swerve = new SwerveSubsystem(ButtonConfig.driverController, ButtonConfig.coDriverController, Constants.maxVelocity,
-          Constants.maxAngularVelocity);
-
-        buttons = new ButtonConfig();
 
         
         switch(Constants.currentMode){
             case REAL: {
                 intake = new IntakeSubsystem();
                 rollerFloor = new RollerFloorSubsystem();
-                shooter = new ShooterSubsystem();
+                shooter = ShooterSubsystem.getInstance();
                 superstructure = new Superstructure();
-                flywheel = new FlywheelSubsystem();
-                feeder = new FeederSubsystem();
-                hood = new HoodSubsystem();
+                flywheel = this.shooter.getFlywheel();
+                feeder = this.shooter.getFeeder();
+                hood = this.shooter.getHood();
+                        buttons = new ButtonConfig();
+                break;
             }
 
             case SIM: {
                 intake = new IntakeSubsystem();
                 rollerFloor = new RollerFloorSubsystem();
-                shooter = new ShooterSubsystem();
+                shooter = ShooterSubsystem.getInstance();
                 superstructure = new Superstructure();
-                flywheel = new FlywheelSubsystem();
-                feeder = new FeederSubsystem();
-                hood = new HoodSubsystem();
+                flywheel = this.shooter.getFlywheel();
+                feeder = this.shooter.getFeeder();
+                hood = this.shooter.getHood();
+                buttons = new ButtonConfig();
+               
+
+                break;
             }
             case REPLAY:
-            //laugh
+          break;
         }
-  
-    buttons.initTeleop();
+ SwerveSubsystem swerve = shooter.getSwerve();
+  configureBindings();
 
 
-
-    // autoChooser = AutoBuilder.buildAutoChooser();
-    // // NAMED COMMANDS IN SWERVE
-    // SmartDashboard.putData("Auto", autoChooser);
-    // ButtonConfig buttons = new ButtonConfig();
-    // buttons.initTeleop();
-
-     autoChooser = AutoBuilder.buildAutoChooser();
+     //autoChooser = AutoBuilder.buildAutoChooser();
     // NAMED COMMANDS IN SWERVE
-    SmartDashboard.putData("Auto", autoChooser);
+    //SmartDashboard.putData("Auto", autoChooser);
 
   }
 
+ public void configureBindings(){
+   buttons.initTeleop();   
+      ButtonConfig.driverController.b().whileTrue(flywheel.setDutyCycle(0.3));
+      flywheel.setDefaultCommand(flywheel.setDutyCycle(0.3));
 
+ }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-    // return new InstantCommand();
-  }
+  // public Command getAutonomousCommand() {
+  //   return autoChooser.getSelected();
+  //   // return new InstantCommand();
+  // }
 }

@@ -34,7 +34,7 @@ public class FeederTalonFX {
     public SmartMotorController FeederMotor;
 
     public void init(){
-        FeederMotor = new TalonFXWrapper(new TalonFX(6), DCMotor.getKrakenX44(1), FeederSMCConfig);
-        FeederFollowerSmc = new TalonFXWrapper(new TalonFX(7), DCMotor.getKrakenX44(1), FeederFollowerSMCConfig);    
+        FeederMotor = new TalonFXWrapper(new TalonFX(7), DCMotor.getKrakenX44(1), FeederSMCConfig);
+        FeederFollowerSmc = new TalonFXWrapper(new TalonFX(8), DCMotor.getKrakenX44(1), FeederFollowerSMCConfig);    
     }
 }

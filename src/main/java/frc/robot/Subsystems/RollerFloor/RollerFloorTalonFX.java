@@ -15,8 +15,14 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
-public class RollerFloorTalonFX {
-    public SmartMotorControllerConfig FloorFollowerSMCConfig = new SmartMotorControllerConfig()
+public class RollerFloorTalonFX {    
+    public SmartMotorController FloorFollowerSmc;
+    public SmartMotorControllerConfig FloorSMCConfig;
+    public SmartMotorController FloorMotor;
+    public SmartMotorControllerConfig FloorFollowerSmcConfig;
+
+    public RollerFloorTalonFX(RollerFloorSubsystem subsystem){
+    FloorFollowerSmcConfig = new SmartMotorControllerConfig()
     .withClosedLoopController(0.1,0,0)
     .withSimClosedLoopController(0.1,0,0)
     .withControlMode(ControlMode.CLOSED_LOOP)
@@ -26,14 +32,15 @@ public class RollerFloorTalonFX {
     .withClosedLoopRampRate(Seconds.of(0.25))
     .withOpenLoopRampRate(Seconds.of(0.25))
     .withIdleMode(MotorMode.BRAKE)  
-    .withSubsystem(RollerFloorSubsystem.getInstance());
-    public SmartMotorController FloorFollowerSmc;
-    public SmartMotorControllerConfig FloorSMCConfig = FloorFollowerSMCConfig.clone()
-    .withLooselyCoupledFollowers(FloorFollowerSmc);
-    public SmartMotorController FloorMotor;
+    .withSubsystem(subsystem);
+
+    }
+
 
     public void init() {
-        FloorFollowerSmc = new TalonFXWrapper(new TalonFX(9), DCMotor.getKrakenX44(1), FloorFollowerSMCConfig);
-        FloorMotor = new TalonFXWrapper(new TalonFX(8), DCMotor.getKrakenX44(1), FloorSMCConfig);
+        FloorFollowerSmc = new TalonFXWrapper(new TalonFX(10), DCMotor.getKrakenX44(1), FloorFollowerSmcConfig);
+        FloorSMCConfig = FloorFollowerSmcConfig.clone()
+        .withLooselyCoupledFollowers(FloorFollowerSmc);
+        FloorMotor = new TalonFXWrapper(new TalonFX(11), DCMotor.getKrakenX44(1), FloorSMCConfig);
     }
 }

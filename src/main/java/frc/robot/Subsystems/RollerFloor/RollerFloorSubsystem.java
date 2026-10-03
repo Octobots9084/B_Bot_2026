@@ -32,7 +32,7 @@ public class RollerFloorSubsystem extends SubsystemBase {
     public RollerFloorSubsystem() {
         instance = this;
 
-        TX = new RollerFloorTalonFX();
+        TX = new RollerFloorTalonFX(this);
         TX.init();
 
         RollerFloorConfig = new FlyWheelConfig()
