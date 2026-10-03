@@ -89,8 +89,12 @@ public class RobotContainer {
 
  public void configureBindings(){
    buttons.initTeleop();   
-      ButtonConfig.driverController.b().whileTrue(flywheel.setDutyCycle(0.3));
-      flywheel.setDefaultCommand(flywheel.setDutyCycle(0.3));
+      //ButtonConfig.driverController.b().whileTrue(flywheel.setDutyCycle(0.3));
+      //flywheel.setDefaultCommand(flywheel.setDutyCycle(0.3));
+
+      ButtonConfig.driverController.y().toggleOnTrue(intake.swapState());
+   //   intake.setDefaultCommand(intake.setDutyCycle(0));
+
 
  }
   /**

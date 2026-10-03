@@ -4,13 +4,18 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import yams.gearing.MechanismGearing;
 import yams.mechanisms.config.ArmConfig;
 import yams.mechanisms.config.PivotConfig;
 import yams.mechanisms.positional.Arm;
 import yams.mechanisms.positional.Pivot;
+import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
@@ -46,7 +51,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public static IntakeSubsystem instance;
     
         public Pivot pivotYAM;
-        public Pivot rollerYAM;
+        public FlyWheel rollerYAM;
     
     
     
@@ -56,11 +61,18 @@ public class IntakeSubsystem extends SubsystemBase {
             rollerYAM = io.motorInstRoller(this);
         }
     
-        public void rotateP(double d) {
-            pivotYAM.setAngle(Rotation.of(d));
+        public Command rotateP(double d) {
+            return pivotYAM.set(d);
         }
-        public void rotateR(double d) {
-            rollerYAM.setAngle(Rotation.of(d));
+        public Command rotateR(double d) {
+            return rollerYAM.set(d);
+        }
+        @Override
+        public void simulationPeriodic() {
+            pivotYAM.updateTelemetry();
+            rollerYAM.updateTelemetry();
+            pivotYAM.simIterate();
+            rollerYAM.simIterate();
         }
     
         @Override
@@ -68,6 +80,15 @@ public class IntakeSubsystem extends SubsystemBase {
             handleStateTransitions();
             applyStates();
             logging();
+        }
+
+        int iterator = 0;
+        public Command swapState() {
+            return new InstantCommand(() -> {
+                wantedIntakeState = IntakeStates.values()[iterator++];
+                iterator %= IntakeStates.values().length;
+                SmartDashboard.putString("Intake State", wantedIntakeState.toString());
+            });
         }
     
         public void handleStateTransitions() {
@@ -117,19 +138,32 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     
         public void applyStates() {
-            if (currentIntakeState.pos != null) io.moveRollerToPos(currentIntakeState.pos /*always 0 or 1 ¯\_(ツ)_/¯ */ * 130 * 1 /* gear ratio */ / 360 /* degrees to rotations*/);
-            if (currentIntakeState.vel != null) io.spinRollers(currentIntakeState.vel * 5/4);
+            if (currentIntakeState.pos != null) simFriendlyPos(currentIntakeState.pos/6 /*always 0 or 1 ¯\_(ツ)_/¯ */ * 130 * 1 /* gear ratio */ / 360 /* degrees to rotations*/);
+            if (currentIntakeState.vel != null) simFriendlySpin(currentIntakeState.vel/6 * 5/4);
     
             switch(currentIntakeState) {
                 case ELEPHANTIASIS:
                     // i was going to name this elephantimer but variableless worked just fine :(
-                    io.moveRollerToPos((double) (System.currentTimeMillis() % 1000 > 500 ? 130 * 1 / 360 : 0));
+                    simFriendlyPos((double) (System.currentTimeMillis() % 1000 > 500 ? 1 : -1));
+                    simFriendlySpin((double) (System.currentTimeMillis() + 250 % 1000 > 500 ? 1*130*1/360/6 : -1*130*1/360/6));
+
                     break;
                     
                 case EXTENDED, INTAKING, REVERSEINTAKE, SAFE, ZERO: break;
                 default: throw new RuntimeException("If you see this message, current state is probably null: " + currentIntakeState + ". Anyway, this should never be reached.");
     
             }
+        }
+
+        public void simFriendlyPos(double d) {
+            if (Robot.isSimulation()) rotateP(d).execute();
+            else io.moveRollerToPos(d);
+
+        }
+
+        public void simFriendlySpin(double d) {
+            if (Robot.isSimulation()) rotateR(d).execute();
+            else io.spinRollers(d);
         }
     
         public void logging() {
@@ -175,4 +209,10 @@ public class IntakeSubsystem extends SubsystemBase {
         public static IntakeSubsystem getInstance() {
             return instance;
     }
+
+        public Command setDutyCycle(double d) {
+           
+        return Commands.sequence(pivotYAM.set(d), rollerYAM.set(d));
+           
+        }
 }

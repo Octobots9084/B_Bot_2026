@@ -25,8 +25,10 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import frc.robot.Constants;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
+import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.config.PivotConfig;
 import yams.mechanisms.positional.Pivot;
+import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
@@ -43,9 +45,14 @@ public class IntakeIOTalonFX {
         // Length and mass of your arm for sim.
         // Telemetry name and verbosity for the arm.
         .withHardLimits(Degrees.of(0), Degrees.of(360))
-        .withTelemetry("Intake", TelemetryVerbosity.HIGH);
+        .withTelemetry("IntakeP", TelemetryVerbosity.HIGH);
         
-    
+      private FlyWheelConfig roller = new FlyWheelConfig()
+        // Hard limit is applied to the simulation.
+        // Length and mass of your arm for sim.
+        // Telemetry name and verbosity for the arm.
+        .withTelemetry("IntakeR", TelemetryVerbosity.HIGH);
+      
 
 
     public TalonFX rollerMover;
@@ -164,7 +171,7 @@ public class IntakeIOTalonFX {
 
     }
 
-    public Pivot motorInstRoller(IntakeSubsystem sub) {
+    public FlyWheel motorInstRoller(IntakeSubsystem sub) {
 
 
         SmartMotorControllerConfig smcc = new SmartMotorControllerConfig(sub)
@@ -175,7 +182,7 @@ public class IntakeIOTalonFX {
             .withSimClosedLoopController(50, 0, 0)
             // Feedforward Constants (? TODO no clue what these are)
             // Telemetry name and verbosity level
-            .withTelemetry("IntakePivot", TelemetryVerbosity.HIGH)
+            .withTelemetry("IntakeRoller", TelemetryVerbosity.HIGH)
             // Gearing from the motor rotor to final shaft.
             // In this example GearBox.fromReductionStages(3,4) is the same as GearBox.fromStages("3:1","4:1") which corresponds to the gearbox attached to your motor.
             .withGearing(new MechanismGearing(GearBox.fromReductionStages(30, 1)))
@@ -190,7 +197,7 @@ public class IntakeIOTalonFX {
             .withFollowers(Pair.of(this.rollerSpinner, false));
 
         SmartMotorController SMC = new TalonFXWrapper(rollerMover,DCMotor.getKrakenX60(1),smcc);    
-        return new Pivot(config.clone(), SMC);
+        return new FlyWheel(roller, SMC);
 
     }
 }
