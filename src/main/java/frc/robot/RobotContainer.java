@@ -41,7 +41,7 @@ public class RobotContainer {
 
 
 // Dashboard inputs
- // final SendableChooser<Command> autoChooser;
+ final SendableChooser<Command> autoChooser;
 
 
     public RobotContainer(Robot robot) {
@@ -55,7 +55,7 @@ public class RobotContainer {
                 flywheel = this.shooter.getFlywheel();
                 feeder = this.shooter.getFeeder();
                 hood = this.shooter.getHood();
-                        buttons = new ButtonConfig();
+                buttons = new ButtonConfig();
                 break;
             }
 
@@ -79,15 +79,13 @@ public class RobotContainer {
   configureBindings();
 
 
-     //autoChooser = AutoBuilder.buildAutoChooser();
-    // NAMED COMMANDS IN SWERVE
-    //SmartDashboard.putData("Auto", autoChooser);
+     autoChooser = AutoBuilder.buildAutoChooser();
+         SmartDashboard.putData("Auto", autoChooser);
 
   }
 
  public void configureBindings(){
    buttons.initTeleop();   
-         ButtonConfig.driverController.a().whileTrue(shooter.testShoot());
 
  }
  
@@ -96,8 +94,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   return autoChooser.getSelected();
-  //   // return new InstantCommand();
-  // }
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+    // return new InstantCommand();
+  }
 }

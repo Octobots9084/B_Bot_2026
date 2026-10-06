@@ -89,12 +89,12 @@ public class ShooterSubsystem extends SubsystemBase {
         hood = new HoodSubsystem();
         swerve = new SwerveSubsystem(ButtonConfig.driverController, ButtonConfig.coDriverController, Constants.maxVelocity,
         Constants.maxAngularVelocity);
-        shooterFlywheel.setDefaultCommand(shooterFlywheel.setDutyCycle(0));
         initDone = true;
     }
     
-   public Command testShoot(){
-        return shooterFlywheel.setDutyCycle(0.3);
+   public void testShoot(){
+        feeder.setDutyCycle(0.3);
+        shooterFlywheel.setFlywheelVelocitySetpoint(90);
    }
  
     public void shooterPartsControl(double flywheelSpeed, double feederSpeed, double angle){
@@ -179,13 +179,15 @@ public class ShooterSubsystem extends SubsystemBase {
             //TODO zeroing stuff
             break;    
             case FIXEDFIRE:
-                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
+                testShoot();
+                //shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
             break;
             case UNJAM:
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.REVERSE.enumVelocity);
             break;
             case SPINUP:
-                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.SAFE.enumVelocity);
+                testShoot();
+                //shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.SAFE.enumVelocity);
             break;
             default:
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);

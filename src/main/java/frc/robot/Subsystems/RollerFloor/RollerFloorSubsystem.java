@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.RPM;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -13,6 +14,8 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.Mode;
 import frc.robot.Subsystems.RollerFloor.RollerFloorStates;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
@@ -22,8 +25,8 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class RollerFloorSubsystem extends SubsystemBase {
     private Distance RollerDiameter = Centimeters.of(20);//TODO replace all of these values
-    public RollerFloorStates wantedRollerState = RollerFloorStates.SAFE;
-    public RollerFloorStates currentRollerState = RollerFloorStates.SAFE;
+    @AutoLogOutput public RollerFloorStates wantedRollerState = RollerFloorStates.SAFE;
+    @AutoLogOutput public RollerFloorStates currentRollerState = RollerFloorStates.SAFE;
     public RollerFloorTalonFX TX;
     public static RollerFloorSubsystem instance;
     private FlyWheel RollerFlywheel;
@@ -81,7 +84,11 @@ public class RollerFloorSubsystem extends SubsystemBase {
     }
 
     private void applyStates () {
-        setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
+        if(Constants.currentMode == Mode.SIM){
+            setDutyCycle(0.3);
+        }else{
+            setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
+        }
     }
     
     private void logging() {
@@ -104,15 +111,15 @@ public class RollerFloorSubsystem extends SubsystemBase {
      public Command Run(AngularVelocity speed){
         return RollerFlywheel.run(speed);
      }
-
+     public void setDutyCycle(double cycle){
+        RollerFlywheel.setDutyCycleSetpoint(cycle);
+     }
      public void setRollorFloorVelocitySetpoint(AngularVelocity speed){
         RollerFlywheel.setMechanismVelocitySetpoint(speed);
      }
 
      //wantedState, currentState, state, RollerFlysheel, TX.FloorMotor, TX.getVoltage
      public void log() {
-        Logger.recordOutput("wantedState", wantedRollerState);
-        Logger.recordOutput("currentState", currentRollerState);
         Logger.recordOutput("Motor Voltage", TX.FloorMotor.getVoltage());
         Logger.recordOutput("Motor Temperature", TX.FloorMotor.getTemperature());
         Logger.recordOutput("Motor Position", TX.FloorMotor.getRotorPosition()); //someone who knows motors pls translate and verify... like verity

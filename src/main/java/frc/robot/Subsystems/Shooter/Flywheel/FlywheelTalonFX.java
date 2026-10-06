@@ -34,7 +34,7 @@ public class FlywheelTalonFX {
             .withClosedLoopController(1,0,0)
             .withSimClosedLoopController(1,0,0)
             .withFeedforward(new SimpleMotorFeedforward(0,0.05,0))
-            .withSimFeedforward(new SimpleMotorFeedforward(0,0.05, 0))
+            .withSimFeedforward(new SimpleMotorFeedforward(0.1,0.1, 0.05))
             .withMomentOfInertia(KilogramSquareMeters.of(0.005))
             .withTelemetry("Shooter Motor", TelemetryVerbosity.HIGH)
             .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,3)))

@@ -1,28 +1,19 @@
 package frc.robot.Subsystems.Superstructure;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearVelocity;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
+import frc.robot.Subsystems.Lights.LightAnimations;
+import frc.robot.Subsystems.Lights.LightsSubsystem;
 import frc.robot.Subsystems.RollerFloor.RollerFloorStates;
 import frc.robot.Subsystems.RollerFloor.RollerFloorSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
-import frc.robot.Subsystems.Lights.LightAnimations;
-import frc.robot.Subsystems.Lights.LightsSubsystem;
 
 
 
@@ -238,7 +229,7 @@ public class Superstructure extends SubsystemBase{
             case AUTOHUB:
                 lights.lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.HUB;
-                RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;
+                floor.wantedRollerState = RollerFloorStates.SHOOT;
 
                 if(superstructureWantedIntakeState != IntakeStates.INTAKING || superstructureWantedIntakeState != IntakeStates.ZERO){
                     if(superstructureWantedIntakeState != null){
@@ -250,24 +241,27 @@ public class Superstructure extends SubsystemBase{
             case UNJAM:
                 lights.lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.UNJAM;
+                floor.wantedRollerState = RollerFloorStates.REVERSE;
 
             break;
 
             case SPINUP:
                 lights.lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.SPINUP;
+                floor.wantedRollerState = RollerFloorStates.PRELOAD;
             break;
 
             case FIXEDFIRE:
                 lights.lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                floor.wantedRollerState = RollerFloorStates.SHOOT;
             break;
 
             case AUTOFERRY:
                 lights.lightsWantedState = LightAnimations.DEFAULT;
 
                 shooter.wantedShooterState = ShooterStates.HUB;
-                RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;
+                floor.wantedRollerState = RollerFloorStates.SHOOT;
                 if(superstructureWantedIntakeState != IntakeStates.INTAKING || superstructureWantedIntakeState != IntakeStates.ZERO){
                     if(superstructureWantedIntakeState != null){
                         IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.ELEPHANTIASIS);
