@@ -68,7 +68,6 @@ public Robot() {
   Logger.start();
 
     container = new RobotContainer(this);
-    
     CommandScheduler.getInstance().enable();
 }
 
@@ -114,8 +113,8 @@ public Robot() {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
-    //ButtonConfig.getInstance().initCalculator();    //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
+    //Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING; TODO uncomment
+  //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
   }
 
   /** This function is called periodically during operator control. */
@@ -178,6 +177,5 @@ public Robot() {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
-    ShooterSubsystem.getInstance().log();
   }
 }

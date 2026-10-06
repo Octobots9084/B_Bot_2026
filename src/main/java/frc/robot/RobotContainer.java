@@ -46,8 +46,6 @@ public class RobotContainer {
 
     public RobotContainer(Robot robot) {
 
-
-        
         switch(Constants.currentMode){
             case REAL: {
                 intake = new IntakeSubsystem();
@@ -89,11 +87,10 @@ public class RobotContainer {
 
  public void configureBindings(){
    buttons.initTeleop();   
-         ButtonConfig.driverController.a().whileTrue(flywheel.setDutyCycle(0.3));
-
-      flywheel.setDefaultCommand(flywheel.setDutyCycle(0.0));
+         ButtonConfig.driverController.a().whileTrue(shooter.testShoot());
 
  }
+ 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

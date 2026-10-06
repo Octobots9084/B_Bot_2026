@@ -6,7 +6,9 @@ public class LightsSubsystem {
     private static LightsSubsystem instance;
 
     public static LightsDevice candle;
-
+    public LightsSubsystem(){
+        instance = this;
+    }
     public static LightsSubsystem getInstance() {
         return instance;
     }
