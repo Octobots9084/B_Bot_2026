@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Shooter.Flywheel.FlywheelSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
 import frc.robot.Subsystems.Superstructure.SuperstructureStates;
@@ -47,10 +48,26 @@ public Robot() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+        switch(Constants.currentMode) { //TODO log
+      case REAL:
+        Logger.addDataReceiver(new WPILOGWriter());
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+      case SIM:
+        Logger.addDataReceiver(new NT4Publisher());
+        break;
+      case REPLAY:
+     // Replaying a log, set up replay source
+        setUseTiming(false); // Run as fast as possible
+        String logPath = LogFileUtil.findReplayLog();
+        Logger.setReplaySource(new WPILOGReader(logPath));
+        Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+        break;
+       }
+
   Logger.start();
 
     container = new RobotContainer(this);
-    
     CommandScheduler.getInstance().enable();
 }
 
@@ -96,8 +113,8 @@ public Robot() {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
-    //ButtonConfig.getInstance().initCalculator();    //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
+    //Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING; TODO uncomment
+  //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
   }
 
   /** This function is called periodically during operator control. */

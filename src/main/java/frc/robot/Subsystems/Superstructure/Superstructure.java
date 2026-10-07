@@ -1,28 +1,27 @@
 package frc.robot.Subsystems.Superstructure;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-
-import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
+import frc.robot.Subsystems.Lights.LightAnimations;
+import frc.robot.Subsystems.Lights.LightsSubsystem;
 import frc.robot.Subsystems.RollerFloor.RollerFloorStates;
 import frc.robot.Subsystems.RollerFloor.RollerFloorSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 
 
-public class Superstructure {
-    public SuperstructureStates currentState = SuperstructureStates.ZEROING;
-    public SuperstructureStates wantedState = SuperstructureStates.ZEROING;
+
+public class Superstructure extends SubsystemBase{
+    @AutoLogOutput
+    public SuperstructureStates currentState = SuperstructureStates.SAFE;
+    @AutoLogOutput
+    public SuperstructureStates wantedState = SuperstructureStates.SAFE;
     public IntakeStates superstructureWantedIntakeState = IntakeStates.SAFE;
 
     public IntakeSubsystem intake = IntakeSubsystem.getInstance();
@@ -30,23 +29,18 @@ public class Superstructure {
     public RollerFloorSubsystem floor = RollerFloorSubsystem.getInstance();
     public boolean InAlignedZone = true;
     public IntakeStates driverRequestedIntakeState = null;
-
+    public LightsSubsystem lights = new LightsSubsystem();
 
     public static Superstructure currentInstance;
   
 
     //@Override
      public void periodic() {
-        if(SwerveSubsystem.InTrenchLane() && SwerveSubsystem.inDangerOfTrench()){
-            wantedState = SuperstructureStates.TRENCH;
-        }
-        if (currentState != wantedState)        
+        //if(SwerveSubsystem.InTrenchLane() && SwerveSubsystem.inDangerOfTrench()){
+          //  wantedState = SuperstructureStates.TRENCH;
+        //}
             handleStateTransitions();
-         applyStates();
-
-        Logger.recordOutput("wantedState", this.wantedState);
-        Logger.recordOutput("currentState", this.currentState);
-        
+            applyStates();        
      }
 
     public Superstructure() {
@@ -129,7 +123,7 @@ public class Superstructure {
                 }
                 break;
             case FIXEDFIRE:
-                if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
+                {
                     currentState = wantedState;
                 }
     
@@ -148,17 +142,25 @@ public class Superstructure {
             currentState = wantedState;
             break;
             case SPINUP:
-            currentState = wantedState;
+            currentState = SuperstructureStates.SPINUP;
             break;
             default: 
-                if (wantedState != null) currentState = wantedState;
-                break;
+            currentState = SuperstructureStates.SAFE;
+            break;
         }
     }
     private void applyStates() {
     
+    // BUMP YELLOW,
+    // HUB GREEN,
+    // FERRY BLUE,
+    // TRENCH RED,
+    // SAFE WHITE,
+
+
         switch (currentState) {
             case BUMP:
+                lights.lightsWantedState = LightAnimations.BUMP;
                 if (shooter.currentShooterState == ShooterStates.FIXEDFIRE || shooter.currentShooterState == ShooterStates.FERRY){
                     shooter.wantedShooterState = ShooterStates.SAFE;
                 }
@@ -173,6 +175,7 @@ public class Superstructure {
                 break;
                 
             case FERRY:
+                lights.lightsWantedState = LightAnimations.FERRY;
                 shooter.wantedShooterState = ShooterStates.FERRY;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
                 
@@ -186,6 +189,7 @@ public class Superstructure {
                 break;
 
             case HUB:
+                lights.lightsWantedState = LightAnimations.HUB;
                 shooter.wantedShooterState = ShooterStates.HUB;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
 
@@ -198,6 +202,7 @@ public class Superstructure {
                 break;
 
             case SAFE:
+                lights.lightsWantedState = LightAnimations.SAFE;
                 shooter.wantedShooterState = ShooterStates.SAFE;
                 floor.wantedRollerState = RollerFloorStates.PRELOAD;
 
@@ -206,6 +211,7 @@ public class Superstructure {
                 break;
 
             case TRENCH:
+                lights.lightsWantedState = LightAnimations.TRENCH;
                 shooter.wantedShooterState = ShooterStates.TRENCH;
                 
                 if(superstructureWantedIntakeState != IntakeSubsystem.wantedIntakeState){
@@ -214,12 +220,16 @@ public class Superstructure {
                     }
                 }
                 break;
+
             case ZEROING:
+                lights.lightsWantedState = LightAnimations.DEFAULT;
                 //TODO when something actually exists for the zeroing algorithm
                 break;
+
             case AUTOHUB:
+                lights.lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.HUB;
-                RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;
+                floor.wantedRollerState = RollerFloorStates.SHOOT;
 
                 if(superstructureWantedIntakeState != IntakeStates.INTAKING || superstructureWantedIntakeState != IntakeStates.ZERO){
                     if(superstructureWantedIntakeState != null){
@@ -227,19 +237,31 @@ public class Superstructure {
                     }
                 }
             break;
+
             case UNJAM:
-            shooter.wantedShooterState = ShooterStates.UNJAM;
+                lights.lightsWantedState = LightAnimations.DEFAULT;
+                shooter.wantedShooterState = ShooterStates.UNJAM;
+                floor.wantedRollerState = RollerFloorStates.REVERSE;
 
             break;
+
             case SPINUP:
-            shooter.wantedShooterState = ShooterStates.SPINUP;
+                lights.lightsWantedState = LightAnimations.DEFAULT;
+                shooter.wantedShooterState = ShooterStates.SPINUP;
+                floor.wantedRollerState = RollerFloorStates.PRELOAD;
             break;
+
             case FIXEDFIRE:
-            shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                lights.lightsWantedState = LightAnimations.DEFAULT;
+                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+                floor.wantedRollerState = RollerFloorStates.SHOOT;
             break;
+
             case AUTOFERRY:
+                lights.lightsWantedState = LightAnimations.DEFAULT;
+
                 shooter.wantedShooterState = ShooterStates.HUB;
-                RollerFloorSubsystem.getInstance().wantedRollerState = RollerFloorStates.SHOOT;
+                floor.wantedRollerState = RollerFloorStates.SHOOT;
                 if(superstructureWantedIntakeState != IntakeStates.INTAKING || superstructureWantedIntakeState != IntakeStates.ZERO){
                     if(superstructureWantedIntakeState != null){
                         IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.ELEPHANTIASIS);

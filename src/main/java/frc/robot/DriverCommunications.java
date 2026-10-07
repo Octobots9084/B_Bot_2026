@@ -63,5 +63,7 @@ public class DriverCommunications {
 
         // Field
         SmartDashboard.putData(fieldPose);
+
+        //TODO remove santi smartdashboard stuff because its logged differently
     }
 }

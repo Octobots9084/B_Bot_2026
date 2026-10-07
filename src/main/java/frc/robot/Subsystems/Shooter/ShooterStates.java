@@ -8,5 +8,5 @@ public enum ShooterStates {
     HUB,
     FERRY,
     UNJAM,
-    SPINUP
+    SPINUP,
 }

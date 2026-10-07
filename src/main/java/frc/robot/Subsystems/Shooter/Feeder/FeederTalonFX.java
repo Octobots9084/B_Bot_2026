@@ -1,9 +1,12 @@
 package frc.robot.Subsystems.Shooter.Feeder;
 
+import static edu.wpi.first.units.Units.KilogramMetersPerSecond;
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Seconds;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
@@ -18,7 +21,9 @@ public class FeederTalonFX {
      FeederFollowerSMCConfig = new SmartMotorControllerConfig()
     .withClosedLoopController(0.1,0,0)
     .withSimClosedLoopController(0.1,0,0)
+    .withSimFeedforward(new SimpleMotorFeedforward(0, 0.05, 0.02))
     .withControlMode(ControlMode.CLOSED_LOOP)
+    .withMomentOfInertia(KilogramSquareMeters.of(0.009))
     .withTelemetry("feeder", TelemetryVerbosity.HIGH)
     .withMotorInverted(false)
     .withGearing(1)

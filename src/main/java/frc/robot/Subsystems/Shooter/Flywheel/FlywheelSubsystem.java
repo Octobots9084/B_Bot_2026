@@ -51,8 +51,8 @@ public class FlywheelSubsystem extends SubsystemBase{
      public AngularVelocity getFlywheelVelocity() {
         return shooterFlywheel.getSpeed();
      }
-   public Command setDutyCycle(double cycle){
-         return shooterFlywheel.set(cycle);
+   public void setDutyCycle(double cycle){
+         shooterFlywheel.setDutyCycleSetpoint(cycle);
       }
      public Command FlywheelRun(double rpm){
         return shooterFlywheel.run(RPM.of(rpm));

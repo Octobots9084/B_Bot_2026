@@ -41,13 +41,11 @@ public class RobotContainer {
 
 
 // Dashboard inputs
- // final SendableChooser<Command> autoChooser;
+ final SendableChooser<Command> autoChooser;
 
 
     public RobotContainer(Robot robot) {
 
-
-        
         switch(Constants.currentMode){
             case REAL: {
                 intake = new IntakeSubsystem();
@@ -57,7 +55,7 @@ public class RobotContainer {
                 flywheel = this.shooter.getFlywheel();
                 feeder = this.shooter.getFeeder();
                 hood = this.shooter.getHood();
-                        buttons = new ButtonConfig();
+                buttons = new ButtonConfig();
                 break;
             }
 
@@ -81,29 +79,23 @@ public class RobotContainer {
   configureBindings();
 
 
-     //autoChooser = AutoBuilder.buildAutoChooser();
-    // NAMED COMMANDS IN SWERVE
-    //SmartDashboard.putData("Auto", autoChooser);
+     autoChooser = AutoBuilder.buildAutoChooser();
+         SmartDashboard.putData("Auto", autoChooser);
 
   }
 
  public void configureBindings(){
    buttons.initTeleop();   
-      //ButtonConfig.driverController.b().whileTrue(flywheel.setDutyCycle(0.3));
-      //flywheel.setDefaultCommand(flywheel.setDutyCycle(0.3));
-
-      ButtonConfig.driverController.y().toggleOnTrue(intake.swapState());
-   //   intake.setDefaultCommand(intake.setDutyCycle(0));
-
 
  }
+ 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   return autoChooser.getSelected();
-  //   // return new InstantCommand();
-  // }
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+    // return new InstantCommand();
+  }
 }

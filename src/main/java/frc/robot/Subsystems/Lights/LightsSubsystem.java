@@ -1,12 +1,14 @@
 package frc.robot.Subsystems.Lights;
 
 public class LightsSubsystem {
-    public LightAnimations lightsCurrentState = LightAnimations.DEFAULT;
-    public LightAnimations lightsWantedState = LightAnimations.DEFAULT;
+    public LightAnimations lightsCurrentState = LightAnimations.SAFE;
+    public LightAnimations lightsWantedState = LightAnimations.SAFE;
     private static LightsSubsystem instance;
 
     public static LightsDevice candle;
-
+    public LightsSubsystem(){
+        instance = this;
+    }
     public static LightsSubsystem getInstance() {
         return instance;
     }
@@ -14,16 +16,23 @@ public class LightsSubsystem {
         instance = val;
     }
 
+    // BUMP,
+    // HUB,
+    // FERRY,
+    // TRENCH,
+    // ZEROING,
+    // UNJAM,
+    // SPINUP,
+    // SAFE,
+    // FIXEDFIRE,
+    //AUTOHUB,
+     //AUTOFERRY,
+
+
     public void lightStateTransitions() {
         switch (lightsWantedState) {
             case DEFAULT:
                 lightsCurrentState = LightAnimations.DEFAULT;
-                break;
-            case DISABLED:
-                lightsCurrentState = LightAnimations.DISABLED;
-                break;
-            case IDLE:
-                lightsCurrentState = LightAnimations.IDLE;
                 break;
             case HUB:
                 lightsCurrentState = LightAnimations.HUB;
@@ -31,6 +40,16 @@ public class LightsSubsystem {
             case FERRY:
                 lightsCurrentState = LightAnimations.FERRY;
                 break;
+            case TRENCH:
+                lightsCurrentState = LightAnimations.TRENCH;
+                break;
+            case SAFE:
+                lightsCurrentState = LightAnimations.SAFE;
+                break;
+            case BUMP:
+                lightsCurrentState = LightAnimations.BUMP;
+            break;
+            
             
           //case XYZ:
           //    lightsCurrentState = LightAnimations.XYZ;

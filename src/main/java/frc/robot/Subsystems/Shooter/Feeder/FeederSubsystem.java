@@ -42,7 +42,9 @@ public class FeederSubsystem extends SubsystemBase{
    public AngularVelocity getFeederVelocity() {
       return feederFlywheel.getSpeed();
    }
-
+   public void setDutyCycle(double cycle){
+      feederFlywheel.setDutyCycleSetpoint(cycle);
+   }
    public Command FeederRun(AngularVelocity speed){
       return feederFlywheel.run(speed);
    }
@@ -51,7 +53,7 @@ public class FeederSubsystem extends SubsystemBase{
        if (this.feederFlywheel == null) {
         System.out.println("Warning: Feeder is lowkey null rn");
         return; 
-    }
+      }
       feederFlywheel.setMechanismVelocitySetpoint(speed);
    }
 

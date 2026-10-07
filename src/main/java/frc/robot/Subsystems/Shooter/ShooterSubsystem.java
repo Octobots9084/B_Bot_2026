@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Seconds;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,9 +21,12 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Per;
 import edu.wpi.first.units.measure.Distance.*;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.ButtonConfig;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.Mode;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Constants;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
@@ -36,8 +40,8 @@ import frc.robot.Subsystems.Vision.Alignment;
 import frc.robot.Subsystems.Vision.ShooterCalculator;
 
 public class ShooterSubsystem extends SubsystemBase {
-    public ShooterStates wantedShooterState = ShooterStates.SAFE;
-    public ShooterStates currentShooterState = ShooterStates.SAFE;
+    @AutoLogOutput public ShooterStates wantedShooterState = ShooterStates.SAFE;
+    @AutoLogOutput public ShooterStates currentShooterState = ShooterStates.SAFE;
     public SwerveSubsystem swerve;
     public static ShooterSubsystem inst;
     private Translation2d hubPoseBlue = new Translation2d(4.6228, 4.02082);
@@ -51,7 +55,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private HoodSubsystem hood;
     private FlywheelSubsystem shooterFlywheel;
     private boolean initDone = false;
-
+    
     public static int flywheelDebouncer = 10;
     //public double hubBallSpeed = 6.7;
     //public double hubFlywheelSpeed = 10;
@@ -67,9 +71,9 @@ public class ShooterSubsystem extends SubsystemBase {
         if(!initDone){
             return;
         }
-            handleStateTransitions();
-            applyStates();
-            log();
+        handleStateTransitions();
+        applyStates();
+        log();
         
      
     }
@@ -84,19 +88,24 @@ public class ShooterSubsystem extends SubsystemBase {
         feeder = new FeederSubsystem();
         hood = new HoodSubsystem();
         swerve = new SwerveSubsystem(ButtonConfig.driverController, ButtonConfig.coDriverController, Constants.maxVelocity,
-          Constants.maxAngularVelocity);
-
+        Constants.maxAngularVelocity);
         initDone = true;
     }
     
-   
+   public void testShoot(){
+        feeder.setDutyCycle(0.3);
+        shooterFlywheel.setFlywheelVelocitySetpoint(90);
+   }
  
-    public void shooterPartsControl(double flywheelSpeed, double feederSpeed, Angle angle){
-        this.shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
-        this.feeder.setFeederVelocitySetpoint(RPM.of(feederSpeed));
-        this.hood.setAngleWithTolerance(angle, HoodSubsystem.hoodTolerance);
+    public void shooterPartsControl(double flywheelSpeed, double feederSpeed, double angle){
+        shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
+        feeder.setFeederVelocitySetpoint(RPM.of(feederSpeed));
+        hood.setAngleWithTolerance(Degrees.of(angle), HoodSubsystem.hoodTolerance);
     }
-
+    public void shooterPartsControl(double flywheelSpeed, double feederSpeed){
+        shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
+        feeder.setFeederVelocitySetpoint(RPM.of(feederSpeed));
+    }
    
     public static ShooterSubsystem getInstance() {
         if(inst == null){
@@ -134,6 +143,7 @@ public class ShooterSubsystem extends SubsystemBase {
             currentShooterState = ShooterStates.ZEROING;
             break;    
             case FIXEDFIRE:
+            currentShooterState = ShooterStates.FIXEDFIRE;
             break;
             case UNJAM:
             currentShooterState = ShooterStates.UNJAM;
@@ -155,12 +165,12 @@ public class ShooterSubsystem extends SubsystemBase {
                 hubShot = ShooterCalculator.getInstance().calculateShot(ourHub.getX() - swerve.getPose2d().getTranslation().getX(), ourHub.getY() - swerve.getPose2d().getTranslation().getY(), SwerveSubsystem.getInstance().getChassisSpeeds().vxMetersPerSecond,SwerveSubsystem.getInstance().getChassisSpeeds().vyMetersPerSecond);
                 //if this code doesnt work fiddle with the X and Y distance from hubs <3
                 Alignment.getInstance().getRotation(hubShot.getRotation());
-                shooterPartsControl(hubShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, Degrees.of(hubShot.getHoodAngle()));
+                shooterPartsControl(hubShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, hubShot.getHoodAngle());
             break;     
             case FERRY:
                 ferryShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
                 Alignment.getInstance().getRotation(ferryShot.getRotation());
-                shooterPartsControl(ferryShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, Degrees.of(ferryShot.getHoodAngle()));
+                shooterPartsControl(ferryShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, ferryShot.getHoodAngle());
             break;
             case TRENCH:
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
@@ -169,14 +179,15 @@ public class ShooterSubsystem extends SubsystemBase {
             //TODO zeroing stuff
             break;    
             case FIXEDFIRE:
-                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
+                testShoot();
+                //shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
             break;
             case UNJAM:
-                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.REVERSE.enumVelocity, null);//TODO
+                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.REVERSE.enumVelocity);
             break;
             case SPINUP:
-                FlywheelSubsystem.getInstance().setDutyCycle(0.3);
-                //shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.SAFE.enumVelocity, null);//TODO not null
+                testShoot();
+                //shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.SAFE.enumVelocity);
             break;
             default:
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
@@ -184,8 +195,6 @@ public class ShooterSubsystem extends SubsystemBase {
             }
     }
     public void log() {
-        Logger.recordOutput("Wanted State", wantedShooterState);
-        Logger.recordOutput("Current State", currentShooterState);
         //Logger.recordOutput("Hub Shot Angle", hubShot.getHoodAngle());
         //Logger.recordOutput("Hub Shot Rotation", hubShot.getRotation());
         //Logger.recordOutput("Hub Shot Flywheel Speed", hubShot.getflywheelSpeed());
