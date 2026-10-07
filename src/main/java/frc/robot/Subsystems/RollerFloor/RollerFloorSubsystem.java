@@ -45,7 +45,6 @@ public class RollerFloorSubsystem extends SubsystemBase {
     }
       @Override
     public void periodic() {
-        RollerFlywheel.updateTelemetry();
         handleStateTransitions();
         applyStates();
         logging();
@@ -53,9 +52,6 @@ public class RollerFloorSubsystem extends SubsystemBase {
     public void simulationPeriodic() {
         RollerFlywheel.updateTelemetry();
         RollerFlywheel.simIterate();
-        handleStateTransitions();
-        applyStates();
-        logging();
     }
     public static RollerFloorSubsystem getInstance(){
         return instance;
@@ -84,21 +80,13 @@ public class RollerFloorSubsystem extends SubsystemBase {
     }
 
     private void applyStates () {
-        if(Constants.currentMode == Mode.SIM){
-            setDutyCycle(0.3);
-        }else{
-            setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
-        }
+        setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
+            
     }
     
     private void logging() {
 
     }
-
-
-
-  
-
     public FlyWheel getRollerFlywheel() {
         if (RollerFlywheel == null) RollerFlywheel = new FlyWheel(RollerFloorConfig, TX.FloorMotor);
         return RollerFlywheel;

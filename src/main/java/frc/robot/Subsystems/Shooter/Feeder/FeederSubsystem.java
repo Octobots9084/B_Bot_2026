@@ -50,10 +50,6 @@ public class FeederSubsystem extends SubsystemBase{
    }
 
    public void setFeederVelocitySetpoint(AngularVelocity speed){
-       if (this.feederFlywheel == null) {
-        System.out.println("Warning: Feeder is lowkey null rn");
-        return; 
-      }
       feederFlywheel.setMechanismVelocitySetpoint(speed);
    }
 

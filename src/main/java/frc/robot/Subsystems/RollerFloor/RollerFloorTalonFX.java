@@ -1,9 +1,11 @@
 package frc.robot.Subsystems.RollerFloor;
 
+import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Seconds;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.robot.Subsystems.RollerFloor.RollerFloorSubsystem;
 import yams.gearing.MechanismGearing;
@@ -23,14 +25,17 @@ public class RollerFloorTalonFX {
 
     public RollerFloorTalonFX(RollerFloorSubsystem subsystem){
     FloorFollowerSmcConfig = new SmartMotorControllerConfig()
-    .withClosedLoopController(0.1,0,0)
-    .withSimClosedLoopController(0.1,0,0)
+    .withClosedLoopController(0.25,0,0)
+    .withSimClosedLoopController(0.25,0,0)
+    .withFeedforward(new SimpleMotorFeedforward(0, 0.05, 0))
+    .withSimFeedforward(new SimpleMotorFeedforward(0, 0.05, 0))
+    .withMomentOfInertia(KilogramSquareMeters.of(0.000056))
     .withControlMode(ControlMode.CLOSED_LOOP)
     .withTelemetry("rollerFloor", TelemetryVerbosity.HIGH)
     .withMotorInverted(false)
-    .withGearing(new MechanismGearing(GearBox.fromReductionStages(22,18)))
-    .withClosedLoopRampRate(Seconds.of(0.25))
-    .withOpenLoopRampRate(Seconds.of(0.25))
+    .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,3)))
+    .withClosedLoopRampRate(Seconds.of(0.125))
+    .withOpenLoopRampRate(Seconds.of(0.125))
     .withIdleMode(MotorMode.BRAKE)  
     .withSubsystem(subsystem);
 

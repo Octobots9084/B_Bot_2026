@@ -31,17 +31,18 @@ public class FlywheelTalonFX {
 
     public FlywheelTalonFX(FlywheelSubsystem subsystem) {
         flywheelFollowerSmc = new SmartMotorControllerConfig()
-            .withClosedLoopController(1,0,0)
-            .withSimClosedLoopController(1,0,0)
-            .withFeedforward(new SimpleMotorFeedforward(0,0.05,0))
-            .withSimFeedforward(new SimpleMotorFeedforward(0.1,0.1, 0.05))
+            .withControlMode(ControlMode.CLOSED_LOOP)
+            .withClosedLoopController(0.25,0,0)
+            .withSimClosedLoopController(0.25,0,0)
+            .withFeedforward(new SimpleMotorFeedforward(0,0.1,0))
+            .withSimFeedforward(new SimpleMotorFeedforward(0,0.1, 0))
             .withMomentOfInertia(KilogramSquareMeters.of(0.005))
             .withTelemetry("Shooter Motor", TelemetryVerbosity.HIGH)
             .withGearing(new MechanismGearing(GearBox.fromReductionStages(1,3)))
             .withMotorInverted(false)
             .withIdleMode(MotorMode.BRAKE)
             .withSubsystem(subsystem) 
-            .withTrapezoidalProfile(FlywheelSubsystem.maxVelocity, FlywheelSubsystem.maxAcceleration)
+            //.withTrapezoidalProfile(FlywheelSubsystem.maxVelocity, FlywheelSubsystem.maxAcceleration)
             .withStatorCurrentLimit(Amps.of(FlywheelSubsystem.FlywheelStatorLimit));
     }
    

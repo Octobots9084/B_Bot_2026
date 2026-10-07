@@ -16,7 +16,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class HoodSubsystem extends SubsystemBase{
     public static double HoodStatorLimit = 40; //TODO replace with real stuff
-    public static Angle hoodTolerance = Degrees.of(0);
+    public static Angle hoodTolerance = Degrees.of(5);
     public Arm hood;
     public HoodTalonFX TX;
     public static HoodSubsystem instance;
@@ -43,8 +43,8 @@ public class HoodSubsystem extends SubsystemBase{
     public Command setAngle(Angle angle){
         return hood.setAngle(angle);
     }
-    public Command setAngleWithTolerance(Angle angle, Angle tolerance){
-        return hood.runTo(angle, tolerance);
+    public void setAngleWithTolerance(Angle angle){
+        hood.setMechanismPositionSetpoint(angle);
     }
    public Angle getAngle(){
     return hood.getAngle();
