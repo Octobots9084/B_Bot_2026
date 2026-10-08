@@ -225,10 +225,8 @@ public class Superstructure extends SubsystemBase{
                 lights.lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.ZEROING;
                 intake.setWantedIntakeState(IntakeStates.ZERO);
-                if(shooter.alreadyZeroed && true){ //change to intake alreadyZeroed
-
-                }else{
-                    
+                if(shooter.alreadyZeroed && intake.alreadyZeroed){ //change to intake alreadyZeroed
+                    wantedState = SuperstructureStates.SAFE;
                 }
                 break;
 
