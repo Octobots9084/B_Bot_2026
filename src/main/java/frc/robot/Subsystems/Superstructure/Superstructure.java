@@ -223,7 +223,13 @@ public class Superstructure extends SubsystemBase{
 
             case ZEROING:
                 lights.lightsWantedState = LightAnimations.DEFAULT;
-                //TODO when something actually exists for the zeroing algorithm
+                shooter.wantedShooterState = ShooterStates.ZEROING;
+                intake.setWantedIntakeState(IntakeStates.ZERO);
+                if(shooter.alreadyZeroed && true){ //change to intake alreadyZeroed
+
+                }else{
+                    
+                }
                 break;
 
             case AUTOHUB:

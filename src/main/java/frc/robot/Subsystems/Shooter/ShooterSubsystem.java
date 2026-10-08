@@ -55,6 +55,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private HoodSubsystem hood;
     private FlywheelSubsystem shooterFlywheel;
     private boolean initDone = false;
+    public boolean alreadyZeroed = false;
     
     public static int flywheelDebouncer = 10;
     //public double hubBallSpeed = 6.7;
@@ -172,7 +173,10 @@ public class ShooterSubsystem extends SubsystemBase {
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
             break;  
             case ZEROING:
-            //TODO zeroing stuff
+                if(hood.zero()){
+                    alreadyZeroed = true;
+                }
+                
             break;    
             case FIXEDFIRE:
                 

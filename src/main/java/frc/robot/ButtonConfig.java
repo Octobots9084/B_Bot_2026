@@ -49,14 +49,14 @@ public class ButtonConfig {
         driverController.leftBumper().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.REVERSEINTAKE))
         .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
         
-//        driverController.rightBumper().onTrue(new InstantCommand(() -> Alignment.getInstance().getRotation(alignRotation.getRotation())));
+        //driverController.rightBumper().onTrue(new InstantCommand(() -> Alignment.getInstance().getRotation(alignRotation.getRotation())));
 
 
-        //driverController.a().onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.SAFE));
+        driverController.a().onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.SAFE));
 
-        //driverController.b().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.UNJAM)));
+        driverController.b().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.UNJAM)));
 
-        //driverController.x().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SPINUP)));
+        driverController.x().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SPINUP)));
 
         driverController.y().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDFIRE)));
         driverController.y().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));

@@ -115,6 +115,7 @@ public Robot() {
   public void teleopInit() {
     //Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING; TODO uncomment
   //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
+    Superstructure.getInstance().setWantedState(SuperstructureStates.ZEROING);
   }
 
   /** This function is called periodically during operator control. */

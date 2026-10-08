@@ -15,6 +15,7 @@ import yams.mechanisms.positional.Arm;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class HoodSubsystem extends SubsystemBase{
+    public double hoodZeroAngle = -10;
     public static double HoodStatorLimit = 40; //TODO replace with real stuff
     public static Angle hoodTolerance = Degrees.of(5);
     public Arm hood;
@@ -32,19 +33,19 @@ public class HoodSubsystem extends SubsystemBase{
         .withTelemetry("HoodMech", TelemetryVerbosity.HIGH);
         
         hood = new Arm(HoodConfig, TX.HoodMotorSMC);
-        
     }
-
     public static HoodSubsystem getInstanceHood(){
         return instance;
     }
-
-
     public Command setAngle(Angle angle){
         return hood.setAngle(angle);
     }
     public void setAngleWithTolerance(Angle angle){
         hood.setMechanismPositionSetpoint(angle);
+    }
+    public boolean zero(){
+        hood.setAngle(Degrees.of(hoodZeroAngle));
+        return true;
     }
    public Angle getAngle(){
     return hood.getAngle();
@@ -52,7 +53,7 @@ public class HoodSubsystem extends SubsystemBase{
    public void periodic(){
     hood.updateTelemetry();
    }
-   public void  simulationPeriodic(){
+   public void simulationPeriodic(){
     hood.updateTelemetry();
     hood.simIterate();
    }
@@ -62,7 +63,6 @@ public class HoodSubsystem extends SubsystemBase{
         Logger.recordOutput("Motor Temperature", TX.HoodMotorSMC.getTemperature());
         Logger.recordOutput("Motor Voltage", TX.HoodMotorSMC.getVoltage());
         Logger.recordOutput("Motor Position", TX.HoodMotorSMC.getRotorPosition());
-        
    }
    
 }
