@@ -35,7 +35,7 @@ public class FlywheelSubsystem extends SubsystemBase{
    public FlywheelTalonFX TX;
    
     public FlywheelSubsystem(){
-      instance = this;
+      instance = this; 
       TX = new FlywheelTalonFX(this);
       TX.init();
       flyWheelConfig = new FlyWheelConfig()

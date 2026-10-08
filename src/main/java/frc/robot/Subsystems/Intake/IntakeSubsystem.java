@@ -97,42 +97,32 @@ public class IntakeSubsystem extends SubsystemBase {
                     currentIntakeState = wantedIntakeState;
                 break;
                 case ZERO:
-                    if (currentIntakeState != IntakeStates.SAFE) break;
+                    if (currentIntakeState == IntakeStates.SAFE){
                     currentIntakeState = wantedIntakeState;
+                    }
                 break;
                 case ELEPHANTIASIS:
-                    if (currentIntakeState != IntakeStates.SAFE &&
-                        currentIntakeState != IntakeStates.REVERSEINTAKE &&
-                        currentIntakeState != IntakeStates.INTAKING)
-                            break;
-    
-                    currentIntakeState = wantedIntakeState;
-                break;
+                    if (currentIntakeState == IntakeStates.EXTENDED || 
+                    currentIntakeState == IntakeStates.INTAKING || 
+                    currentIntakeState == IntakeStates.REVERSEINTAKE){
+                        currentIntakeState = wantedIntakeState;
+                    }
+                    break;
                 case EXTENDED:
-                    if (currentIntakeState != IntakeStates.INTAKING &&
-                        currentIntakeState != IntakeStates.SAFE &&
-                        currentIntakeState != IntakeStates.REVERSEINTAKE) 
-                            break;
-                currentIntakeState = wantedIntakeState;
-                break;
+                    if (currentIntakeState != IntakeStates.ZERO){
+                        currentIntakeState = wantedIntakeState;
+                    }
+                    break;
                 case INTAKING:
-                    if (currentIntakeState != IntakeStates.EXTENDED && 
-                        currentIntakeState != IntakeStates.ELEPHANTIASIS &&
-                        currentIntakeState != IntakeStates.REVERSEINTAKE && 
-                        currentIntakeState != IntakeStates.SAFE)
-                            break;
-                currentIntakeState = wantedIntakeState;
-    
-                break;
+                    if (currentIntakeState != IntakeStates.ZERO){
+                        currentIntakeState = wantedIntakeState;
+                    }
+                    break;
                 case REVERSEINTAKE:
-                    if (currentIntakeState != IntakeStates.EXTENDED && 
-                        currentIntakeState != IntakeStates.ELEPHANTIASIS &&
-                        currentIntakeState != IntakeStates.INTAKING && 
-                        currentIntakeState != IntakeStates.SAFE)
-                            break;
-                currentIntakeState = wantedIntakeState;
-    
-                break;
+                    if (currentIntakeState != IntakeStates.ZERO){
+                        currentIntakeState = wantedIntakeState;
+                    }
+                    break;
             }
     
         }
