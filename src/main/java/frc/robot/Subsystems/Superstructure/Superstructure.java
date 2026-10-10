@@ -165,7 +165,7 @@ public class Superstructure extends SubsystemBase{
                     shooter.wantedShooterState = ShooterStates.SAFE;
                 }
                     
-                floor.wantedRollerState = RollerFloorStates.PRELOAD;
+                floor.wantedRollerState = RollerFloorStates.SAFE;
 
                 if(superstructureWantedIntakeState != IntakeSubsystem.wantedIntakeState){
                     if(superstructureWantedIntakeState != null){
@@ -204,7 +204,7 @@ public class Superstructure extends SubsystemBase{
             case SAFE:
                 lights.lightsWantedState = LightAnimations.SAFE;
                 shooter.wantedShooterState = ShooterStates.SAFE;
-                floor.wantedRollerState = RollerFloorStates.PRELOAD;
+                floor.wantedRollerState = RollerFloorStates.SAFE;
 
             
                 IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.SAFE);
@@ -213,6 +213,7 @@ public class Superstructure extends SubsystemBase{
             case TRENCH:
                 lights.lightsWantedState = LightAnimations.TRENCH;
                 shooter.wantedShooterState = ShooterStates.TRENCH;
+                floor.wantedRollerState = RollerFloorStates.SAFE;
                 
                 if(superstructureWantedIntakeState != IntakeSubsystem.wantedIntakeState){
                     if(superstructureWantedIntakeState != null){
@@ -224,6 +225,7 @@ public class Superstructure extends SubsystemBase{
             case ZEROING:
                 lights.lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.ZEROING;
+                floor.wantedRollerState = RollerFloorStates.SAFE;
                 intake.setWantedIntakeState(IntakeStates.ZERO);
                 if(shooter.alreadyZeroed && intake.alreadyZeroed){ //change to intake alreadyZeroed
                     wantedState = SuperstructureStates.SAFE;
