@@ -32,6 +32,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.Meters;
@@ -377,7 +379,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
             .withPigeon2Configs(null);
 
 
-        TunerConstants.createDrivetrain();
+        commandSwerveDrivetrain = TunerConstants.createDrivetrain();
         }
     public ChassisSpeeds getChassisSpeeds() {
         return commandSwerveDrivetrain.getState().Speeds;

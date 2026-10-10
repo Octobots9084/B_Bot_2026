@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.*;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -243,6 +245,7 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
             });
         }
     }
+    @AutoLogOutput
     public Pose2d getPose2d() {
         return this.getState().Pose;
     }

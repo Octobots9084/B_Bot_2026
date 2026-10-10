@@ -70,6 +70,8 @@ public Robot() {
 
     container = new RobotContainer(this);
     CommandScheduler.getInstance().enable();
+    ShooterSubsystem.getInstance().getSwerve().initCommandSwerveDrivetrain();
+    
 }
 
 
@@ -85,6 +87,7 @@ public Robot() {
     CommandScheduler.getInstance().run();
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
     DriverCommunications.pushToElastic();
+    
   }
 
   /**
@@ -173,7 +176,6 @@ public Robot() {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-
   }
 
   /** This function is called periodically whilst in simulation. */
