@@ -50,7 +50,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeStates currentIntakeState = IntakeStates.SAFE;
     public IntakeIOTalonFX io = new IntakeIOTalonFX();
     public static IntakeSubsystem instance;
-    public static boolean alreadyZeroed = false;
+    public boolean alreadyZeroed = false;
         public Pivot pivotYAM;
         public FlyWheel rollerYAM;
     
@@ -149,12 +149,14 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
 
                 case ZERO:
+                
                 if(!alreadyZeroed){
                     alreadyZeroed = true;
                     pivotYAM.setAngle(intakeZeroingDegree); 
                     //we know where we are cuz we set pos so now just go to safe because thats where wed be if intake was pushed all the way in
                     wantedIntakeState = IntakeStates.SAFE;
                 }
+                break;
 
                 default: throw new RuntimeException("If you see this message, current state is probably null: " + currentIntakeState + ". Anyway, this should never be reached.🙈");
     

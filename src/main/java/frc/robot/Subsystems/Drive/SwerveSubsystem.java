@@ -166,6 +166,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         handleStateTransitions();
         applyStates();
         log();
+        
     }
 
     public void handleStateTransitions() {
