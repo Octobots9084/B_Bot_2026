@@ -166,7 +166,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         handleStateTransitions();
         applyStates();
         log();
-        
+
     }
 
     public void handleStateTransitions() {
@@ -368,11 +368,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         Logger.recordOutput("Back Right Drive Motor Voltage", commandSwerveDrivetrain.getModule(3).getDriveMotor().getMotorVoltage().getValueAsDouble());
          //front left, fr, bl, br
     }
-
-        
-
-
-
+    
     public void initCommandSwerveDrivetrain() {
 
         SwerveDrivetrainConstants dtC = new SwerveDrivetrainConstants()

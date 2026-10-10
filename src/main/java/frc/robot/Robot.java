@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Shooter.Flywheel.FlywheelSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
@@ -178,5 +179,6 @@ public Robot() {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
+    SwerveSubsystem.getInstance().commandSwerveDrivetrain.updateSimState(defaultPeriodSecs, 10);
   }
 }

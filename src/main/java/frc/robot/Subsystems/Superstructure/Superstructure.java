@@ -30,7 +30,7 @@ public class Superstructure extends SubsystemBase{
     public boolean InAlignedZone = true;
     public IntakeStates driverRequestedIntakeState = null;
     public LightsSubsystem lights = new LightsSubsystem();
-
+    Pose2d robotPose;
     public static Superstructure currentInstance;
   
 
@@ -41,6 +41,7 @@ public class Superstructure extends SubsystemBase{
         //}
             handleStateTransitions();
             applyStates();        
+            robotPose = SwerveSubsystem.getInstance().getPose2d();
      }
 
     public Superstructure() {
@@ -49,7 +50,7 @@ public class Superstructure extends SubsystemBase{
 
     public void IsInAllianceZone(){
         //TODO Owen please add get instance to swerve
-        Pose2d robotPose = SwerveSubsystem.getInstance().getRobotPose();
+        robotPose = SwerveSubsystem.getInstance().getRobotPose();
         if(Constants.isBlueAlliance){
             if(robotPose.getX() < Constants.blueTrenchX){
                 InAlignedZone = true;
