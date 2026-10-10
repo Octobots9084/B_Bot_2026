@@ -8,27 +8,31 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.525544316320961,
-        "y": 0.5202198758187775
+        "x": 6.5939133391203715,
+        "y": 0.21338331886574124
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.1977493859170307,
-        "y": 0.6828821529294036
+        "x": 2.5017844328703704,
+        "y": 0.9472371238425934
       },
       "prevControl": {
-        "x": 4.174969693868268,
-        "y": 0.26490692094250434
+        "x": 3.479004740821606,
+        "y": 0.5292618918556942
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "right double swipe 1"
     }
   ],
   "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8494140624999997,
+      "rotationDegrees": 180.0
+    },
     {
       "waypointRelativePos": 1,
       "rotationDegrees": 179.8559247018419
@@ -51,7 +55,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 68.0
+    "rotation": -108.31660001616494
   },
   "reversed": false,
   "folder": "Left Paths",

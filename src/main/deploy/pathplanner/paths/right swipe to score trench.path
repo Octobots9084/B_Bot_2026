@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.525544316320961,
-        "y": 7.4797801241812225
+        "x": 6.837065972222223,
+        "y": 7.789693938078704
       },
       "isLocked": false,
       "linkedName": "nuetral right swipe done"
     },
     {
       "anchor": {
-        "x": 3.1977493859170307,
-        "y": 7.317117847070596
+        "x": 2.8847531105324076,
+        "y": 7.147629267939815
       },
       "prevControl": {
-        "x": 4.174969693868268,
-        "y": 7.735093079057496
+        "x": 4.060591036536676,
+        "y": 7.478158556285885
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,6 +29,10 @@
     }
   ],
   "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8980468749999996,
+      "rotationDegrees": 180.0
+    },
     {
       "waypointRelativePos": 1,
       "rotationDegrees": -179.8559247018419
@@ -51,7 +55,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -68.0
+    "rotation": 108.58196271431196
   },
   "reversed": false,
   "folder": "Right Paths",

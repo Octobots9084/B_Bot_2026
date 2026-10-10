@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.525544316320961,
-        "y": 0.5202198758187775
+        "x": 6.634919921875,
+        "y": -0.06021260127314809
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.1977493859170307,
-        "y": 0.6828821529294036
+        "x": 2.5868156828703706,
+        "y": 0.9705288628472226
       },
       "prevControl": {
-        "x": 4.174969693868268,
-        "y": 0.26490692094250434
+        "x": 3.527867549189815,
+        "y": 0.8205431857638894
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,11 +30,15 @@
   ],
   "rotationTargets": [
     {
+      "waypointRelativePos": 0.7957750822368421,
+      "rotationDegrees": -179.47734734134184
+    },
+    {
       "waypointRelativePos": 1,
       "rotationDegrees": 179.8559247018419
     },
     {
-      "waypointRelativePos": 1,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": -0.0
     }
   ],
@@ -51,7 +55,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 68.0
+    "rotation": -120.88870596560491
   },
   "reversed": false,
   "folder": "Left Paths",

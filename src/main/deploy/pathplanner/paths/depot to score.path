@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5546606626157413,
-        "y": 5.96034107349537
+        "x": 0.49390530960648193,
+        "y": 6.971268156828704
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4355996822362358,
-        "y": 6.101560410002418
+        "x": 1.3748443292269763,
+        "y": 7.112487493335752
       },
       "isLocked": false,
-      "linkedName": "real depot"
+      "linkedName": "depot collected"
     },
     {
       "anchor": {
@@ -28,7 +28,12 @@
       "linkedName": "start center swipe"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6211451480263159,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": -50.0
+    "rotation": 126.71839177142958
   },
   "reversed": false,
   "folder": "Center Paths",
   "idealStartingState": {
     "velocity": 4.0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4157391493055558,
-        "y": 4.027848451967593
+        "x": 3.198633897569445,
+        "y": 4.054945601851852
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0955538917824077,
-        "y": 4.201978804976852
+        "x": 2.330606553819445,
+        "y": 5.018042607060186
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.5546606626157413,
-        "y": 5.96034107349537
+        "x": 0.49390530960648193,
+        "y": 4.7542226562500005
       },
       "prevControl": {
-        "x": 1.7987019675925913,
-        "y": 6.5145532407407405
+        "x": 2.271229021990741,
+        "y": 5.041924840856482
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "real depot"
+      "linkedName": "depot collection start"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8352693256578945,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Center Paths",

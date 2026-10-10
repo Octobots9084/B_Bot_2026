@@ -19,6 +19,12 @@
         {
           "type": "path",
           "data": {
+            "pathName": "depot collect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "depot to score"
           }
         },
