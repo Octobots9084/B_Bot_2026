@@ -16,16 +16,22 @@ public class DriverCommunications {
     public static double TeleopTimer = Timer.getMatchTime();
     public static double TeleopTimePassed = 160 - Timer.getMatchTime();
     public static VisionIOSystem vision = new VisionIOSystem();
-    
+    public static double testFlywheelSpeed = 0;
+    public static double testHoodAngle = 0;
+
+
     public static void pushToElastic() {
         // Are the cameras connected
-        SmartDashboard.putBoolean("left camera connected", vision.cameraConnected(0));
-        SmartDashboard.putBoolean("right camera connected", vision.cameraConnected(1));
-        SmartDashboard.putBoolean("shooter camera connected", vision.cameraConnected(2));
+        SmartDashboard.putBoolean("Cam/ Left cam", vision.cameraConnected(0));
+        SmartDashboard.putBoolean("Cam/ Right cam", vision.cameraConnected(1));
+        SmartDashboard.putBoolean("Cam/ Shooter cam", vision.cameraConnected(2));
 
         // Match times
-        SmartDashboard.putNumber("Time Passed", TeleopTimePassed);
-        SmartDashboard.putNumber("Time Left", TeleopTimer);
+        SmartDashboard.putNumber("Timer", Constants.timer.get());
+        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+        testFlywheelSpeed = SmartDashboard.getNumber("Flywheel Speed", 0);
+        testHoodAngle = SmartDashboard.getNumber("Hood Angle", 0);
+
         
         // Field
         SmartDashboard.putData(fieldPose);

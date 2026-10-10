@@ -103,6 +103,8 @@ public Robot() {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    Constants.timer.restart();
+
     //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().schedule(container.autoChooser.getSelected()); //awkward command
   }
 
@@ -117,6 +119,8 @@ public Robot() {
   Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
   //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
     Superstructure.getInstance().setWantedState(SuperstructureStates.ZEROING);
+        Constants.timer.restart();
+
   }
 
   /** This function is called periodically during operator control. */

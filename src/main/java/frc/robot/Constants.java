@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.constraint.MaxVelocityConstraint;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
@@ -29,6 +30,7 @@ public class Constants {
     //general
     public static CANBus krakenBus = new CANBus("krakenbus");
   public static Boolean isBlueAlliance = null;
+  public static Timer timer = new Timer();
 
     public static double redTrenchX = 11.7;
     public static double blueTrenchX = 4.8;
