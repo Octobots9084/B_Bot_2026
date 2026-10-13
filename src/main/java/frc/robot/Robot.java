@@ -46,6 +46,7 @@ public class Robot extends LoggedRobot {
    * initialization code.
    */
 public Robot() {
+    DriverCommunications.sliderInit();
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -183,6 +184,6 @@ public Robot() {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
-    SwerveSubsystem.getInstance().commandSwerveDrivetrain.updateSimState(defaultPeriodSecs, 10);
+    //SwerveSubsystem.getInstance().commandSwerveDrivetrain.updateSimState(defaultPeriodSecs, 10);
   }
 }

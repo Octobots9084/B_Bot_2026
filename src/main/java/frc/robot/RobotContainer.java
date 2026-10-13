@@ -88,7 +88,9 @@ public class RobotContainer {
    buttons.initTeleop();   
 
  }
+ public void sebbyTuningButtons(){
  
+ }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

@@ -60,7 +60,7 @@ public class ButtonConfig {
 
         driverController.y().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDFIRE)));
         driverController.y().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
-
+        
 
 
 

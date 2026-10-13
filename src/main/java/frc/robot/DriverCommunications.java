@@ -19,6 +19,11 @@ public class DriverCommunications {
     public static double testFlywheelSpeed = 0;
     public static double testHoodAngle = 0;
 
+    public static void sliderInit(){
+        SmartDashboard.putNumber("Flywheel Speed", 0);
+        SmartDashboard.putNumber("Hood Angle", 0);
+
+    }
 
     public static void pushToElastic() {
         // Are the cameras connected
@@ -29,13 +34,12 @@ public class DriverCommunications {
         // Match times
         SmartDashboard.putNumber("Timer", Constants.timer.get());
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-        testFlywheelSpeed = SmartDashboard.getNumber("Flywheel Speed", 0);
-        testHoodAngle = SmartDashboard.getNumber("Hood Angle", 0);
 
         
         // Field
         SmartDashboard.putData(fieldPose);
 
-        //TODO remove santi smartdashboard stuff because its logged differently
+        testFlywheelSpeed = SmartDashboard.getNumber("Flywheel Speed", 0);
+        testHoodAngle = SmartDashboard.getNumber("Hood Angle", 0);
     }
 }

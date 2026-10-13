@@ -41,7 +41,7 @@ public class Superstructure extends SubsystemBase{
         //}
             handleStateTransitions();
             applyStates();        
-            robotPose = SwerveSubsystem.getInstance().getPose2d();
+            //robotPose = SwerveSubsystem.getInstance().getPose2d();
      }
 
     public Superstructure() {
