@@ -55,9 +55,11 @@ public class ButtonConfig {
         driverController.a().onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.SAFE));
 
         driverController.b().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.UNJAM)));
-
+        driverController.b().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
+        
         driverController.x().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SPINUP)));
-
+        driverController.x().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
+        
         driverController.y().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDFIRE)));
         driverController.y().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
 
