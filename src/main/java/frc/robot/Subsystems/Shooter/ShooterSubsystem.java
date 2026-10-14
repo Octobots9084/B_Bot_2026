@@ -88,8 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterFlywheel = new FlywheelSubsystem();
         feeder = new FeederSubsystem();
         hood = new HoodSubsystem();
-        swerve = new SwerveSubsystem(ButtonConfig.driverController, ButtonConfig.coDriverController, Constants.maxVelocity,
-        Constants.maxAngularVelocity);
+        swerve = SwerveSubsystem.getInstance();
         initDone = true;
     }
     

@@ -35,6 +35,7 @@ public class ButtonConfig {
     
     public void initTeleop() {
         driverController = new CommandXboxController(0);
+        coDriverController = new CommandXboxController(1);
         //initCalculator()u;
         driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
             superstructure.setWantedState(SuperstructureStates.HUB)), 

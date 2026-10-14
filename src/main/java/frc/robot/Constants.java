@@ -37,10 +37,10 @@ public class Constants {
     public static double fieldMidline = 8.25;
     public static double trenchDangerZone = 0.1016;
     public static double shooterLoweringTime = 0.25;
-    public static double leftYDeadband;
-    public static double leftXDeadband;
-    public static double rightXDeadband;
-    public static double rightYDeadband;
+    public static double leftYDeadband = 0;//TODO
+    public static double leftXDeadband = 0;//TODO
+    public static double rightXDeadband = 0;//TODO
+    public static double rightYDeadband = 0;//TODO
 
    private static final double highCamPitch = Units.degreesToRadians(20);
 

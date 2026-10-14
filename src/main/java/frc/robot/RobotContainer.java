@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
+import frc.robot.Subsystems.Drive.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Drive.TunerConstants;
 import frc.robot.Subsystems.Drive.TunerConstants;
@@ -43,6 +44,9 @@ public class RobotContainer {
 // Dashboard inputs
  final SendableChooser<Command> autoChooser;
 
+ public ButtonConfig getButtonConfig () {
+  return buttons;
+ }
 
     public RobotContainer(Robot robot) {
 
@@ -75,12 +79,20 @@ public class RobotContainer {
             case REPLAY:
           break;
         }
- SwerveSubsystem swerve = shooter.getSwerve();
+        
+    buttons.initTeleop();
+
+  SwerveSubsystem swerve = SwerveSubsystem.setInstance(
+        TunerConstants.createDrivetrain(),
+        ButtonConfig.driverController, 
+        ButtonConfig.coDriverController,
+          Constants.maxAngularVelocity, 
+          Constants.maxVelocity);
   configureBindings();
 
 
-     autoChooser = AutoBuilder.buildAutoChooser();
-         SmartDashboard.putData("Auto", autoChooser);
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto", autoChooser);
 
   }
 

@@ -15,7 +15,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.RobotTypes;
+import frc.robot.Subsystems.Drive.CommandSwerveDrivetrain;
+import frc.robot.Subsystems.Drive.SwerveStates;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
+import frc.robot.Subsystems.Drive.TunerConstants;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Shooter.Flywheel.FlywheelSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
@@ -40,12 +44,15 @@ public class Robot extends LoggedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private RobotContainer container;
+  private SwerveSubsystem swerve;
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
 public Robot() {
+      // TODO change the buttons from driverleft and right to the xbox controller
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -69,11 +76,14 @@ public Robot() {
   Logger.start();
 
     container = new RobotContainer(this);
+
+
+
+
     CommandScheduler.getInstance().enable();
-    ShooterSubsystem.getInstance().getSwerve().initCommandSwerveDrivetrain();
+    // ShooterSubsystem.getInstance().getSwerve().initCommandSwerveDrivetrain();
     
 }
-
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -87,7 +97,6 @@ public Robot() {
     CommandScheduler.getInstance().run();
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
     DriverCommunications.pushToElastic();
-    
   }
 
   /**
@@ -112,12 +121,14 @@ public Robot() {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    SwerveSubsystem.getInstance().periodic();
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
   Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
+  SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
   //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
     Superstructure.getInstance().setWantedState(SuperstructureStates.ZEROING);
   }
@@ -125,7 +136,8 @@ public Robot() {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
+    SwerveSubsystem.getInstance().periodic();
+    // SwerveSubsystem.getInstance().periodic();
   }
 
   /** This function is called once when the robot is disabled. */
@@ -181,6 +193,6 @@ public Robot() {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
-    SwerveSubsystem.getInstance().commandSwerveDrivetrain.updateSimState(defaultPeriodSecs, 10);
+    // SwerveSubsystem.getInstance().commandSwerveDrivetrain.updateSimState(defaultPeriodSecs, 10);
   }
 }

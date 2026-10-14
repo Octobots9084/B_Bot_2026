@@ -55,6 +55,7 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
@@ -117,15 +118,23 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         return constants;
     }
     
-    public SwerveSubsystem(CommandXboxController driverController2, CommandXboxController coDriverController2, double maxVelocity, double maxAngularVelocity) {
+    public SwerveSubsystem(CommandSwerveDrivetrain commandSwerveDrivetrain, CommandXboxController driverController2, CommandXboxController coDriverController2, double maxVelocity, double maxAngularVelocity) {
         super(TunerConstants.DrivetrainConstants, TunerConstants.FrontLeft, TunerConstants.FrontRight, TunerConstants.BackLeft, TunerConstants.BackRight);
         this.driverController = driverController2;
+        this.commandSwerveDrivetrain = commandSwerveDrivetrain;
         //this.coDriverController = driverController2;
         this.maxVelocity = maxVelocity;
         this.maxAngularVelocity = maxAngularVelocity;
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
         instance = this;
         configureAutoBuilder();
+    }
+
+    public static SwerveSubsystem setInstance(CommandSwerveDrivetrain commandSwerveDrivetrain,CommandXboxController driverController, CommandXboxController coDriverController2,
+            double maxAngularVelocity, double maxVelocity) {
+        SwerveSubsystem instance = new SwerveSubsystem(commandSwerveDrivetrain, driverController, coDriverController2, maxAngularVelocity, maxVelocity);
+        instance.registerNamedCommands();
+        return instance;
     }
 
     public Pose2d getPose2d()
@@ -176,16 +185,23 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
             case ALIGNHUB:
                 break;
             case IDLE:
+                    currentState = wantedState;
                 break;
             case MANUAL:
+                    currentState = wantedState;
                 break;
             case REVERSE:
+                    currentState = wantedState;
                 break;
             case ROTATION_LOCK:
+                    currentState = wantedState;
                 break;
             case SLOW:
+                if (currentState != SwerveStates.IDLE)
+                    currentState = wantedState;
                 break;
             case XLOCK:
+                currentState = wantedState;
                 break;
             default:
                 break;
@@ -217,7 +233,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
                 break;
             case MANUAL:
 
-                shouldXLock();
+                // shouldXLock();
                 commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                     .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                     .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
@@ -234,7 +250,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             case SLOW:
-                shouldXLock();
+                // shouldXLock();
                 ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
 
               
@@ -353,6 +369,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
         //states, motor voltage
         public void log() {
+        Logger.recordOutput("RobotPose", commandSwerveDrivetrain.getPose2d());
         Logger.recordOutput("Pose X", commandSwerveDrivetrain.getPose2d().getX());
         Logger.recordOutput("Pose Y", commandSwerveDrivetrain.getPose2d().getY());
         Logger.recordOutput("Pose Rotation (Degrees)", commandSwerveDrivetrain.getPose2d().getRotation().getDegrees());
@@ -371,18 +388,16 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
          //front left, fr, bl, br
     }
     
-    public void initCommandSwerveDrivetrain() {
+    // public void initCommandSwerveDrivetrain() {
 
-        SwerveDrivetrainConstants dtC = new SwerveDrivetrainConstants()
-            .withCANBusName(Constants.krakenBus.getName())
-            .withPigeon2Id(0)
-            .withPigeon2Configs(null);
+    //     SwerveDrivetrainConstants dtC = new SwerveDrivetrainConstants()
+    //         .withCANBusName(Constants.krakenBus.getName())
+    //         .withPigeon2Id(0)
+    //         .withPigeon2Configs(null);
 
-
-        commandSwerveDrivetrain = TunerConstants.createDrivetrain();
-        }
+    //     }
     public ChassisSpeeds getChassisSpeeds() {
-        return commandSwerveDrivetrain.getState().Speeds;
+        return this.getState().Speeds;
     } 
     public static boolean InTrenchLane(){
         Pose2d robPose = SwerveSubsystem.getInstance().getRobotPose();
