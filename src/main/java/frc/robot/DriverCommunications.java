@@ -16,7 +16,15 @@ public class DriverCommunications {
     public static double TeleopTimer = Timer.getMatchTime();
     public static double TeleopTimePassed = 160 - Timer.getMatchTime();
     public static VisionIOSystem vision = new VisionIOSystem();
-    
+    public static double testFlywheelSpeed = 30;
+    public static double testHoodAngle = 0;
+
+    public static void sliderInit(){
+        SmartDashboard.putNumber("Flywheel Speed", 0);
+        SmartDashboard.putNumber("Hood Angle", 0);
+
+    }
+
     public static void pushToElastic() {
         // Are the cameras connected
         SmartDashboard.putBoolean("left camera connected", vision.cameraConnected(0));
@@ -30,6 +38,7 @@ public class DriverCommunications {
         // Field
         SmartDashboard.putData(fieldPose);
 
-        //TODO remove santi smartdashboard stuff because its logged differently
+        testFlywheelSpeed = SmartDashboard.getNumber("Flywheel Speed", 30);
+        testHoodAngle = SmartDashboard.getNumber("Hood Angle", 0);
     }
 }

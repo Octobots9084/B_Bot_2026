@@ -7,7 +7,13 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElephantiasisMKII"
           }
         },
         {
@@ -17,9 +23,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "trench to neutral left delay"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
           }
         },
         {
@@ -32,6 +50,12 @@
           "type": "path",
           "data": {
             "pathName": "delay left swipe to score trench"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElephantiasisMKII"
           }
         },
         {

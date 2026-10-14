@@ -35,6 +35,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ElephantiasisMKII"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 4.0
@@ -44,6 +50,12 @@
           "type": "named",
           "data": {
             "name": "StopShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
           }
         },
         {
@@ -74,6 +86,12 @@
           "type": "named",
           "data": {
             "name": "StartShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElephantiasisMKII"
           }
         }
       ]

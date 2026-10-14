@@ -15,7 +15,7 @@ import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class FeederSubsystem extends SubsystemBase{
-   public static double feederShootVelocity = 200;
+   public static double feederShootVelocity = 135;
    public static double feederReverseVelocity = -100;
    public FeederStates wantedFeederState = FeederStates.SAFE;
    public FeederStates FeederState = FeederStates.SAFE;

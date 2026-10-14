@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
+            "name": "ElephantiasisMKII"
           }
         },
         {
@@ -47,9 +47,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "depot score to swipe"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         },
         {
@@ -74,6 +86,12 @@
           "type": "named",
           "data": {
             "name": "StartShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElephantiasisMKII"
           }
         }
       ]

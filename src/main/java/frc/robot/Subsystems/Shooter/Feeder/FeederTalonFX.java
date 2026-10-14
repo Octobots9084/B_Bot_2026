@@ -19,12 +19,12 @@ public class FeederTalonFX {
     public SmartMotorControllerConfig FeederFollowerSMCConfig;
     public FeederTalonFX(FeederSubsystem subsystem){
      FeederFollowerSMCConfig = new SmartMotorControllerConfig()
-    .withClosedLoopController(1,0,0)
-    .withSimClosedLoopController(1,0,0)
+    .withClosedLoopController(0.25,0.1,0.1)
+    .withSimClosedLoopController(0.25,0.1,0.1)
     .withSimFeedforward(new SimpleMotorFeedforward(0, 0.05, 0))
     .withFeedforward(new SimpleMotorFeedforward(0, 0.05, 0))
     .withControlMode(ControlMode.CLOSED_LOOP)
-    .withMomentOfInertia(KilogramSquareMeters.of(0.009))
+    .withMomentOfInertia(KilogramSquareMeters.of(0.0009))
     .withTelemetry("feeder", TelemetryVerbosity.HIGH)
     .withMotorInverted(false)
     .withGearing(1)

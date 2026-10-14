@@ -25,8 +25,8 @@ public class RollerFloorTalonFX {
 
     public RollerFloorTalonFX(RollerFloorSubsystem subsystem){
     FloorFollowerSmcConfig = new SmartMotorControllerConfig()
-    .withClosedLoopController(0.25,0,0)
-    .withSimClosedLoopController(0.25,0,0)
+    .withClosedLoopController(0.2,0,0)
+    .withSimClosedLoopController(0.2,0,0)
     .withFeedforward(new SimpleMotorFeedforward(0, 0.05, 0))
     .withSimFeedforward(new SimpleMotorFeedforward(0, 0.05, 0))
     .withMomentOfInertia(KilogramSquareMeters.of(0.000056))

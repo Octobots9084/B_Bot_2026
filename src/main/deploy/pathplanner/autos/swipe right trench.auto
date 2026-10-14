@@ -7,13 +7,19 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
+            "name": "StopIntake"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "trench to neutral right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
           }
         },
         {
@@ -32,6 +38,12 @@
           "type": "named",
           "data": {
             "name": "StartShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElephantiasisMKII"
           }
         }
       ]

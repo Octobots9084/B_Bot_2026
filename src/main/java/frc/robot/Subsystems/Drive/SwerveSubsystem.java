@@ -60,6 +60,8 @@ import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Shooter.ShooterStates;
 import frc.robot.Subsystems.Shooter.ShooterSubsystem;
+import frc.robot.Subsystems.Superstructure.Superstructure;
+import frc.robot.Subsystems.Superstructure.SuperstructureStates;
 import frc.robot.Subsystems.Vision.ShooterCalculator;
 
 public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
@@ -278,11 +280,12 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
     public void registerNamedCommands () {
 
-    NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {ShooterSubsystem.getInstance().wantedShooterState = ShooterStates.HUB;}));
-    NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {ShooterSubsystem.getInstance().wantedShooterState = ShooterStates.SAFE;}));
+    NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.HUB)));
+    NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.SAFE)));
 
     NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;}));
-    NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.EXTENDED;}));
+    NamedCommands.registerCommand("ElephantiasisMKII", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.ELEPHANTIASIS;}));
+    NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.SAFE;}));
     }
 
     public void shouldXLock() {

@@ -7,13 +7,31 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElephantiasisMKII"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 4.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
           }
         },
         {
@@ -32,6 +50,12 @@
           "type": "path",
           "data": {
             "pathName": "delay right swipe to score bump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElephantiasisMKII"
           }
         },
         {
