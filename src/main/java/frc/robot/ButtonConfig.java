@@ -31,6 +31,7 @@ public class ButtonConfig {
     Superstructure superstructure = Superstructure.getInstance();
     //private ShooterCalculator alignRotation;
     public ButtonConfig(){
+        
     }
     
     public void initTeleop() {
@@ -53,7 +54,7 @@ public class ButtonConfig {
         //driverController.rightBumper().onTrue(new InstantCommand(() -> Alignment.getInstance().getRotation(alignRotation.getRotation())));
 
 
-        //driverController.a().onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.SAFE));
+        driverController.a().onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.SAFE));
 
         driverController.b().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.UNJAM)));
         driverController.b().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
