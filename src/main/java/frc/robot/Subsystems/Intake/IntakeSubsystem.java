@@ -62,10 +62,10 @@ public class IntakeSubsystem extends SubsystemBase {
             rollerYAM = io.motorInstRoller(this);
         }
     
-        public Command rotateP(double d) {
+        public Command simMovePivot(double d) {
             return pivotYAM.set(d);
         }
-        public Command rotateR(double d) {
+        public Command simRotateRoller(double d) {
             return rollerYAM.set(d);
         }
         @Override
@@ -159,27 +159,26 @@ public class IntakeSubsystem extends SubsystemBase {
                 break;
 
                 default: throw new RuntimeException("If you see this message, current state is probably null: " + currentIntakeState + ". Anyway, this should never be reached.🙈");
-    
             }
         }
 
-        public void simFriendlyPos(double d) {
-            if (Robot.isSimulation()) rotateP(d).execute();
-            else io.moveRollerToPos(d);
+        public void simFriendlyPos(double pos) {
+            if (Robot.isSimulation()) simMovePivot(pos).execute();
+            else io.moveToPos(pos);
 
         }
 
-        public void simFriendlySpin(double d) {
-            if (Robot.isSimulation()) rotateR(d).execute();
-            else io.spinRollers(d);
+        public void simFriendlySpin(double velocity) {
+            if (Robot.isSimulation()) simRotateRoller(velocity).execute();
+            else io.spinRollers(velocity);
         }
     
         public void logging() {
             Logger.recordOutput("currState", currentIntakeState);
             Logger.recordOutput("wantState", wantedIntakeState);
     
-            Logger.recordOutput("currRPS", ((IntakeIOTalonFX) io).rollerSpinner.getVelocity().getValueAsDouble());
-            Logger.recordOutput("currAngle (0-130)", ((IntakeIOTalonFX) io).rollerMover.getPosition().getValueAsDouble());
+            Logger.recordOutput("currRPS", ((IntakeIOTalonFX) io).rollerMotor.getVelocity().getValueAsDouble());
+            Logger.recordOutput("currAngle (0-130)", ((IntakeIOTalonFX) io).pivotMotor.getPosition().getValueAsDouble());
     
             io.log();
         }
@@ -218,9 +217,8 @@ public class IntakeSubsystem extends SubsystemBase {
             return instance;
     }
 
-        public Command setDutyCycle(double d) {
-           
-        return Commands.sequence(pivotYAM.set(d), rollerYAM.set(d));
+        public Command setDutyCycle(double dutyCycle) {
+            return Commands.sequence(pivotYAM.set(dutyCycle), rollerYAM.set(dutyCycle));
            
         }
 }
