@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.Subsystems.Drive.SwerveStates;
+import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.RollerFloor.RollerFloorStates;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
@@ -27,6 +29,8 @@ public class RollerFloorSubsystem extends SubsystemBase {
     private Distance RollerDiameter = Centimeters.of(20);//TODO replace all of these values
     @AutoLogOutput public RollerFloorStates wantedRollerState = RollerFloorStates.SAFE;
     @AutoLogOutput public RollerFloorStates currentRollerState = RollerFloorStates.SAFE;
+    @AutoLogOutput public SwerveStates wantedSwerveStateCopy;
+    @AutoLogOutput public SwerveStates currentSwerveStateCopy;
     public RollerFloorTalonFX TX;
     public static RollerFloorSubsystem instance;
     private FlyWheel RollerFlywheel;
@@ -48,6 +52,8 @@ public class RollerFloorSubsystem extends SubsystemBase {
         handleStateTransitions();
         applyStates();
         logging();
+        wantedSwerveStateCopy = SwerveSubsystem.getInstance().wantedState;
+        currentSwerveStateCopy = SwerveSubsystem.getInstance().currentState;
     }
     public void simulationPeriodic() {
         RollerFlywheel.updateTelemetry();

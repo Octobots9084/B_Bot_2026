@@ -158,15 +158,15 @@ public class ShooterSubsystem extends SubsystemBase {
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
             break;
             case HUB:
-                hubShot = ShooterCalculator.getInstance().calculateShot(ourHub.getX() - swerve.getPose2d().getTranslation().getX(), ourHub.getY() - swerve.getPose2d().getTranslation().getY(), SwerveSubsystem.getInstance().getChassisSpeeds().vxMetersPerSecond,SwerveSubsystem.getInstance().getChassisSpeeds().vyMetersPerSecond);
-                //if this code doesnt work fiddle with the X and Y distance from hubs <3
-                Alignment.getInstance().getRotation(hubShot.getRotation());
-                shooterPartsControl(hubShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, hubShot.getHoodAngle());
+                // hubShot = ShooterCalculator.getInstance().calculateShot(ourHub.getX() - swerve.getPose2d().getTranslation().getX(), ourHub.getY() - swerve.getPose2d().getTranslation().getY(), SwerveSubsystem.getInstance().getChassisSpeeds().vxMetersPerSecond,SwerveSubsystem.getInstance().getChassisSpeeds().vyMetersPerSecond);
+                // //if this code doesnt work fiddle with the X and Y distance from hubs <3
+                // Alignment.getInstance().getRotation(hubShot.getRotation());
+                // shooterPartsControl(hubShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, hubShot.getHoodAngle());
             break;     
             case FERRY:
-                ferryShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
-                Alignment.getInstance().getRotation(ferryShot.getRotation());
-                shooterPartsControl(ferryShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, ferryShot.getHoodAngle());
+                // ferryShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+                // Alignment.getInstance().getRotation(ferryShot.getRotation());
+                // shooterPartsControl(ferryShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, ferryShot.getHoodAngle());
             break;
             case TRENCH:
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);

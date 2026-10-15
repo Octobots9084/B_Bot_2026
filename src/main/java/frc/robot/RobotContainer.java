@@ -86,8 +86,8 @@ public class RobotContainer {
         TunerConstants.createDrivetrain(),
         ButtonConfig.driverController, 
         ButtonConfig.coDriverController,
-          Constants.maxAngularVelocity, 
-          Constants.maxVelocity);
+          Constants.maxVelocity, 
+          Constants.maxAngularVelocity);
   configureBindings();
 
 

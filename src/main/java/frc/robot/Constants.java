@@ -37,10 +37,10 @@ public class Constants {
     public static double fieldMidline = 8.25;
     public static double trenchDangerZone = 0.1016;
     public static double shooterLoweringTime = 0.25;
-    public static double leftYDeadband = 0;//TODO
-    public static double leftXDeadband = 0;//TODO
-    public static double rightXDeadband = 0;//TODO
-    public static double rightYDeadband = 0;//TODO
+    public static double leftYDeadband = 0.1;
+    public static double leftXDeadband = 0.1;
+    public static double rightXDeadband = 0.1;
+    public static double rightYDeadband = 0.1;
 
    private static final double highCamPitch = Units.degreesToRadians(20);
 
@@ -81,7 +81,7 @@ public class Constants {
   }
 
 
-public static final double maxAngularVelocity = 540;
+public static final double maxAngularVelocity = 2 * Math.PI;
 public static final double maxVelocity = 4.5;
   private static final SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constantCreator =
         new SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>()
