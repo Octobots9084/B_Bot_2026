@@ -4,7 +4,8 @@ import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Seconds;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.google.flatbuffers.Constants;
+import frc.robot.Constants;
+
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -44,9 +45,9 @@ public class RollerFloorTalonFX {
 
 
     public void init() {
-        FloorFollowerSmc = new TalonFXWrapper(new TalonFX(Constants.floorID), DCMotor.getKrakenX44(1), FloorFollowerSmcConfig);
+        FloorFollowerSmc = new TalonFXWrapper(new TalonFX(Constants.rollerFloorLeftID), DCMotor.getKrakenX44(1), FloorFollowerSmcConfig);
         FloorSMCConfig = FloorFollowerSmcConfig.clone()
         .withLooselyCoupledFollowers(FloorFollowerSmc);
-        FloorMotor = new TalonFXWrapper(new TalonFX(11), DCMotor.getKrakenX44(1), FloorSMCConfig);
+        FloorMotor = new TalonFXWrapper(new TalonFX(Constants.rollerFloorRightID), DCMotor.getKrakenX44(1), FloorSMCConfig);
     }
 }

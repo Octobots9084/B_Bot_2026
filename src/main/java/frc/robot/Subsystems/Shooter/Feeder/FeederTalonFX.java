@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
+import frc.robot.Constants;
 import yams.motorcontrollers.SmartMotorController;
 import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
@@ -43,10 +44,10 @@ public class FeederTalonFX {
     public SmartMotorController FeederMotor;
 
     public void init(){
-        FeederFollowerSmc = new TalonFXWrapper(new TalonFX(8), DCMotor.getKrakenX44(1), FeederFollowerSMCConfig);    
+        FeederFollowerSmc = new TalonFXWrapper(new TalonFX(Constants.feederLeftID), DCMotor.getKrakenX44(1), FeederFollowerSMCConfig);    
 
         FeederSMCConfig = FeederFollowerSMCConfig.clone()
     .withLooselyCoupledFollowers(FeederFollowerSmc);
-        FeederMotor = new TalonFXWrapper(new TalonFX(7), DCMotor.getKrakenX44(1), FeederSMCConfig);
+        FeederMotor = new TalonFXWrapper(new TalonFX(Constants.feederRightID), DCMotor.getKrakenX44(1), FeederSMCConfig);
     }
 }

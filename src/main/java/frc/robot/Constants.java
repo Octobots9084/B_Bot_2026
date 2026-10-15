@@ -48,6 +48,16 @@ public class Constants {
     public static int intakePivotFollowerID = 12;
     public static int rollerFloorRightID = 13;
     public static int rollerFloorLeftID = 14;
+    public static int feederLeftID = 0;
+    public static int feederRightID = 0;
+    public static int flyWheel1ID= 0;
+    public static int flyWheel2ID= 0;
+    public static int flyWheel3ID= 0;
+    public static int flyWheel4ID= 0;
+    public static int hoodID= 0;
+
+
+
     // public static int iID = 0;
     // public static int intakeRollerID = 0;
     // public static int intakeRollerID = 0;

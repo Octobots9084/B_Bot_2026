@@ -7,8 +7,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
-
-
+import frc.robot.Constants;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
 import yams.motorcontrollers.SmartMotorController;
@@ -18,10 +17,10 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 public class FlywheelTalonFX {
-    public TalonFX flywheelMotor = new TalonFX(3);
-    public TalonFX flywheelMot2 = new TalonFX(4);
-    public TalonFX flywheelMot3 = new TalonFX(5);
-    public TalonFX flywheelMot4 = new TalonFX(6);
+    public TalonFX flywheelMotor = new TalonFX(Constants.flyWheel1ID);
+    public TalonFX flywheelMot2 = new TalonFX(Constants.flyWheel2ID);
+    public TalonFX flywheelMot3 = new TalonFX(Constants.flyWheel3ID);
+    public TalonFX flywheelMot4 = new TalonFX(Constants.flyWheel4ID);
     public SmartMotorController flywheelTalon2;
     public SmartMotorController flywheelTalon3;
     public SmartMotorController flywheelTalon4;

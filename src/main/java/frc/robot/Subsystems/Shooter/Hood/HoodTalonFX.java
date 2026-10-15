@@ -11,8 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
-
-
+import frc.robot.Constants;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
 import yams.motorcontrollers.SmartMotorController;
@@ -42,7 +41,7 @@ public class HoodTalonFX {
     public SmartMotorController HoodMotorSMC;
 
     public void init(){
-        HoodMotorSMC = new TalonFXWrapper(new TalonFX(9), DCMotor.getKrakenX60(1), HoodSMC);
+        HoodMotorSMC = new TalonFXWrapper(new TalonFX(Constants.hoodID), DCMotor.getKrakenX60(1), HoodSMC);
     }
 
 }
