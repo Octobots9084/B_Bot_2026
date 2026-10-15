@@ -42,6 +42,18 @@ public class Constants {
     public static double rightXDeadband = 0.1;
     public static double rightYDeadband = 0.1;
 
+    public static int intakeRollerID = 9;
+    public static int intakeRollerFollowerID = 10;
+    public static int intakePivotID = 11;
+    public static int intakePivotFollowerID = 12;
+    public static int rollerFloorRightID = 13;
+    public static int rollerFloorLeftID = 14;
+    // public static int iID = 0;
+    // public static int intakeRollerID = 0;
+    // public static int intakeRollerID = 0;
+    // public static int intakeRollerID = 0;
+    
+
    private static final double highCamPitch = Units.degreesToRadians(20);
 
     //thank you ethan

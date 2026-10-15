@@ -16,12 +16,14 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import frc.robot.Constants;
 import yams.gearing.GearBox;
 import yams.gearing.MechanismGearing;
@@ -55,37 +57,39 @@ public class IntakeIOTalonFX {
       
 
 
-    public TalonFX rollerMover;
-    public TalonFX rollerSpinner;
-    public TalonFX rollerSpinnerF;
+    public TalonFX pivotMotor;
+    public TalonFX pivotFollowerMotor;
+    public TalonFX rollerMotor;
+    public TalonFX rollerFollowerMotor;
 
-    MotionMagicVoltage moverMagic; 
-    MotionMagicVelocityVoltage spinnerMagic;
+    MotionMagicVoltage pivotMagic; 
+    VelocityVoltage rollerVelocity;
 
-    Follower rollerMoverFollower;
-    Follower rollerSpinnerFollower;
+    Follower pivotFollower;
+    Follower rollerFollower;
 
 
 
 
     public IntakeIOTalonFX() {
         //todo get actual device ids that probably arent taken
-        rollerMover = new TalonFX(0, Constants.krakenBus);
-        rollerSpinner = new TalonFX(1, Constants.krakenBus);
-        rollerSpinnerF = new TalonFX(2, Constants.krakenBus);
+        pivotMotor = new TalonFX(Constants.intakePivotID, Constants.krakenBus);
+        pivotFollowerMotor = new TalonFX(Constants.intakePivotFollowerID, Constants.krakenBus);
+        rollerMotor = new TalonFX(Constants.intakeRollerID, Constants.krakenBus);
+        rollerFollowerMotor = new TalonFX(Constants.intakeRollerFollowerID, Constants.krakenBus);
 
-        rollerMoverFollower = new Follower(0, MotorAlignmentValue.Opposed); //todo this is my guess but idk
-        rollerSpinnerFollower = new Follower(1, MotorAlignmentValue.Opposed); //again
+        pivotFollower = new Follower(Constants.intakePivotID, MotorAlignmentValue.Opposed); //todo this is my guess but idk
+        rollerFollower = new Follower(Constants.intakeRollerID, MotorAlignmentValue.Opposed); //again
 
-        moverMagic = new MotionMagicVoltage(0);
-        spinnerMagic = new MotionMagicVelocityVoltage(0);
+        pivotMagic = new MotionMagicVoltage(0);
+        rollerVelocity = new  VelocityVoltage(0);
 
         config();
 
-        rollerMover.setControl(moverMagic);
-        rollerSpinner.setControl(spinnerMagic);
+        pivotMotor.setControl(pivotMagic);
+        rollerMotor.setControl(rollerVelocity);
 
-        rollerSpinnerF.setControl(rollerSpinnerFollower);
+        rollerFollowerMotor.setControl(rollerFollower);
 
     
     }
@@ -98,7 +102,7 @@ public class IntakeIOTalonFX {
         config.CurrentLimits.StatorCurrentLimit = 40;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         
-        rollerMover.getConfigurator().apply(config);
+        pivotMotor.getConfigurator().apply(config);
 
 
         config = new TalonFXConfiguration(); 
@@ -107,35 +111,37 @@ public class IntakeIOTalonFX {
         config.CurrentLimits.StatorCurrentLimit = 40;
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         
-        rollerSpinner.getConfigurator().apply(config);
+        rollerMotor.getConfigurator().apply(config);
 
     }
 
 
-    public void spinRollers(double b) {
-        spinnerMagic.Velocity = b;
-        rollerSpinner.setControl(spinnerMagic);
+    public void spinRollers(double velocity) {
+        rollerMotor.setControl(rollerVelocity.withVelocity(velocity));
     }
 
     
     /**TODO figure out actual positions */
-    public void moveRollerToPos(Double pos) {
-        moverMagic.Position = pos;
-        rollerSpinner.setControl(moverMagic);
+    public void moveToPos(Double pos) {
+        pivotMotor.setControl(pivotMagic.withPosition(pos));
     }
 
     public void log() {
-        Logger.recordOutput("Roller Temp/", rollerMover.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("Roller Position/", rollerMover.getPosition().getValueAsDouble());
-        Logger.recordOutput("Roller Voltage/", rollerMover.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Pivot Temp/", pivotMotor.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Pivot Position/", pivotMotor.getPosition().getValueAsDouble());
+        Logger.recordOutput("Pivot Voltage/", pivotMotor.getMotorVoltage().getValueAsDouble());
 
-        Logger.recordOutput("Spinner Temp", rollerSpinner.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("Spinner Position", rollerSpinner.getPosition().getValueAsDouble());
-        Logger.recordOutput("Spinner Voltage", rollerSpinner.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Roller Temp", rollerMotor.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Roller Position", rollerMotor.getPosition().getValueAsDouble());
+        Logger.recordOutput("Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
 
-        Logger.recordOutput("SpinnerF Temp", rollerSpinnerF.getDeviceTemp().getValueAsDouble());
-        Logger.recordOutput("SpinnerF Position", rollerSpinnerF.getPosition().getValueAsDouble());
-        Logger.recordOutput("SpinnerF Voltage", rollerSpinnerF.getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("Roller Follower Temp", rollerFollowerMotor.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Roller Follower Position", rollerFollowerMotor.getPosition().getValueAsDouble());
+        Logger.recordOutput("Roller Follower Voltage", rollerFollowerMotor.getMotorVoltage().getValueAsDouble());
+
+        Logger.recordOutput("Pivot Follower Temp", rollerFollowerMotor.getDeviceTemp().getValueAsDouble());
+        Logger.recordOutput("Pivot Follower Position", rollerFollowerMotor.getPosition().getValueAsDouble());
+        Logger.recordOutput("Pivot Follower Voltage", rollerFollowerMotor.getMotorVoltage().getValueAsDouble());
     }
 
     public Pivot motorInstPivot(IntakeSubsystem sub) {
@@ -144,9 +150,9 @@ public class IntakeIOTalonFX {
         SmartMotorControllerConfig smcc =  new SmartMotorControllerConfig(sub)
             .withControlMode(ControlMode.CLOSED_LOOP)
             // Feedback Constants (PID Constants)
-            .withClosedLoopController(50, 0, 0)
+            .withClosedLoopController(1, 0, 0)
             .withTrapezoidalProfile(DegreesPerSecond.of(90), DegreesPerSecondPerSecond.of(45))
-            .withSimClosedLoopController(50, 0, 0)
+            .withSimClosedLoopController(1, 0, 0)
             // Feedforward Constants (? TODO no clue what these are)
             // Telemetry name and verbosity level
             .withTelemetry("IntakePivot", TelemetryVerbosity.HIGH)
@@ -157,6 +163,7 @@ public class IntakeIOTalonFX {
             .withMotorInverted(false)
             .withIdleMode(MotorMode.COAST)
             .withStatorCurrentLimit(Amps.of(40))
+            .withSupplyCurrentLimit(Amps.of(20))
             .withClosedLoopRampRate(Seconds.of(0.25))
             .withOpenLoopRampRate(Seconds.of(0.25))
             // Starting position is where your arm starts
@@ -166,7 +173,7 @@ public class IntakeIOTalonFX {
             //.withSoftLimits(Degrees.of(-20), Degrees.of(10));
 
 
-        SmartMotorController SMC = new TalonFXWrapper(rollerMover,DCMotor.getKrakenX60(1),smcc);
+        SmartMotorController SMC = new TalonFXWrapper(pivotMotor,DCMotor.getKrakenX60(1),smcc);
         return new Pivot(config, SMC);
 
     }
@@ -177,9 +184,9 @@ public class IntakeIOTalonFX {
         SmartMotorControllerConfig smcc = new SmartMotorControllerConfig(sub)
             .withControlMode(ControlMode.CLOSED_LOOP)
             // Feedback Constants (PID Constants)
-            .withClosedLoopController(50, 0, 0)
+            .withClosedLoopController(1, 0, 0)
             .withTrapezoidalProfile(DegreesPerSecond.of(90), DegreesPerSecondPerSecond.of(45))
-            .withSimClosedLoopController(50, 0, 0)
+            .withSimClosedLoopController(1, 0, 0)
             // Feedforward Constants (? TODO no clue what these are)
             // Telemetry name and verbosity level
             .withTelemetry("IntakeRoller", TelemetryVerbosity.HIGH)
@@ -189,18 +196,16 @@ public class IntakeIOTalonFX {
             // Motor properties to prevent over currenting.
             .withMotorInverted(false)
             .withIdleMode(MotorMode.COAST)
-            .withStatorCurrentLimit(Amps.of(40))
+            .withStatorCurrentLimit(Amps.of(60))
+            .withSupplyCurrentLimit(Amps.of(20))
             .withClosedLoopRampRate(Seconds.of(0.25))
             .withOpenLoopRampRate(Seconds.of(0.25))
             // Starting position is where your arm starts
             .withStartingPosition(Degrees.of(0))
-            .withFollowers(Pair.of(this.rollerSpinner, false));
+            .withFollowers(Pair.of(this.rollerFollowerMotor, true));
 
-        SmartMotorController SMC = new TalonFXWrapper(rollerMover,DCMotor.getKrakenX60(1),smcc);    
+        SmartMotorController SMC = new TalonFXWrapper(rollerMotor,DCMotor.getKrakenX60(1),smcc);    
         return new FlyWheel(roller, SMC);
 
     }
 }
-
-
-
