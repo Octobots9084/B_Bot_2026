@@ -22,7 +22,7 @@ public class CreatePathDuplicates {
     private static String oldPath;
     private static String newPathName;
     private static String newPath;
-    private static String goalPathFolder = "";
+    private static String goalPathFolder = "Left Paths";
         
     public static void main(String[] args) {
         try {

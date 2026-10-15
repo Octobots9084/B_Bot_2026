@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "right swipe to score bump"
+            "pathName": "delay right swipe to score bump"
           }
         },
         {

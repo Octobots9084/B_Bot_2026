@@ -25,13 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "left swipe to score bump"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElephantiasisMKII"
+            "pathName": "delay left swipe to score bump"
           }
         },
         {

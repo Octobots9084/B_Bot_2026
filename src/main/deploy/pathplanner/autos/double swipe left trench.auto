@@ -31,13 +31,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ElephantiasisMKII"
+            "name": "StartShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "ElephantiasisMKII"
           }
         },
         {
@@ -53,15 +53,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(Flipped) double swipe connection"
+            "name": "StopIntake"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "StartIntake"
+            "pathName": "(Flipped) double swipe connection"
           }
         },
         {
@@ -85,13 +85,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ElephantiasisMKII"
+            "name": "StartShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "ElephantiasisMKII"
           }
         }
       ]

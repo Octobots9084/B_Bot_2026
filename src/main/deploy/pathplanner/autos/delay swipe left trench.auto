@@ -7,13 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElephantiasisMKII"
+            "name": "StartIntake"
           }
         },
         {
@@ -23,21 +17,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "StopIntake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "trench to neutral left delay"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartIntake"
           }
         },
         {
