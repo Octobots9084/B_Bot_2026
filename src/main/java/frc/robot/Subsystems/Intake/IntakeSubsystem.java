@@ -76,9 +76,14 @@ public class IntakeSubsystem extends SubsystemBase {
     
         @Override
         public void periodic() {
+            if(wantedIntakeState == null){
+                wantedIntakeState = IntakeStates.SAFE;
+            }
             handleStateTransitions();
             applyStates();
             logging();
+            pivotYAM.updateTelemetry(); // (Note: depending on your specific version of YAMS, 
+            rollerYAM.updateTelemetry();
         }
 
         int iterator = 0;
@@ -106,29 +111,29 @@ public class IntakeSubsystem extends SubsystemBase {
                     currentIntakeState == IntakeStates.REVERSEINTAKE){
                         currentIntakeState = wantedIntakeState;
                     }
-                    break;
+                break;
                 case EXTENDED:
                     if (currentIntakeState != IntakeStates.ZERO){
                         currentIntakeState = wantedIntakeState;
                     }
-                    break;
+                break;
                 case INTAKING:
-                    if (currentIntakeState != IntakeStates.ZERO){
+                    // if (currentIntakeState != IntakeStates.ZERO){
                         currentIntakeState = wantedIntakeState;
-                    }
-                    break;
+                    // }
+                break;
                 case REVERSEINTAKE:
                     if (currentIntakeState != IntakeStates.ZERO){
                         currentIntakeState = wantedIntakeState;
                     }
-                    break;
+                break;
             }
     
         }
 
         public void setIntakeState(IntakeStates state){
-            // pivotYAM.setMechanismPositionSetpoint(state.pos);
-            // rollerYAM.setMechanismVelocitySetpoint(state.vel);
+            pivotYAM.setMechanismPositionSetpoint(state.pos);
+            rollerYAM.setMechanismVelocitySetpoint(state.vel);
         }
     
         public void applyStates() {

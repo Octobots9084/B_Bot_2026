@@ -207,8 +207,8 @@ public class Superstructure extends SubsystemBase{
                 shooter.wantedShooterState = ShooterStates.SAFE;
                 floor.wantedRollerState = RollerFloorStates.SAFE;
 
-            
-                IntakeSubsystem.getInstance().setWantedIntakeState(IntakeStates.SAFE);
+                
+                IntakeSubsystem.getInstance().setWantedIntakeState(driverRequestedIntakeState);
                 break;
 
             case TRENCH:

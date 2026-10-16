@@ -285,6 +285,9 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;}));
     NamedCommands.registerCommand("ElephantiasisMKII", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.ELEPHANTIASIS;}));
     NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.SAFE;}));
+    NamedCommands.registerCommand("DriveOverBumpFromAlliance", new InstantCommand());
+    NamedCommands.registerCommand("DriveOverBumpToAlliance", new InstantCommand());
+    NamedCommands.registerCommand("DriveOverBump", new InstantCommand());
     }
     public ChassisSpeeds calculateRotLockSpeedsBasedOnJoystickInputs() {
         // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),

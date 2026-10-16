@@ -4,10 +4,14 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
 import java.lang.reflect.Field;
 
+import org.dyn4j.geometry.Rotation;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -22,6 +26,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import frc.robot.Constants;
@@ -93,37 +98,31 @@ public class IntakeIOTalonFX {
 
     public Pivot motorInstPivot(IntakeSubsystem sub) {
 
-       
-        SmartMotorControllerConfig smcc =  new SmartMotorControllerConfig(sub)
+        SmartMotorControllerConfig smcc = new SmartMotorControllerConfig(sub)
             .withControlMode(ControlMode.CLOSED_LOOP)
             // Feedback Constants (PID Constants)
-            .withClosedLoopController(1, 0, 0)
-            .withTrapezoidalProfile(DegreesPerSecond.of(90), DegreesPerSecondPerSecond.of(45))
+            .withClosedLoopController(75, 0, 0)
+            .withTrapezoidalProfile(RotationsPerSecond.of(5), RotationsPerSecondPerSecond.of(2.5))
             .withSimClosedLoopController(1, 0, 0)
             // Feedforward Constants (? TODO no clue what these are)
             // Telemetry name and verbosity level
             .withTelemetry("IntakePivot", TelemetryVerbosity.HIGH)
             // Gearing from the motor rotor to final shaft.
-            // In this example GearBox.fromReductionStages(3,4) is the same as GearBox.fromStages("3:1","4:1") which corresponds to the gearbox attached to your motor.
-            .withGearing(new MechanismGearing(GearBox.fromReductionStages(5, 4)))
+            .withGearing(new MechanismGearing(GearBox.fromReductionStages(5, 5, 1.2)))
             // Motor properties to prevent over currenting.
-            .withMotorInverted(false)
+            .withMotorInverted(true)
             .withIdleMode(MotorMode.COAST)
             .withStatorCurrentLimit(Amps.of(40))
             .withSupplyCurrentLimit(Amps.of(20))
             .withClosedLoopRampRate(Seconds.of(0.25))
             .withOpenLoopRampRate(Seconds.of(0.25))
             // Starting position is where your arm starts
-            .withStartingPosition(Degrees.of(0));
-            // Soft limit is applied to the SmartMotorControllers PID
-            //screw soft limits, this is a roller
-            //.withSoftLimits(Degrees.of(-20), Degrees.of(10));
+            .withStartingPosition(Rotations.of(0))
+            // Pass the follower motor and whether it's inverted relative to the main motor
+            .withFollowers(Pair.of(this.pivotFollowerMotor, true)); // Or use .withLooselyCoupledFollowers() depending on your exact YAMS version needs, making sure to pass the Pair
 
-
-        SmartMotorController SMC = new TalonFXWrapper(pivotMotor,DCMotor.getKrakenX60(1),smcc);
-        SMC.setEncoderPosition(Degrees.of(0));
+        SmartMotorController SMC = new TalonFXWrapper(pivotMotor, DCMotor.getKrakenX60(1), smcc);
         return new Pivot(config, SMC);
-
     }
 
     public FlyWheel motorInstRoller(IntakeSubsystem sub) {
@@ -132,7 +131,8 @@ public class IntakeIOTalonFX {
         SmartMotorControllerConfig smcc = new SmartMotorControllerConfig(sub)
             .withControlMode(ControlMode.CLOSED_LOOP)
             // Feedback Constants (PID Constants)
-            .withClosedLoopController(1, 0, 0)
+            .withClosedLoopController(0, 0, 0)
+            .withFeedforward(new SimpleMotorFeedforward(0, 1.5))
             .withTrapezoidalProfile(DegreesPerSecond.of(90), DegreesPerSecondPerSecond.of(45))
             .withSimClosedLoopController(1, 0, 0)
             // Feedforward Constants (? TODO no clue what these are)
@@ -140,7 +140,7 @@ public class IntakeIOTalonFX {
             .withTelemetry("IntakeRoller", TelemetryVerbosity.HIGH)
             // Gearing from the motor rotor to final shaft.
             // In this example GearBox.fromReductionStages(3,4) is the same as GearBox.fromStages("3:1","4:1") which corresponds to the gearbox attached to your motor.
-            .withGearing(new MechanismGearing(GearBox.fromReductionStages(30, 1)))
+            .withGearing(new MechanismGearing(GearBox.fromReductionStages(12.0/11.0)))
             // Motor properties to prevent over currenting.
             .withMotorInverted(false)
             .withIdleMode(MotorMode.COAST)
@@ -149,7 +149,6 @@ public class IntakeIOTalonFX {
             .withClosedLoopRampRate(Seconds.of(0.25))
             .withOpenLoopRampRate(Seconds.of(0.25))
             // Starting position is where your arm starts
-            .withStartingPosition(Degrees.of(0))
             .withFollowers(Pair.of(this.rollerFollowerMotor, true));
 
         SmartMotorController SMC = new TalonFXWrapper(rollerMotor,DCMotor.getKrakenX60(1),smcc);    

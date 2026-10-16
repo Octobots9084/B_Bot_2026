@@ -47,6 +47,11 @@ public class ButtonConfig {
 
         driverController.leftTrigger().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.INTAKING))
         .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
+        
+        // driverController.leftTrigger().onTrue(new InstantCommand(() -> {
+        //     IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;
+        // }));
+
 
         driverController.leftBumper().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.REVERSEINTAKE))
         .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));

@@ -1,19 +1,23 @@
 
 package frc.robot.Subsystems.Intake;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import org.dyn4j.geometry.Rotation;
+
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 
 
 public enum IntakeStates{
-    SAFE(Degrees.of(0), RotationsPerSecond.of(0)),
-    EXTENDED(Degrees.of(130), RotationsPerSecond.of(0)),
-    INTAKING(Degrees.of(130), RotationsPerSecond.of(1)),
-    ELEPHANTIASIS(Degrees.of(40), RotationsPerSecond.of(0)),//MK 3!
-    ZERO(Degrees.of(0), RotationsPerSecond.of(0)),
-    REVERSEINTAKE(Degrees.of(130), RotationsPerSecond.of(-1));
+    SAFE(Rotations.of(0), RotationsPerSecond.of(0)),
+    EXTENDED(Rotations.of(0.4), RotationsPerSecond.of(0)),
+    INTAKING(Rotations.of(0.4), RotationsPerSecond.of(30)),
+    ELEPHANTIASIS(Rotations.of(0.15), RotationsPerSecond.of(15)),//MK 3!
+    ZERO(Rotations.of(0), RotationsPerSecond.of(0)),
+    REVERSEINTAKE(Rotations.of(0.4), RotationsPerSecond.of(-30));
     
 
     public final Angle pos;
