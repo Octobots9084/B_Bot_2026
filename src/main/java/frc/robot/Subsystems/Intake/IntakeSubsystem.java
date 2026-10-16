@@ -70,8 +70,6 @@ public class IntakeSubsystem extends SubsystemBase {
         }
         @Override
         public void simulationPeriodic() {
-            pivotYAM.updateTelemetry();
-            rollerYAM.updateTelemetry();
             pivotYAM.simIterate();
             rollerYAM.simIterate();
         }
@@ -127,25 +125,16 @@ public class IntakeSubsystem extends SubsystemBase {
             }
     
         }
+
+        public void setIntakeState(IntakeStates state){
+            pivotYAM.setMechanismPositionSetpoint(state.pos);
+            rollerYAM.setMechanismVelocitySetpoint(state.vel);
+        }
     
         public void applyStates() {
-            if (currentIntakeState.pos != null){
-            simFriendlyPos(currentIntakeState.pos/6 /*always 0 or 1 ¯\_(ツ)_/¯ */ * 130 * 1 /* gear ratio */ / 360 /* degrees to rotations*/);
-            }
-            if (currentIntakeState.vel != null){ 
-                simFriendlySpin(currentIntakeState.vel/6 * 5/4);
-            }
-    
-    
             switch(currentIntakeState) {
-                case ELEPHANTIASIS:
-                    // i was going to name this elephantimer but variableless worked just fine :(
-                    simFriendlyPos((double) (System.currentTimeMillis() % 1000 > 500 ? 1 : -1));
-                    simFriendlySpin((double) (System.currentTimeMillis() + 250 % 1000 > 500 ? 1*130*1/360/6 : -1*130*1/360/6));
-
-                    break;
-                    
-                case EXTENDED, INTAKING, REVERSEINTAKE, SAFE: 
+                case EXTENDED, INTAKING, REVERSEINTAKE, SAFE, ELEPHANTIASIS: 
+                    setIntakeState(currentIntakeState);
                 break;
 
                 case ZERO:
@@ -158,20 +147,12 @@ public class IntakeSubsystem extends SubsystemBase {
                 }
                 break;
 
-                default: throw new RuntimeException("If you see this message, current state is probably null: " + currentIntakeState + ". Anyway, this should never be reached.🙈");
+                default:
+                   currentIntakeState = IntakeStates.SAFE;
+                break;
             }
         }
 
-        public void simFriendlyPos(double pos) {
-            if (Robot.isSimulation()) simMovePivot(pos).execute();
-            else io.moveToPos(pos);
-
-        }
-
-        public void simFriendlySpin(double velocity) {
-            if (Robot.isSimulation()) simRotateRoller(velocity).execute();
-            else io.spinRollers(velocity);
-        }
     
         public void logging() {
             Logger.recordOutput("currState", currentIntakeState);

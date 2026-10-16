@@ -47,13 +47,13 @@ public class IntakeIOTalonFX {
         // Length and mass of your arm for sim.
         // Telemetry name and verbosity for the arm.
         .withHardLimits(Degrees.of(0), Degrees.of(360))
-        .withTelemetry("IntakeP", TelemetryVerbosity.HIGH);
+        .withTelemetry("IntakePivot", TelemetryVerbosity.HIGH);
         
       private FlyWheelConfig roller = new FlyWheelConfig()
         // Hard limit is applied to the simulation.
         // Length and mass of your arm for sim.
         // Telemetry name and verbosity for the arm.
-        .withTelemetry("IntakeR", TelemetryVerbosity.HIGH);
+        .withTelemetry("IntakeRoller", TelemetryVerbosity.HIGH);
       
 
 
@@ -61,12 +61,6 @@ public class IntakeIOTalonFX {
     public TalonFX pivotFollowerMotor;
     public TalonFX rollerMotor;
     public TalonFX rollerFollowerMotor;
-
-    MotionMagicVoltage pivotMagic; 
-    VelocityVoltage rollerVelocity;
-
-    Follower pivotFollower;
-    Follower rollerFollower;
 
 
 
@@ -77,53 +71,6 @@ public class IntakeIOTalonFX {
         pivotFollowerMotor = new TalonFX(Constants.intakePivotFollowerID, Constants.krakenBus);
         rollerMotor = new TalonFX(Constants.intakeRollerID, Constants.krakenBus);
         rollerFollowerMotor = new TalonFX(Constants.intakeRollerFollowerID, Constants.krakenBus);
-
-        pivotFollower = new Follower(Constants.intakePivotID, MotorAlignmentValue.Opposed); //todo this is my guess but idk
-        rollerFollower = new Follower(Constants.intakeRollerID, MotorAlignmentValue.Opposed); //again
-
-        pivotMagic = new MotionMagicVoltage(0);
-        rollerVelocity = new  VelocityVoltage(0);
-
-        config();
-
-        pivotMotor.setControl(pivotMagic);
-        rollerMotor.setControl(rollerVelocity);
-
-        rollerFollowerMotor.setControl(rollerFollower);
-
-    
-    }
-
-    //excuse the weird setup - this is to create slots to fill 
-    public void config() {
-        TalonFXConfiguration config = new TalonFXConfiguration();
-
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config.CurrentLimits.StatorCurrentLimit = 40;
-        config.CurrentLimits.StatorCurrentLimitEnable = true;
-        
-        pivotMotor.getConfigurator().apply(config);
-
-
-        config = new TalonFXConfiguration(); 
-
-        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config.CurrentLimits.StatorCurrentLimit = 40;
-        config.CurrentLimits.StatorCurrentLimitEnable = true;
-        
-        rollerMotor.getConfigurator().apply(config);
-
-    }
-
-
-    public void spinRollers(double velocity) {
-        rollerMotor.setControl(rollerVelocity.withVelocity(velocity));
-    }
-
-    
-    /**TODO figure out actual positions */
-    public void moveToPos(Double pos) {
-        pivotMotor.setControl(pivotMagic.withPosition(pos));
     }
 
     public void log() {

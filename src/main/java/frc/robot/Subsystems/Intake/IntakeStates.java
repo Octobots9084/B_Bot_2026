@@ -1,20 +1,25 @@
 
 package frc.robot.Subsystems.Intake;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Degrees;
+
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+
 
 public enum IntakeStates{
-    SAFE(0d,0d),
-    EXTENDED(1d,0d),
-    INTAKING(1d,1d),
-    ELEPHANTIASIS(null, 0d),//MK 3!
-    ZERO(0d,0d),
-    REVERSEINTAKE(1d,-1d);
+    SAFE(Degrees.of(0), RotationsPerSecond.of(0)),
+    EXTENDED(Degrees.of(130), RotationsPerSecond.of(0)),
+    INTAKING(Degrees.of(130), RotationsPerSecond.of(1)),
+    ELEPHANTIASIS(Degrees.of(40), RotationsPerSecond.of(0)),//MK 3!
+    ZERO(Degrees.of(0), RotationsPerSecond.of(0)),
+    REVERSEINTAKE(Degrees.of(130), RotationsPerSecond.of(-1));
     
 
-
-    public final Double pos;
-    public final Double vel;
+    public final Angle pos;
+    public final AngularVelocity vel;
     
-    IntakeStates(Double pos, Double vel) {
+    IntakeStates(Angle pos, AngularVelocity vel) {
         this.pos = pos;
         this.vel = vel;
     }
