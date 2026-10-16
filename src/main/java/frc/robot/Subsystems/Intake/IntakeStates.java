@@ -15,7 +15,7 @@ public enum IntakeStates{
     SAFE(Rotations.of(0), RotationsPerSecond.of(0)),
     EXTENDED(Rotations.of(0.4), RotationsPerSecond.of(0)),
     INTAKING(Rotations.of(0.4), RotationsPerSecond.of(30)),
-    ELEPHANTIASIS(Rotations.of(0.15), RotationsPerSecond.of(15)),//MK 3!
+    ELEPHANTIASIS(Rotations.of(0.2), RotationsPerSecond.of(15)),//MK 3!
     ZERO(Rotations.of(0), RotationsPerSecond.of(0)),
     REVERSEINTAKE(Rotations.of(0.4), RotationsPerSecond.of(-30));
     

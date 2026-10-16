@@ -86,8 +86,7 @@ public class RollerFloorSubsystem extends SubsystemBase {
     }
 
     private void applyStates () {
-        setRollorFloorVelocitySetpoint(RPM.of(currentRollerState.enumRollerVelocity));
-            
+        setRollorFloorVelocitySetpoint(currentRollerState.enumRollerVelocity);
     }
     
     private void logging() {

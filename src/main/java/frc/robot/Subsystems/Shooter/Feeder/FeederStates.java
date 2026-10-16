@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import yams.mechanisms.SmartMechanism;
@@ -13,14 +14,15 @@ import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 public enum FeederStates {
 
-    SAFE(0),
-    FIRE(FeederSubsystem.feederShootVelocity),
-    REVERSE(FeederSubsystem.feederReverseVelocity);
-    public final double enumVelocity;
-    private FeederStates(double enumVelocity){
+    SAFE(RotationsPerSecond.of(0)),
+    FIRE(RotationsPerSecond.of(25)),
+    REVERSE(RotationsPerSecond.of(-10));
+    public final AngularVelocity enumVelocity;
+    private FeederStates(AngularVelocity enumVelocity){
         this.enumVelocity = enumVelocity;
     }
 

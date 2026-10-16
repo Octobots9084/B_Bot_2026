@@ -2,11 +2,13 @@ package frc.robot.Subsystems.Shooter.Feeder;
 
 import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,8 +17,6 @@ import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class FeederSubsystem extends SubsystemBase{
-   public static double feederShootVelocity = 135;
-   public static double feederReverseVelocity = -100;
    public FeederStates wantedFeederState = FeederStates.SAFE;
    public FeederStates FeederState = FeederStates.SAFE;
    public static double feederStatorLimit = 40; //TODO replace
@@ -50,7 +50,7 @@ public class FeederSubsystem extends SubsystemBase{
    }
 
    public void setFeederVelocitySetpoint(AngularVelocity speed){
-      feederFlywheel.setMechanismVelocitySetpoint(speed);
+      feederFlywheel.setVoltage(Voltage.ofBaseUnits(5, Volts));
    }
 
    @Override
@@ -64,12 +64,11 @@ public class FeederSubsystem extends SubsystemBase{
    }
 
     public void log() {
-        Logger.recordOutput("wantedState", wantedFeederState);
-        Logger.recordOutput("currentState", FeederState);
+        Logger.recordOutput("FeederwantedState", wantedFeederState);
+        Logger.recordOutput("FeedercurrentState", FeederState);
         Logger.recordOutput("Feeder Velocity", getFeederVelocity());
-        Logger.recordOutput("Motor Voltage", TX.FeederMotor.getVoltage());
-        Logger.recordOutput("Motor Temperature", TX.FeederMotor.getTemperature());
-        Logger.recordOutput("Motor Position", TX.FeederMotor.getRotorPosition());
+        Logger.recordOutput("Feeder Motor Voltage", TX.FeederMotor.getVoltage());
+        Logger.recordOutput("Feeder Motor Temperature", TX.FeederMotor.getTemperature());
     }
 
 }

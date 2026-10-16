@@ -204,11 +204,17 @@ public class Superstructure extends SubsystemBase{
 
             case SAFE:
                 lights.lightsWantedState = LightAnimations.SAFE;
-                shooter.wantedShooterState = ShooterStates.SAFE;
-                floor.wantedRollerState = RollerFloorStates.SAFE;
 
                 
                 IntakeSubsystem.getInstance().setWantedIntakeState(driverRequestedIntakeState);
+                if(driverRequestedIntakeState == IntakeStates.REVERSEINTAKE){
+                    floor.wantedRollerState = RollerFloorStates.REVERSE;
+                    shooter.wantedShooterState = ShooterStates.HUB;
+                }else{
+                    floor.wantedRollerState = RollerFloorStates.SAFE;
+                    shooter.wantedShooterState = ShooterStates.SAFE;
+
+                }
                 break;
 
             case TRENCH:

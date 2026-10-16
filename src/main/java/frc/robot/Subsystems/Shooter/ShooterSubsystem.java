@@ -93,14 +93,14 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     
  
-    public void shooterPartsControl(double flywheelSpeed, double feederSpeed, double angle){
+    public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed, double angle){
         shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
-        feeder.setFeederVelocitySetpoint(RPM.of(feederSpeed));
+        feeder.setFeederVelocitySetpoint(feederSpeed);
         hood.setAngleWithTolerance(Degrees.of(angle));
     }
-    public void shooterPartsControl(double flywheelSpeed, double feederSpeed){
-        shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
-        feeder.setFeederVelocitySetpoint(RPM.of(feederSpeed));
+    public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed){
+        // shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
+        feeder.setFeederVelocitySetpoint(feederSpeed);
     }
    
     public static ShooterSubsystem getInstance() {
@@ -158,6 +158,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
             break;
             case HUB:
+                shooterPartsControl(0,FeederStates.REVERSE.enumVelocity);
                 // hubShot = ShooterCalculator.getInstance().calculateShot(ourHub.getX() - swerve.getPose2d().getTranslation().getX(), ourHub.getY() - swerve.getPose2d().getTranslation().getY(), SwerveSubsystem.getInstance().getChassisSpeeds().vxMetersPerSecond,SwerveSubsystem.getInstance().getChassisSpeeds().vyMetersPerSecond);
                 // //if this code doesnt work fiddle with the X and Y distance from hubs <3
                 // Alignment.getInstance().getRotation(hubShot.getRotation());
