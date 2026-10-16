@@ -121,6 +121,7 @@ public class IntakeIOTalonFX {
 
 
         SmartMotorController SMC = new TalonFXWrapper(pivotMotor,DCMotor.getKrakenX60(1),smcc);
+        SMC.setEncoderPosition(Degrees.of(0));
         return new Pivot(config, SMC);
 
     }

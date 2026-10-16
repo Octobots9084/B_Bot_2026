@@ -45,9 +45,9 @@ public class RollerFloorTalonFX {
 
 
     public void init() {
-        FloorFollowerSmc = new TalonFXWrapper(new TalonFX(Constants.rollerFloorLeftID), DCMotor.getKrakenX44(1), FloorFollowerSmcConfig);
+        FloorFollowerSmc = new TalonFXWrapper(new TalonFX(Constants.rollerFloorLeftID, Constants.krakenBus), DCMotor.getKrakenX44(1), FloorFollowerSmcConfig);
         FloorSMCConfig = FloorFollowerSmcConfig.clone()
         .withLooselyCoupledFollowers(FloorFollowerSmc);
-        FloorMotor = new TalonFXWrapper(new TalonFX(Constants.rollerFloorRightID), DCMotor.getKrakenX44(1), FloorSMCConfig);
+        FloorMotor = new TalonFXWrapper(new TalonFX(Constants.rollerFloorRightID, Constants.krakenBus), DCMotor.getKrakenX44(1), FloorSMCConfig);
     }
 }

@@ -127,8 +127,8 @@ public class IntakeSubsystem extends SubsystemBase {
         }
 
         public void setIntakeState(IntakeStates state){
-            pivotYAM.setMechanismPositionSetpoint(state.pos);
-            rollerYAM.setMechanismVelocitySetpoint(state.vel);
+            // pivotYAM.setMechanismPositionSetpoint(state.pos);
+            // rollerYAM.setMechanismVelocitySetpoint(state.vel);
         }
     
         public void applyStates() {
@@ -141,7 +141,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 
                 if(!alreadyZeroed){
                     alreadyZeroed = true;
-                    pivotYAM.setAngle(intakeZeroingDegree); 
+                    // pivotYAM.setAngle(intakeZeroingDegree); 
                     //we know where we are cuz we set pos so now just go to safe because thats where wed be if intake was pushed all the way in
                     wantedIntakeState = IntakeStates.SAFE;
                 }

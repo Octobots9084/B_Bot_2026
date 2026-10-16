@@ -44,10 +44,10 @@ public class FeederTalonFX {
     public SmartMotorController FeederMotor;
 
     public void init(){
-        FeederFollowerSmc = new TalonFXWrapper(new TalonFX(Constants.feederLeftID), DCMotor.getKrakenX44(1), FeederFollowerSMCConfig);    
+        FeederFollowerSmc = new TalonFXWrapper(new TalonFX(Constants.feederLeftID, Constants.krakenBus), DCMotor.getKrakenX44(1), FeederFollowerSMCConfig);    
 
         FeederSMCConfig = FeederFollowerSMCConfig.clone()
     .withLooselyCoupledFollowers(FeederFollowerSmc);
-        FeederMotor = new TalonFXWrapper(new TalonFX(Constants.feederRightID), DCMotor.getKrakenX44(1), FeederSMCConfig);
+        FeederMotor = new TalonFXWrapper(new TalonFX(Constants.feederRightID, Constants.krakenBus), DCMotor.getKrakenX44(1), FeederSMCConfig);
     }
 }

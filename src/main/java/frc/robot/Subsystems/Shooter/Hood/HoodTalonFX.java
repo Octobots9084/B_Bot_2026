@@ -41,7 +41,7 @@ public class HoodTalonFX {
     public SmartMotorController HoodMotorSMC;
 
     public void init(){
-        HoodMotorSMC = new TalonFXWrapper(new TalonFX(Constants.hoodID), DCMotor.getKrakenX60(1), HoodSMC);
+        HoodMotorSMC = new TalonFXWrapper(new TalonFX(Constants.hoodID, Constants.krakenBus), DCMotor.getKrakenX60(1), HoodSMC);
     }
 
 }

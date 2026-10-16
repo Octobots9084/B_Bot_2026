@@ -17,10 +17,10 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 public class FlywheelTalonFX {
-    public TalonFX flywheelMotor = new TalonFX(Constants.flyWheel1ID);
-    public TalonFX flywheelMot2 = new TalonFX(Constants.flyWheel2ID);
-    public TalonFX flywheelMot3 = new TalonFX(Constants.flyWheel3ID);
-    public TalonFX flywheelMot4 = new TalonFX(Constants.flyWheel4ID);
+    public TalonFX flywheelMotor = new TalonFX(Constants.flyWheel1ID,Constants.krakenBus);
+    public TalonFX flywheelMot2 = new TalonFX(Constants.flyWheel2ID,Constants.krakenBus);
+    public TalonFX flywheelMot3 = new TalonFX(Constants.flyWheel3ID,Constants.krakenBus);
+    public TalonFX flywheelMot4 = new TalonFX(Constants.flyWheel4ID,Constants.krakenBus);
     public SmartMotorController flywheelTalon2;
     public SmartMotorController flywheelTalon3;
     public SmartMotorController flywheelTalon4;
