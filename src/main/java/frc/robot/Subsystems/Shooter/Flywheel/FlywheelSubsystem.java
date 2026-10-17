@@ -13,6 +13,8 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
@@ -24,7 +26,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 public class FlywheelSubsystem extends SubsystemBase{
    public static LinearAcceleration maxAcceleration = MetersPerSecondPerSecond.of(0);
    public static LinearVelocity maxVelocity = MetersPerSecond.of(20);
-   public static double FlywheelStatorLimit = 40; //replace with real
+   public static double FlywheelStatorLimit = 60; //replace with real
    public static FlywheelStates currentState = FlywheelStates.SAFE;
    public static FlywheelStates wantedFlywheelState = FlywheelStates.SAFE;
    public static FlywheelSubsystem instance = null;
@@ -58,8 +60,12 @@ public class FlywheelSubsystem extends SubsystemBase{
    //      return shooterFlywheel.run(RPM.of(rpm));
    //   }
 
-     public void setFlywheelVelocitySetpoint(double rpm){ 
-         shooterFlywheel.setMechanismVelocitySetpoint(RPM.of(rpm));
+     public void setFlywheelVelocitySetpoint(double rps){ 
+      if(rps != 0){
+        shooterFlywheel.setMechanismVelocitySetpoint(RotationsPerSecond.of(rps));
+      }else{
+        shooterFlywheel.setVoltageSetpoint(Volts.of(0));
+      }
      }
      @Override
      public void periodic(){

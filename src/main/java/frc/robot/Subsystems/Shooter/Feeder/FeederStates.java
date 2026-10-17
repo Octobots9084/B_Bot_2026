@@ -19,8 +19,8 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 public enum FeederStates {
 
     SAFE(RotationsPerSecond.of(0)),
-    FIRE(RotationsPerSecond.of(10)),
-    REVERSE(RotationsPerSecond.of(-10));
+    FIRE(RotationsPerSecond.of(25)),
+    REVERSE(RotationsPerSecond.of(-15));
     public final AngularVelocity enumVelocity;
     private FeederStates(AngularVelocity enumVelocity){
         this.enumVelocity = enumVelocity;

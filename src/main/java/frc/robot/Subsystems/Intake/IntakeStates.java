@@ -13,11 +13,11 @@ import edu.wpi.first.units.measure.AngularVelocity;
 
 public enum IntakeStates{
     SAFE(Rotations.of(0), RotationsPerSecond.of(0)),
-    EXTENDED(Rotations.of(0.4), RotationsPerSecond.of(0)),
-    INTAKING(Rotations.of(0.4), RotationsPerSecond.of(30)),
+    EXTENDED(Rotations.of(0.44), RotationsPerSecond.of(0)),
+    INTAKING(Rotations.of(0.44), RotationsPerSecond.of(30)),
     ELEPHANTIASIS(Rotations.of(0.2), RotationsPerSecond.of(15)),//MK 3!
     ZERO(Rotations.of(0), RotationsPerSecond.of(0)),
-    REVERSEINTAKE(Rotations.of(0.4), RotationsPerSecond.of(-30));
+    REVERSEINTAKE(Rotations.of(0.44), RotationsPerSecond.of(-30));
     
 
     public final Angle pos;

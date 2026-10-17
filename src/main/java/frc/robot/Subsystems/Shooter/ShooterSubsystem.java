@@ -96,10 +96,10 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed, double angle){
         shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
         feeder.setFeederVelocitySetpoint(feederSpeed);
-        hood.setAngleWithTolerance(Degrees.of(angle));
+        // hood.setAngleWithTolerance(Degrees.of(angle));
     }
     public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed){
-        // shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
+        shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
         feeder.setFeederVelocitySetpoint(feederSpeed);
     }
    
