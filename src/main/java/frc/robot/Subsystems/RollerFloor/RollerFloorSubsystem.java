@@ -26,7 +26,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 
 public class RollerFloorSubsystem extends SubsystemBase {
-    private Distance RollerDiameter = Centimeters.of(20);//TODO replace all of these values
+    private Distance RollerDiameter = Centimeters.of(8);//TODO replace all of these values
     @AutoLogOutput public RollerFloorStates wantedRollerState = RollerFloorStates.SAFE;
     @AutoLogOutput public RollerFloorStates currentRollerState = RollerFloorStates.SAFE;
     @AutoLogOutput public SwerveStates wantedSwerveStateCopy;

@@ -21,9 +21,10 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class FeederTalonFX {
+    public TalonFX followerFeeder = new TalonFX(Constants.feederLeftID, Constants.krakenBus);
     public SmartMotorControllerConfig FeederFollowerSMCConfig;
     public FeederTalonFX(FeederSubsystem subsystem){
-     FeederFollowerSMCConfig = new SmartMotorControllerConfig()
+     FeederSMCConfig = new SmartMotorControllerConfig()
     .withClosedLoopController(1,0,0)
     .withSimClosedLoopController(0.25,0,0)
     .withSimFeedforward(new SimpleMotorFeedforward(0, 0.15, 0))
@@ -36,6 +37,7 @@ public class FeederTalonFX {
     .withClosedLoopRampRate(Seconds.of(0.125))
     .withOpenLoopRampRate(Seconds.of(0.125))
     .withIdleMode(MotorMode.BRAKE)
+    .withFollowers(Pair.of(followerFeeder,true))
     .withStatorCurrentLimit(Amps.of(FeederSubsystem.feederStatorLimit))
     .withSubsystem(subsystem);
 
@@ -48,13 +50,8 @@ public class FeederTalonFX {
 
     public SmartMotorController FeederMotor;
 
-    public TalonFX followerFeeder = new TalonFX(Constants.feederRightID, Constants.krakenBus);
 
     public void init(){
-        FeederFollowerSmc = new TalonFXWrapper(followerFeeder, DCMotor.getKrakenX44(1), FeederFollowerSMCConfig);    
-
-        FeederSMCConfig = FeederFollowerSMCConfig.clone()
-    .withFollowers(Pair.of(followerFeeder,true));
         FeederMotor = new TalonFXWrapper(new TalonFX(Constants.feederRightID, Constants.krakenBus), DCMotor.getKrakenX44(1), FeederSMCConfig);
     }
 }
