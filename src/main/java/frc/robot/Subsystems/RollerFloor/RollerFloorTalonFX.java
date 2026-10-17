@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.RollerFloor;
 
+import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.KilogramSquareMeters;
 import static edu.wpi.first.units.Units.Seconds;
 
@@ -38,6 +39,8 @@ public class RollerFloorTalonFX {
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(22.0/18.0)))
     .withClosedLoopRampRate(Seconds.of(0.125))
     .withOpenLoopRampRate(Seconds.of(0.125))
+    .withStatorCurrentLimit(Amps.of(60))
+    .withStatorCurrentLimit(Amps.of(40))
     .withIdleMode(MotorMode.BRAKE)  
     .withSubsystem(subsystem);
 

@@ -50,7 +50,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeStates currentIntakeState = IntakeStates.SAFE;
     public IntakeIOTalonFX io = new IntakeIOTalonFX();
     public static IntakeSubsystem instance;
-    public boolean alreadyZeroed = false;
+    //public boolean alreadyZeroed = false;
         public Pivot pivotYAM;
         public FlyWheel rollerYAM;
     
@@ -138,18 +138,20 @@ public class IntakeSubsystem extends SubsystemBase {
     
         public void applyStates() {
             switch(currentIntakeState) {
-                case EXTENDED, INTAKING, REVERSEINTAKE, SAFE, ELEPHANTIASIS: 
+                case EXTENDED, INTAKING, REVERSEINTAKE, SAFE: 
                     setIntakeState(currentIntakeState);
                 break;
-
+                case ELEPHANTIASIS:
+                    setIntakeState(IntakeStates.EXTENDED);
+                break;
                 case ZERO:
                 
-                if(!alreadyZeroed){
-                    alreadyZeroed = true;
-                    // pivotYAM.setAngle(intakeZeroingDegree); 
-                    //we know where we are cuz we set pos so now just go to safe because thats where wed be if intake was pushed all the way in
-                    wantedIntakeState = IntakeStates.SAFE;
-                }
+                // if(!alreadyZeroed){
+                //     alreadyZeroed = true;
+                //     // pivotYAM.setAngle(intakeZeroingDegree); 
+                //     //we know where we are cuz we set pos so now just go to safe because thats where wed be if intake was pushed all the way in
+                //     wantedIntakeState = IntakeStates.SAFE;
+                // }
                 break;
 
                 default:

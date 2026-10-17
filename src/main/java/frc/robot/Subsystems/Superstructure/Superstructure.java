@@ -129,6 +129,10 @@ public class Superstructure extends SubsystemBase{
                 }
     
             break;
+            case FIXEDTRENCH:
+            currentState = wantedState;
+            break;
+
             case AUTOHUB:
                 //if(currentState != SuperstructureStates.ZEROING && currentState != SuperstructureStates.TRENCH){
                     currentState = wantedState;
@@ -230,13 +234,10 @@ public class Superstructure extends SubsystemBase{
                 break;
 
             case ZEROING:
-                lights.lightsWantedState = LightAnimations.DEFAULT;
-                shooter.wantedShooterState = ShooterStates.ZEROING;
-                floor.wantedRollerState = RollerFloorStates.SAFE;
-                intake.setWantedIntakeState(IntakeStates.ZERO);
-                if(shooter.alreadyZeroed && intake.alreadyZeroed){ //change to intake alreadyZeroed
-                    wantedState = SuperstructureStates.SAFE;
-                }
+                wantedState = SuperstructureStates.SAFE;
+                // if(shooter.alreadyZeroed && intake.alreadyZeroed){ //change to intake alreadyZeroed
+                //     wantedState = SuperstructureStates.SAFE;
+                // }
                 break;
 
             case AUTOHUB:
@@ -268,6 +269,13 @@ public class Superstructure extends SubsystemBase{
                 lights.lightsWantedState = LightAnimations.DEFAULT;
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
+                intake.setWantedIntakeState(driverRequestedIntakeState);
+            break;
+            case FIXEDTRENCH:
+                lights.lightsWantedState = LightAnimations.DEFAULT;
+                shooter.wantedShooterState = ShooterStates.FIXEDTRENCH;
+                floor.wantedRollerState = RollerFloorStates.SHOOT;
+                intake.setWantedIntakeState(driverRequestedIntakeState);
             break;
 
             case AUTOFERRY:

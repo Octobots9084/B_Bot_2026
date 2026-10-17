@@ -42,14 +42,16 @@ public class FlywheelTalonFX {
             .withIdleMode(MotorMode.COAST)
             .withSubsystem(subsystem) 
             .withMotorInverted(true)
-            .withFollowers(Pair.of(flywheelMotor, true), Pair.of(flywheelMot3, false), Pair.of(flywheelMot4, true))
+            .withFollowers(Pair.of(flywheelMot2, true), Pair.of(flywheelMot3, false), Pair.of(flywheelMot4, true))
             //.withTrapezoidalProfile(FlywheelSubsystem.maxVelocity, FlywheelSubsystem.maxAcceleration)
-            .withStatorCurrentLimit(Amps.of(FlywheelSubsystem.FlywheelStatorLimit));
+            .withStatorCurrentLimit(Amps.of(FlywheelSubsystem.FlywheelStatorLimit))
+            .withSupplyCurrentLimit(Amps.of(40));
     }
    
    public void init() {
 
-    flywheelTalonSMC = new TalonFXWrapper(flywheelMot2, DCMotor.getKrakenX60(1), flywheelMainSmc);
+    flywheelTalonSMC = new TalonFXWrapper(flywheelMotor, DCMotor.getKrakenX60(1)
+    , flywheelMainSmc);
     // flywheelFollowerSmc = flywheelMainSmc.clone();
     // flywheelTalon2 = new TalonFXWrapper(flywheelMot2, DCMotor.getKrakenX60(1), flywheelFollowerSmc);
     // flywheelTalon3 = new TalonFXWrapper(flywheelMot3, DCMotor.getKrakenX60(1), flywheelFollowerSmc);

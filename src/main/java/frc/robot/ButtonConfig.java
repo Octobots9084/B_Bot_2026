@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
 import frc.robot.Subsystems.Shooter.Flywheel.FlywheelStates;
@@ -38,26 +39,27 @@ public class ButtonConfig {
         driverController = new CommandXboxController(0);
         coDriverController = new CommandXboxController(1);
         //initCalculator()u;
-        driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
-            superstructure.setWantedState(SuperstructureStates.HUB)), 
-            new InstantCommand(()->superstructure.setWantedState(SuperstructureStates.FERRY)), ()->superstructure.InAlignedZone))
-            .onTrue((new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS)))
-            .onFalse(new InstantCommand(()->
-            superstructure.setWantedState(SuperstructureStates.SAFE)));
+//         driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
+//             superstructure.setWantedState(SuperstructureStates.FIXEDTRENCH)), 
+// \            .onTrue((new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS)))
+//             .onFalse(new InstantCommand(()->
+//             superstructure.setWantedState(SuperstructureStates.SAFE)));
 
         driverController.leftTrigger().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.INTAKING))
-        .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
-        
+        .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));       
         // driverController.leftTrigger().onTrue(new InstantCommand(() -> {
         //     IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;
         // }));
+
+        driverController.povLeft().onTrue(new InstantCommand( () -> {
+            SwerveSubsystem.getInstance().zeroGyro();
+        }));
 
 
         driverController.leftBumper().onTrue(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.REVERSEINTAKE))
         .onFalse(new InstantCommand(()-> superstructure.driverRequestedIntakeState = IntakeStates.EXTENDED));
         
         //driverController.rightBumper().onTrue(new InstantCommand(() -> Alignment.getInstance().getRotation(alignRotation.getRotation())));
-
 
         driverController.a().onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.SAFE));
 
@@ -67,9 +69,18 @@ public class ButtonConfig {
         driverController.x().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SPINUP)));
         driverController.x().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
         
-        driverController.y().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDFIRE)));
-        driverController.y().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
+        driverController.rightTrigger().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDTRENCH)))
+        //.onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS))
+        .onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
 
+        driverController.rightBumper().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDFIRE)))
+        .onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
+
+        driverController.povDown().onTrue(new InstantCommand(() -> DriverCommunications.testFlywheelSpeed -= 0.5));
+        driverController.povUp().onTrue(new InstantCommand(() -> DriverCommunications.testFlywheelSpeed += 0.5));
+        driverController.povLeft().onTrue(new InstantCommand(() -> DriverCommunications.testFlywheelSpeedTower -= 0.5));
+        driverController.povRight().onTrue(new InstantCommand(() -> DriverCommunications.testFlywheelSpeedTower += 0.5));
+     
 
     }
 }

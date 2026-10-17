@@ -72,7 +72,7 @@ public Robot() {
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
        }
-
+       DriverCommunications.sliderInit();
   Logger.start();
 
     container = new RobotContainer(this);
@@ -111,7 +111,7 @@ public Robot() {
    */
   @Override
   public void autonomousInit() {
-    Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
+    //Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -127,10 +127,10 @@ public Robot() {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-  Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
+  //Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
   SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
   //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());
-    Superstructure.getInstance().setWantedState(SuperstructureStates.ZEROING);
+   // Superstructure.getInstance().setWantedState(SuperstructureStates.ZEROING);
   }
 
   /** This function is called periodically during operator control. */
@@ -177,7 +177,7 @@ public Robot() {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
+    //Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
     CommandScheduler.getInstance().cancelAll();
   }
 

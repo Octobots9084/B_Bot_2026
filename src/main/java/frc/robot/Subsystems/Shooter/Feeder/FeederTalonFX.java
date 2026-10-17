@@ -39,6 +39,7 @@ public class FeederTalonFX {
     .withIdleMode(MotorMode.BRAKE)
     .withFollowers(Pair.of(followerFeeder,true))
     .withStatorCurrentLimit(Amps.of(FeederSubsystem.feederStatorLimit))
+    .withSupplyCurrentLimit(Amps.of(40))
     .withSubsystem(subsystem);
 
     }

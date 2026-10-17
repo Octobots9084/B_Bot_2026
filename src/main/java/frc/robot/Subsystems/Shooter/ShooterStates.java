@@ -9,4 +9,6 @@ public enum ShooterStates {
     FERRY,
     UNJAM,
     SPINUP,
+    FIXEDTRENCH,
+    FIXEDTOWER
 }

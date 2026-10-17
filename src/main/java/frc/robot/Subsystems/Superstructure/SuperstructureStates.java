@@ -19,5 +19,6 @@ public enum SuperstructureStates{
     SPINUP,
     SAFE,
     FIXEDFIRE, AUTOHUB, AUTOFERRY,
+    FIXEDTRENCH
 
 }

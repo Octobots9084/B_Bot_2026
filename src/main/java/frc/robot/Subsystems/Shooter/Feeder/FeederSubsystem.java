@@ -19,7 +19,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 public class FeederSubsystem extends SubsystemBase{
    public FeederStates wantedFeederState = FeederStates.SAFE;
    public FeederStates FeederState = FeederStates.SAFE;
-   public static double feederStatorLimit = 40; //TODO replace
+   public static double feederStatorLimit = 60; //TODO replace
    private Distance FeederDiameter = Centimeters.of(2.54);
    public FeederTalonFX TX;
    public static FeederSubsystem instance;

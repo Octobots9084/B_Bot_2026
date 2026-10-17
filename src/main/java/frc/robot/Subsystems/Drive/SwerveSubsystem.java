@@ -19,6 +19,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
@@ -142,6 +143,15 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public Pose2d getPose2d()
     {
      return commandSwerveDrivetrain.getPose2d();   
+    }
+
+    public void zeroGyro() {
+        // this.getPigeon2().setYaw(0);
+        if(Constants.isBlueAlliance){
+            this.resetRotation(new Rotation2d(0));
+        }else{
+            this.resetRotation(new Rotation2d(Math.PI));
+        }
     }
 
     private void configureAutoBuilder() {
@@ -281,6 +291,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
     NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.HUB)));
     NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.SAFE)));
+    // NamedCommands.registerCommand("TrenchShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.FIXEDTRENCH)));
 
     NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;}));
     NamedCommands.registerCommand("ElephantiasisMKII", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.ELEPHANTIASIS;}));
@@ -307,7 +318,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
                 
             }
         }
-        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
+        double angularMagnitude = MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         double xVelocity = xMagnitude * maxVelocity;
         double yVelocity = yMagnitude * maxVelocity;
 
@@ -331,7 +342,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
             }
 
             if (System.currentTimeMillis() - timer > 500) 
-                wantedState = SwerveStates.XLOCK;
+                wantedState = SwerveStates.MANUAL;
             
         } else {
             debounce = true;
@@ -351,7 +362,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         // Constants.rightXDeadband);
         double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
         double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
-        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
+        double angularMagnitude = MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
         double xVelocity = xMagnitude * maxVelocity;
         double yVelocity = yMagnitude * maxVelocity;

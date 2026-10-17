@@ -1,8 +1,11 @@
-package frc.robot.Subsystems.Shooter.Hood;
+  package frc.robot.Subsystems.Shooter.Hood;
 
 import static edu.wpi.first.units.Units.Degrees;
 
 import edu.wpi.first.units.measure.Angle;
+   
+                                                                                                                                                                                                                                                               
+
 
 public enum HoodStates {
     SAFE(0),

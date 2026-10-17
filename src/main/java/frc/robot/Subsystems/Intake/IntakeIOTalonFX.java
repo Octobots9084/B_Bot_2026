@@ -101,7 +101,7 @@ public class IntakeIOTalonFX {
         SmartMotorControllerConfig smcc = new SmartMotorControllerConfig(sub)
             .withControlMode(ControlMode.CLOSED_LOOP)
             // Feedback Constants (PID Constants)
-            .withClosedLoopController(45, 0, 0)
+            .withClosedLoopController(75, 0, 0)
             .withTrapezoidalProfile(RotationsPerSecond.of(5), RotationsPerSecondPerSecond.of(2.5))
             .withSimClosedLoopController(1, 0, 0)
             // Feedforward Constants (? TODO no clue what these are)
@@ -112,8 +112,8 @@ public class IntakeIOTalonFX {
             // Motor properties to prevent over currenting.
             .withMotorInverted(true)
             .withIdleMode(MotorMode.COAST)
-            .withStatorCurrentLimit(Amps.of(40))
-            .withSupplyCurrentLimit(Amps.of(20))
+            .withStatorCurrentLimit(Amps.of(60))
+            .withSupplyCurrentLimit(Amps.of(40))
             .withClosedLoopRampRate(Seconds.of(0.25))
             .withOpenLoopRampRate(Seconds.of(0.25))
             // Starting position is where your arm starts
