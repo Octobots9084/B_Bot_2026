@@ -50,7 +50,9 @@ public class FeederSubsystem extends SubsystemBase{
    }
 
    public void setFeederVelocitySetpoint(AngularVelocity speed){
-      feederFlywheel.setVoltage(Voltage.ofBaseUnits(5, Volts));
+      feederFlywheel.setMechanismVelocitySetpoint(speed);
+      // feederFlywheel.setVoltageSetpoint(Volts.of(5));
+      //feederFlywheel.setVoltage(Voltage.ofBaseUnits(5, Volts));
    }
 
    @Override
