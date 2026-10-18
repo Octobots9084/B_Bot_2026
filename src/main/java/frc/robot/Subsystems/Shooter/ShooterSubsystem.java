@@ -103,8 +103,10 @@ public class ShooterSubsystem extends SubsystemBase {
         // hood.setAngleWithTolerance(Degrees.of(angle));
     }
     public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed){
-        shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
         feeder.setFeederVelocitySetpoint(feederSpeed);
+        // while(shooterFlywheel.getFlywheelVelocity().magnitude() < 32){
+        // }
+        shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
     }
    
     public static ShooterSubsystem getInstance() {

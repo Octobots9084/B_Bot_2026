@@ -115,6 +115,7 @@ public Robot() {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    SwerveSubsystem.getInstance().wantedState = SwerveStates.IDLE;
     //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().schedule(container.autoChooser.getSelected()); //awkward command
   }
 

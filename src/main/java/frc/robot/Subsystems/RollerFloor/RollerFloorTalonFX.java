@@ -6,8 +6,7 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants;
-
-
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.robot.Subsystems.RollerFloor.RollerFloorSubsystem;
@@ -21,14 +20,14 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.remote.TalonFXWrapper;
 
 public class RollerFloorTalonFX {    
-    public SmartMotorController FloorFollowerSmc;
+    public TalonFX FloorFollower = new TalonFX(Constants.rollerFloorLeftID, Constants.krakenBus);
     public SmartMotorControllerConfig FloorSMCConfig;
     public SmartMotorController FloorMotor;
     public SmartMotorControllerConfig FloorFollowerSmcConfig;
 
     public RollerFloorTalonFX(RollerFloorSubsystem subsystem){
-    FloorFollowerSmcConfig = new SmartMotorControllerConfig()
-    .withClosedLoopController(0.225,0,0)
+    FloorSMCConfig = new SmartMotorControllerConfig()
+    .withClosedLoopController(0.225,0,0) 
     .withSimClosedLoopController(0.2,0,0)
     .withFeedforward(new SimpleMotorFeedforward(0, 0.2, 0))
     .withSimFeedforward(new SimpleMotorFeedforward(0, 0.05, 0))
@@ -42,15 +41,14 @@ public class RollerFloorTalonFX {
     .withStatorCurrentLimit(Amps.of(60))
     .withStatorCurrentLimit(Amps.of(40))
     .withIdleMode(MotorMode.BRAKE)  
+    .withMotorInverted(true)
+    .withFollowers(Pair.of(FloorFollower, true))
     .withSubsystem(subsystem);
 
     }
 
 
     public void init() {
-        FloorFollowerSmc = new TalonFXWrapper(new TalonFX(Constants.rollerFloorLeftID, Constants.krakenBus), DCMotor.getKrakenX44(1), FloorFollowerSmcConfig);
-        FloorSMCConfig = FloorFollowerSmcConfig.clone()
-        .withLooselyCoupledFollowers(FloorFollowerSmc);
         FloorMotor = new TalonFXWrapper(new TalonFX(Constants.rollerFloorRightID, Constants.krakenBus), DCMotor.getKrakenX44(1), FloorSMCConfig);
     }
 }

@@ -291,10 +291,11 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
     NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.HUB)));
     NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.SAFE)));
-    // NamedCommands.registerCommand("TrenchShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.FIXEDTRENCH)));
+    NamedCommands.registerCommand("TrenchShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.FIXEDTRENCH)));
+    NamedCommands.registerCommand("Tower Shoot", new InstantCommand( () -> Superstructure.getInstance().setWantedState(SuperstructureStates.FIXEDFIRE)));
 
     NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;}));
-    NamedCommands.registerCommand("ElephantiasisMKII", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.ELEPHANTIASIS;}));
+    NamedCommands.registerCommand("ElephantiasisMKII",   new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.ELEPHANTIASIS;}));
     NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.SAFE;}));
     NamedCommands.registerCommand("DriveOverBumpFromAlliance", new InstantCommand());
     NamedCommands.registerCommand("DriveOverBumpToAlliance", new InstantCommand());

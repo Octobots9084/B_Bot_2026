@@ -213,7 +213,7 @@ public class Superstructure extends SubsystemBase{
                 IntakeSubsystem.getInstance().setWantedIntakeState(driverRequestedIntakeState);
                 if(driverRequestedIntakeState == IntakeStates.REVERSEINTAKE){
                     floor.wantedRollerState = RollerFloorStates.REVERSE;
-                    shooter.wantedShooterState = ShooterStates.HUB;
+                    // shooter.wantedShooterState = ShooterStates.HUB;
                 }else{
                     floor.wantedRollerState = RollerFloorStates.SAFE;
                     shooter.wantedShooterState = ShooterStates.SAFE;
