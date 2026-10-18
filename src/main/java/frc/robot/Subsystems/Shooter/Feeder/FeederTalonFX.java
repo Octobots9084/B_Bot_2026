@@ -36,7 +36,7 @@ public class FeederTalonFX {
     .withGearing(new MechanismGearing(GearBox.fromReductionStages(2.0/3.0)))
     .withClosedLoopRampRate(Seconds.of(0.125))
     .withOpenLoopRampRate(Seconds.of(0.125))
-    .withIdleMode(MotorMode.BRAKE)
+    .withIdleMode(MotorMode.COAST)
     .withFollowers(Pair.of(followerFeeder,true))
     .withStatorCurrentLimit(Amps.of(FeederSubsystem.feederStatorLimit))
     .withSupplyCurrentLimit(Amps.of(40))
