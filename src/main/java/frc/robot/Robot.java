@@ -45,6 +45,7 @@ public class Robot extends LoggedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private RobotContainer container;
   private SwerveSubsystem swerve;
+  private Command autoCommand;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -116,7 +117,8 @@ public Robot() {
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
     SwerveSubsystem.getInstance().wantedState = SwerveStates.IDLE;
-    //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().schedule(container.autoChooser.getSelected()); //awkward command
+    autoCommand = container.getAutonomousCommand();
+  if (autoCommand != null) CommandScheduler.getInstance().schedule(autoCommand);
   }
 
   /** This function is called periodically during autonomous. */
@@ -128,6 +130,7 @@ public Robot() {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    if (autoCommand != null) autoCommand.cancel();
   //Superstructure.getInstance().wantedState = SuperstructureStates.ZEROING;
   SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
   //if (container.autoChooser.getSelected() != null) CommandScheduler.getInstance().cancel(container.autoChooser.getSelected());

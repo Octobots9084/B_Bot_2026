@@ -1,21 +1,16 @@
 package frc.robot.Subsystems.Drive;
 
-
 import frc.robot.Subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
-import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
-import com.fasterxml.jackson.databind.node.NullNode;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.controllers.PPLTVController;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,46 +21,31 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
-import java.lang.reflect.Array;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain;
-
-import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstantsFactory;
 
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.Subsystems.Intake.IntakeStates;
 import frc.robot.Subsystems.Intake.IntakeSubsystem;
-import frc.robot.Subsystems.Shooter.ShooterStates;
-import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
 import frc.robot.Subsystems.Superstructure.SuperstructureStates;
 import frc.robot.Subsystems.Vision.ShooterCalculator;
 
-public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
+public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem {
 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     @AutoLogOutput public SwerveStates wantedState = SwerveStates.IDLE;
@@ -96,8 +76,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     PIDController rotationPidController = new PIDController(4.0, 0, 0.1);
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
-
-    //TODO get constants
     private synchronized static SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> swerveModuleConstants() {
         SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> factory = new SwerveModuleConstantsFactory<>();
         SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constants = 
@@ -116,8 +94,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         constants.SteerMotorGearRatio = 1;
         constants.CouplingGearRatio = 1;
 
-    //    if (1==1) throw new RuntimeException(constants.CouplingGearRatio + "");
-
         return constants;
     }
     
@@ -125,88 +101,87 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         super(TunerConstants.DrivetrainConstants, TunerConstants.FrontLeft, TunerConstants.FrontRight, TunerConstants.BackLeft, TunerConstants.BackRight);
         this.driverController = driverController2;
         this.commandSwerveDrivetrain = commandSwerveDrivetrain;
-        //this.coDriverController = driverController2;
         this.maxVelocity = maxVelocity;
         this.maxAngularVelocity = maxAngularVelocity;
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
         instance = this;
+
+        // NamedCommands MUST be registered before AutoBuilder is configured
+        registerNamedCommands();
         configureAutoBuilder();
     }
 
-    public static SwerveSubsystem setInstance(CommandSwerveDrivetrain commandSwerveDrivetrain,CommandXboxController driverController, CommandXboxController coDriverController2,
+    public static SwerveSubsystem setInstance(CommandSwerveDrivetrain commandSwerveDrivetrain, CommandXboxController driverController, CommandXboxController coDriverController2,
             double maxAngularVelocity, double maxVelocity) {
         SwerveSubsystem instance = new SwerveSubsystem(commandSwerveDrivetrain, driverController, coDriverController2, maxAngularVelocity, maxVelocity);
-        instance.registerNamedCommands();
         return instance;
     }
 
-    public Pose2d getPose2d()
-    {
-     return commandSwerveDrivetrain.getPose2d();   
+    public Pose2d getPose2d() {
+        return commandSwerveDrivetrain.getPose2d();   
     }
 
     public void zeroGyro() {
-        // this.getPigeon2().setYaw(0);
-        if(Constants.isBlueAlliance){
+        if (Constants.isBlueAlliance) {
             this.resetRotation(new Rotation2d(0));
-        }else{
+        } else {
             this.resetRotation(new Rotation2d(Math.PI));
         }
     }
 
     private void configureAutoBuilder() {
-        // SwerveSubsystem.getInstance().registerNamedCommands();
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
-                    () -> getState().Pose, // Supplier of current robot pose
-                    this::resetPose, // Consumer for seeding pose against auto
-                    () -> getState().Speeds, // Supplier of current robot speeds
-                    // Consumer of ChassisSpeeds and feedforwards to drive the robot
-                    (speeds, feedforwards) -> setControl(
-                            m_pathApplyRobotSpeeds.withSpeeds(speeds)
-                                    .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-                                    .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
+                    this::getPose2d, // Supplier of current robot pose (uses subsystem pose estimation)
+                    commandSwerveDrivetrain::resetPose,                      // was this::resetPose
+                    () -> commandSwerveDrivetrain.getState().Speeds,         // was getState().Speeds
+                    (speeds, feedforwards) -> commandSwerveDrivetrain.setControl(m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                    .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                    .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())),
                     new PPHolonomicDriveController(
                             // PID constants for translation
                             new PIDConstants(10, 0, 0),
                             // PID constants for rotation
                             new PIDConstants(7, 0, 0)),
                     config,
-                    // Assume the path needs to be flipped for Red vs Blue, this is normally the
-                    // case
+                    // Path flipping condition for Red vs Blue
                     () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
-                    this // Subsystem for requirements
+                    this // Subsystem requirements
             );
         } catch (Exception ex) {
-            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder",
-                    ex.getStackTrace());
+            DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
     }
-    
 
     public void periodic() {
         handleStateTransitions();
         applyStates();
         log();
-
     }
 
     public void handleStateTransitions() {
+        // Force state to IDLE during autonomous so teleop joystick transitions don't interfere
+        if (DriverStation.isAutonomous()) {
+            wantedState = SwerveStates.IDLE;
+            currentState = SwerveStates.IDLE;
+            return;
+        }
+
         switch (wantedState) {
             case ALIGNHUB:
                 break;
             case IDLE:
-                    currentState = wantedState;
+                currentState = wantedState;
                 break;
             case MANUAL:
-                    currentState = wantedState;
+                currentState = wantedState;
                 break;
             case REVERSE:
-                    currentState = wantedState;
+                currentState = wantedState;
                 break;
             case ROTATION_LOCK:
-                    currentState = wantedState;
+                currentState = wantedState;
                 break;
             case SLOW:
                 if (currentState != SwerveStates.IDLE)
@@ -217,8 +192,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
                 break;
             default:
                 break;
-           
-           
         }
     }
 
@@ -230,116 +203,97 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
                 double globalAngle = Math.toDegrees(Math.atan2(pos.getY() - robotPose.getY(), pos.getX() - robotPose.getX()));
                 double change = globalAngle - robotPose.getRotation().getDegrees();
             
-                calculator = ShooterCalculator.getInstance().calculateShot(rotLockAngle, maxAngularVelocity, maxVelocity, maxVelocity); // TODO get done later
+                calculator = ShooterCalculator.getInstance().calculateShot(rotLockAngle, maxAngularVelocity, maxVelocity, maxVelocity);
                 double calc = calculator.calculateShot(rotLockAngle, maxAngularVelocity, maxVelocity, maxVelocity).getRotation();
 
-            //double absoluteRotation = calculator.getRotation();
-
-            //idk if this math is right i dont remember waht these angles are
-
                 commandSwerveDrivetrain.setSwerveState(
-                    new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, rotationPidController.calculate(getRobotPose().getRotation().getRadians(), calc - change) * 1 /*todo tune */)));
-                
+                    new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, rotationPidController.calculate(getRobotPose().getRotation().getRadians(), calc - change) * 1)));
                 break;
+
             case IDLE:
+                // During Auto, PathPlanner drives setControl() directly.
+                // Leave empty so no swerve state overwrites PathPlanner outputs.
                 break;
+
             case MANUAL:
-                // shouldXLock();
                 commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-
                 break;
+
             case REVERSE:
                 commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
                     .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-         
                 break;
+
             case ROTATION_LOCK:
-            commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateRotLockSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
+
             case SLOW:
-                // shouldXLock();
                 ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
-
-              
-                // speeds.vxMetersPerSecond = x;
-                // speeds.vyMetersPerSecond = y;
-
                 speeds.omegaRadiansPerSecond = rotlimiter.calculate(speeds.omegaRadiansPerSecond);
-
-                //end segment
 
                 commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(speeds)
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-
-                
                 break;
+
             case XLOCK:
                 commandSwerveDrivetrain.setSwerveState(xLockbrake);
                 break;
+
             default:
                 break;
         }
     }
 
+    public void registerNamedCommands() {
+        NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.HUB)));
+        NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.SAFE)));
+        NamedCommands.registerCommand("TrenchShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.FIXEDTRENCH)));
+        NamedCommands.registerCommand("Tower Shoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.FIXEDFIRE)));
 
-    public void registerNamedCommands () {
-
-    NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.HUB)));
-    NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.SAFE)));
-    NamedCommands.registerCommand("TrenchShoot", new InstantCommand(() -> Superstructure.getInstance().setWantedState(SuperstructureStates.FIXEDTRENCH)));
-    NamedCommands.registerCommand("Tower Shoot", new InstantCommand( () -> Superstructure.getInstance().setWantedState(SuperstructureStates.FIXEDFIRE)));
-
-    NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;}));
-    NamedCommands.registerCommand("ElephantiasisMKII",   new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.ELEPHANTIASIS;}));
-    NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.SAFE;}));
-    NamedCommands.registerCommand("DriveOverBumpFromAlliance", new InstantCommand());
-    NamedCommands.registerCommand("DriveOverBumpToAlliance", new InstantCommand());
-    NamedCommands.registerCommand("DriveOverBump", new InstantCommand());
+        NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.INTAKING;}));
+        NamedCommands.registerCommand("ElephantiasisMKII", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.ELEPHANTIASIS;}));
+        NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {IntakeSubsystem.getInstance().wantedIntakeState = IntakeStates.SAFE;}));
+        NamedCommands.registerCommand("DriveOverBumpFromAlliance", new InstantCommand());
+        NamedCommands.registerCommand("DriveOverBumpToAlliance", new InstantCommand());
+        NamedCommands.registerCommand("DriveOverBump", new InstantCommand());
     }
+
     public ChassisSpeeds calculateRotLockSpeedsBasedOnJoystickInputs() {
-        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
-        // Constants.leftYDeadband);
-        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1),
-        // Constants.leftXDeadband);
-        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0),
-        // Constants.rightXDeadband);
         double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
         double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
-        if (getRobotPose().getRotation().getRadians()-rotLockAngle<0.3){
-            if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband)>0.9){
-                rotLockAngle = (rotLockAngle + Math.PI/2) % (Math.PI*2);
-            }
-            else if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband)<-0.9){
-                rotLockAngle = (rotLockAngle - Math.PI/2) % (Math.PI*2);
-                
+        if (getRobotPose().getRotation().getRadians() - rotLockAngle < 0.3) {
+            if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) > 0.9) {
+                rotLockAngle = (rotLockAngle + Math.PI / 2) % (Math.PI * 2);
+            } else if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) < -0.9) {
+                rotLockAngle = (rotLockAngle - Math.PI / 2) % (Math.PI * 2);
             }
         }
-        double angularMagnitude = MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         double xVelocity = xMagnitude * maxVelocity;
         double yVelocity = yMagnitude * maxVelocity;
 
-        double RotVelocity = angularPidcontroller.calculate(getRobotPose().getRotation().getRadians(),rotLockAngle);
+        double RotVelocity = angularPidcontroller.calculate(getRobotPose().getRotation().getRadians(), rotLockAngle);
 
         if (Constants.isBlueAlliance) {   
             return new ChassisSpeeds(-xVelocity, -yVelocity, RotVelocity);
         }
         return new ChassisSpeeds(xVelocity, yVelocity, RotVelocity);
     }
+
     public void shouldXLock() {
         if (MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || 
-            MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0 ||
+            MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband) != 0 ||
             MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) != 0 ||
             MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) != 0) {
 
             if (debounce) {
-            timer = System.currentTimeMillis();
-
-            debounce = false;
+                timer = System.currentTimeMillis();
+                debounce = false;
             }
 
             if (System.currentTimeMillis() - timer > 500) 
@@ -347,20 +301,10 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
             
         } else {
             debounce = true;
-        };
-        
-
+        }
     }
 
-    
-    
     public ChassisSpeeds calculateSpeedsBasedOnJoystickInputs() {
-        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
-        // Constants.leftYDeadband);
-        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1),
-        // Constants.leftXDeadband);
-        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0),
-        // Constants.rightXDeadband);
         double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
         double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
         double angularMagnitude = MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
@@ -375,17 +319,16 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         }
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
     }
+
     public Pose2d getRobotPose() {
         return commandSwerveDrivetrain.getPose2d();
     }
 
-    public  static SwerveSubsystem getInstance(){
+    public static SwerveSubsystem getInstance() {
         return instance;
     }
 
-
-        //states, motor voltage
-        public void log() {
+    public void log() {
         Logger.recordOutput("RobotPose", commandSwerveDrivetrain.getPose2d());
         Logger.recordOutput("Pose X", commandSwerveDrivetrain.getPose2d().getX());
         Logger.recordOutput("Pose Y", commandSwerveDrivetrain.getPose2d().getY());
@@ -402,23 +345,15 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         Logger.recordOutput("Front Right Drive Motor Voltage", commandSwerveDrivetrain.getModule(1).getDriveMotor().getMotorVoltage().getValueAsDouble());
         Logger.recordOutput("Back Left Drive Motor Voltage", commandSwerveDrivetrain.getModule(2).getDriveMotor().getMotorVoltage().getValueAsDouble());
         Logger.recordOutput("Back Right Drive Motor Voltage", commandSwerveDrivetrain.getModule(3).getDriveMotor().getMotorVoltage().getValueAsDouble());
-         //front left, fr, bl, br
     }
-    
-    // public void initCommandSwerveDrivetrain() {
 
-    //     SwerveDrivetrainConstants dtC = new SwerveDrivetrainConstants()
-    //         .withCANBusName(Constants.krakenBus.getName())
-    //         .withPigeon2Id(0)
-    //         .withPigeon2Configs(null);
-
-    //     }
     public ChassisSpeeds getChassisSpeeds() {
         return this.getState().Speeds;
     } 
-    public static boolean InTrenchLane(){
+
+    public static boolean InTrenchLane() {
         Pose2d robPose = SwerveSubsystem.getInstance().getRobotPose();
-        if(robPose.getY() > Constants.outpostTrenchY || robPose.getY() < Constants.depotTrenchY){
+        if (robPose.getY() > Constants.outpostTrenchY || robPose.getY() < Constants.depotTrenchY) {
             return true;
         }
         return false;
@@ -427,35 +362,29 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     public static LinearVelocity trenchVelocity() {
         Pose2d robPose = SwerveSubsystem.getInstance().getRobotPose();
         ChassisSpeeds speeds = SwerveSubsystem.getInstance().getChassisSpeeds();
-        if(robPose.getX() <= Constants.blueTrenchX || robPose.getX() >= Constants.fieldMidline && robPose.getX() <= Constants.redTrenchX ) {
+        if (robPose.getX() <= Constants.blueTrenchX || robPose.getX() >= Constants.fieldMidline && robPose.getX() <= Constants.redTrenchX) {
             return MetersPerSecond.of(speeds.vxMetersPerSecond);
-        }
-        else if ((robPose.getX()>= Constants.blueTrenchX && robPose.getX()<= Constants.fieldMidline) || robPose.getX() > Constants.redTrenchX){
+        } else if ((robPose.getX() >= Constants.blueTrenchX && robPose.getX() <= Constants.fieldMidline) || robPose.getX() > Constants.redTrenchX) {
             return (MetersPerSecond.of(speeds.vxMetersPerSecond)).times(-1);
-        }
-        else{
+        } else {
             return MetersPerSecond.of(0);
         }
     }
 
-    public static boolean inDangerOfTrench(){
+    public static boolean inDangerOfTrench() {
         LinearVelocity robTrenchVelocity = trenchVelocity();
 
         Distance baseDistanceRelationship = robTrenchVelocity.times(Seconds.of(Constants.shooterLoweringTime));
         Distance minimumTrenchDist = baseDistanceRelationship.plus(Meters.of(Constants.trenchDangerZone));
         return minimumTrenchDist.gte(distanceFromTrench());
-        // y=(x/t) + 0.1016
     }
 
     public static Distance distanceFromTrench() {
         Pose2d robPose = SwerveSubsystem.getInstance().getRobotPose();
 
-        if(robPose.getY() > Constants.fieldMidline) {
-            return Meters.of( Math.abs(robPose.getX() - Constants.redTrenchX));
+        if (robPose.getY() > Constants.fieldMidline) {
+            return Meters.of(Math.abs(robPose.getX() - Constants.redTrenchX));
         } 
-        return Meters.of( Math.abs(robPose.getX() - Constants.blueTrenchX));
-
+        return Meters.of(Math.abs(robPose.getX() - Constants.blueTrenchX));
     }
-
 }
-
