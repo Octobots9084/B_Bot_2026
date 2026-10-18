@@ -19,9 +19,11 @@ public class DriverCommunications {
     public static double testFlywheelSpeed = 0;
     public static double testHoodAngle = 0;
     public static double testFlywheelSpeedTower = 0;
+    public static double testFlywheelSpeedClose = 0;
     public static void sliderInit(){
         testFlywheelSpeed = 0.0;
         testFlywheelSpeedTower = 0.0;
+        testFlywheelSpeedClose = 0.0;
         SmartDashboard.putNumber("Hood Angle", 0);
 
     }
@@ -39,6 +41,7 @@ public class DriverCommunications {
         // Field
         SmartDashboard.putData(fieldPose);
         SmartDashboard.putNumber("Fixed Flywheel Speed(bumper)", testFlywheelSpeed);
+        SmartDashboard.putNumber("Fixed Flywheel Speed Close(double bumper)", testFlywheelSpeedClose);
         SmartDashboard.putNumber("Trench Flywheel Speed(trigger)", testFlywheelSpeedTower);
         // testFlywheelSpeed = SmartDashboard.getNumber("Flywheel Speed", 0);
         // testHoodAngle = SmartDashboard.getNumber("Hood Angle", 0);

@@ -277,7 +277,12 @@ public class Superstructure extends SubsystemBase{
                 floor.wantedRollerState = RollerFloorStates.SHOOT;
                 intake.setWantedIntakeState(driverRequestedIntakeState);
             break;
-
+            case FIXEDCLOSE:
+                lights.lightsWantedState = LightAnimations.DEFAULT;
+                shooter.wantedShooterState = ShooterStates.FIXEDCLOSE;
+                floor.wantedRollerState = RollerFloorStates.SHOOT;
+                intake.setWantedIntakeState(driverRequestedIntakeState);
+            break;
             case AUTOFERRY:
                 lights.lightsWantedState = LightAnimations.DEFAULT;
 

@@ -32,7 +32,7 @@ public class FlywheelTalonFX {
     public FlywheelTalonFX(FlywheelSubsystem subsystem) {
         flywheelMainSmc = new SmartMotorControllerConfig()
             .withControlMode(ControlMode.CLOSED_LOOP)
-            .withClosedLoopController(1,0,0)
+            .withClosedLoopController(1,0.1,0)
             .withSimClosedLoopController(0.35,0,0)
             .withFeedforward(new SimpleMotorFeedforward(0,.25,0))
             .withSimFeedforward(new SimpleMotorFeedforward(0,0.1, 0))

@@ -19,6 +19,7 @@ import frc.robot.Constants.Mode;
 import frc.robot.Subsystems.Drive.SwerveStates;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.RollerFloor.RollerFloorStates;
+import frc.robot.Subsystems.Shooter.ShooterSubsystem;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorController;
@@ -86,7 +87,13 @@ public class RollerFloorSubsystem extends SubsystemBase {
     }
 
     private void applyStates () {
-        setRollorFloorVelocitySetpoint(currentRollerState.enumRollerVelocity);
+        if(currentRollerState == RollerFloorStates.SHOOT){
+            if(ShooterSubsystem.getInstance().getFlywheel().getFlywheelVelocity().magnitude() > Constants.flywheelShootTolerance){
+                setRollorFloorVelocitySetpoint(currentRollerState.enumRollerVelocity);
+            }
+        }else{
+            setRollorFloorVelocitySetpoint(currentRollerState.enumRollerVelocity);
+        }
     }
     
     private void logging() {

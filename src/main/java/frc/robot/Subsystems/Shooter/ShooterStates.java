@@ -10,5 +10,6 @@ public enum ShooterStates {
     UNJAM,
     SPINUP,
     FIXEDTRENCH,
-    FIXEDTOWER
+    FIXEDTOWER,
+    FIXEDCLOSE
 }

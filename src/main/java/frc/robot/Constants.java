@@ -29,6 +29,7 @@ public class Constants {
     //general
     public static CANBus krakenBus = new CANBus("krakenbus");
   public static Boolean isBlueAlliance = null;
+    public static double flywheelShootTolerance = 32;
 
     public static double redTrenchX = 11.7;
     public static double blueTrenchX = 4.8;

@@ -96,17 +96,17 @@ public class ShooterSubsystem extends SubsystemBase {
         initDone = true;
     }
     
- 
-    public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed, double angle){
-        shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
-        feeder.setFeederVelocitySetpoint(feederSpeed);
-        // hood.setAngleWithTolerance(Degrees.of(angle));
-    }
+
     public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed){
-        feeder.setFeederVelocitySetpoint(feederSpeed);
-        // while(shooterFlywheel.getFlywheelVelocity().magnitude() < 32){
-        // }
-        shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
+        if(flywheelSpeed != 0){
+            if(shooterFlywheel.getFlywheelVelocity().magnitude() > Constants.flywheelShootTolerance){
+                feeder.setFeederVelocitySetpoint(feederSpeed);
+            }
+            shooterFlywheel.setFlywheelVelocitySetpoint(flywheelSpeed);
+
+        }else{
+            feeder.setFeederVelocitySetpoint(feederSpeed);
+        }
     }
    
     public static ShooterSubsystem getInstance() {
@@ -164,7 +164,8 @@ public class ShooterSubsystem extends SubsystemBase {
    public void applyStates () {
         switch(currentShooterState){
             case SAFE:
-                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
+                shooterFlywheel.setFlywheelVelocitySetpoint(0);
+                feeder.setFeederVelocitySetpoint(RPM.of(0));
             break;
             case HUB:
                 shooterPartsControl(0,FeederStates.REVERSE.enumVelocity);
@@ -188,11 +189,15 @@ public class ShooterSubsystem extends SubsystemBase {
                 
             break;    
             case FIXEDFIRE:
-                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity + DriverCommunications.testFlywheelSpeedTower, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
+                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity + DriverCommunications.testFlywheelSpeedTower, FeederStates.FIRE.enumVelocity);
             break;
             case FIXEDTRENCH:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
                 // shooterPartsControl(DriverCommunications.testFlywheelSpeed, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
-                shooterPartsControl(FlywheelStates.TRENCHFIRE.enumVelocity + DriverCommunications.testFlywheelSpeed, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
+                shooterPartsControl(FlywheelStates.TRENCHFIRE.enumVelocity + DriverCommunications.testFlywheelSpeed, FeederStates.FIRE.enumVelocity);
+            break;
+            case FIXEDCLOSE:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                // shooterPartsControl(DriverCommunications.testFlywheelSpeed, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
+                shooterPartsControl(FlywheelStates.FIXEDCLOSE.enumVelocity + DriverCommunications.testFlywheelSpeedClose, FeederStates.FIRE.enumVelocity);
             break;
 
             case UNJAM:
@@ -202,7 +207,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity, FeederStates.SAFE.enumVelocity);
             break;
             default:
-                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity, HoodStates.SAFE.enumAngle);
+                shooterPartsControl(FlywheelStates.SAFE.enumVelocity, FeederStates.SAFE.enumVelocity);
             break;
             }
     }
