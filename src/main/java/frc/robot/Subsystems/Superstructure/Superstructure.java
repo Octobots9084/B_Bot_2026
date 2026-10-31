@@ -146,6 +146,9 @@ public class Superstructure extends SubsystemBase{
             case UNJAM:
             currentState = wantedState;
             break;
+            case FIXEDCLOSE:
+            currentState = wantedState;
+            break;
             case SPINUP:
             currentState = SuperstructureStates.SPINUP;
             break;

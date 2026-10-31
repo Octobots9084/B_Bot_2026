@@ -30,6 +30,7 @@ public class DriverCommunications {
 
     public static void pushToElastic() {
         // Are the cameras connected
+        
         SmartDashboard.putBoolean("Cam/left camera connected", vision.cameraConnected(0));
         SmartDashboard.putBoolean("Cam/right camera connected", vision.cameraConnected(1));
         SmartDashboard.putBoolean("Cam/shooter camera connected", vision.cameraConnected(2));

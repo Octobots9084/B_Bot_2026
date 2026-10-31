@@ -156,6 +156,9 @@ public class ShooterSubsystem extends SubsystemBase {
             case SPINUP:
             currentShooterState = ShooterStates.SPINUP;
             break;
+            case FIXEDCLOSE:
+            currentShooterState = ShooterStates.FIXEDCLOSE;
+            break;
             default:
             break;
             }

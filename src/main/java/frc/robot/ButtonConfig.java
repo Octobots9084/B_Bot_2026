@@ -81,8 +81,6 @@ public class ButtonConfig {
         driverController.povLeft().onTrue(new InstantCommand(() -> DriverCommunications.testFlywheelSpeedTower -= 0.5));
         driverController.povRight().onTrue(new InstantCommand(() -> DriverCommunications.testFlywheelSpeedTower += 0.5));
 
-        driverController.rightBumper().multiPress(2, 10).onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDCLOSE)))
-        .onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
      
 
     }
