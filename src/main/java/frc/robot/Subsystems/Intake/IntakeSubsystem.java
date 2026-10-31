@@ -133,7 +133,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         public void setIntakeState(IntakeStates state){
             pivotYAM.setMechanismPositionSetpoint(state.pos);
-            rollerYAM.setMechanismVelocitySetpoint(state.vel);
+            // rollerYAM.setMechanismVelocitySetpoint(state.vel);
         }
     
         public void applyStates() {

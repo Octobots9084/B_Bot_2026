@@ -37,8 +37,8 @@ public class HoodSubsystem extends SubsystemBase{
     public static HoodSubsystem getInstanceHood(){
         return instance;
     }
-    public Command setAngle(Angle angle){
-        return hood.setAngle(angle);
+    public void setAngle(Angle angle){
+        hood.setAngle(angle);
     }
     public void setAngleWithTolerance(Angle angle){
         hood.setMechanismPositionSetpoint(angle);
