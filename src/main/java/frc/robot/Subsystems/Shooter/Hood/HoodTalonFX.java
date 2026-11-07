@@ -29,7 +29,7 @@ public class HoodTalonFX {
         HoodSMC = new SmartMotorControllerConfig(HoodSubsystem.getInstanceHood())
         .withControlMode(ControlMode.CLOSED_LOOP)
         .withGearing(new MechanismGearing(GearBox.fromReductionStages(0.9)))
-        .withClosedLoopController(25,4,1)
+        .withClosedLoopController(40,4,1)
         .withSimClosedLoopController(25,4,1)
         //.withClosedLoopTolerance(Degrees.of(2))
         .withFeedforward(new ArmFeedforward(0, 0, 0))
