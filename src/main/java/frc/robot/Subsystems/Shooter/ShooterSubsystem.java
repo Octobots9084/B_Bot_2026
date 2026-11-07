@@ -96,7 +96,6 @@ public class ShooterSubsystem extends SubsystemBase {
         initDone = true;
     }
     
-
     public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed, Angle hoodAngle){
         if(flywheelSpeed != 0){
             if(shooterFlywheel.getFlywheelVelocity().magnitude() > Constants.flywheelShootTolerance){
@@ -107,9 +106,12 @@ public class ShooterSubsystem extends SubsystemBase {
         }else{
             feeder.setFeederVelocitySetpoint(feederSpeed);
         }
-        hood.setAngle(hoodAngle);
+        hood.setAngleWithTolerance(hoodAngle);
+
     }
-   
+    public void shooterPartsControl(double flywheelSpeed, AngularVelocity feederSpeed, double hoodAngle){
+        shooterPartsControl(flywheelSpeed, feederSpeed, Degrees.of(hoodAngle));
+    }
     public static ShooterSubsystem getInstance() {
         if(inst == null){
             inst = new ShooterSubsystem();
@@ -170,38 +172,37 @@ public class ShooterSubsystem extends SubsystemBase {
             case SAFE:
                 shooterFlywheel.setFlywheelVelocitySetpoint(0);
                 feeder.setFeederVelocitySetpoint(RPM.of(0));
+                hood.setAngleWithTolerance(Degrees.of(0));
             break;
             case HUB:
-                shooterPartsControl(0,FeederStates.REVERSE.enumVelocity,HoodStates.SAFE.enumAngle);
-                // hubShot = ShooterCalculator.getInstance().calculateShot(ourHub.getX() - swerve.getPose2d().getTranslation().getX(), ourHub.getY() - swerve.getPose2d().getTranslation().getY(), SwerveSubsystem.getInstance().getChassisSpeeds().vxMetersPerSecond,SwerveSubsystem.getInstance().getChassisSpeeds().vyMetersPerSecond);
-                // //if this code doesnt work fiddle with the X and Y distance from hubs <3
-                // Alignment.getInstance().getRotation(hubShot.getRotation());
-                // shooterPartsControl(hubShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, hubShot.getHoodAngle());
+                hubShot = ShooterCalculator.getInstance().calculateShot(ourHub.getX() - swerve.getPose2d().getTranslation().getX(), ourHub.getY() - swerve.getPose2d().getTranslation().getY(), SwerveSubsystem.getInstance().getChassisSpeeds().vxMetersPerSecond,SwerveSubsystem.getInstance().getChassisSpeeds().vyMetersPerSecond);
+                //if this code doesnt work fiddle with the X and Y distance from hubs <3
+                Alignment.getInstance().getRotation(hubShot.getRotation());
+                shooterPartsControl(hubShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, hubShot.getHoodAngle());
             break;     
             case FERRY:
-                // ferryShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
-                // Alignment.getInstance().getRotation(ferryShot.getRotation());
-                // shooterPartsControl(ferryShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, ferryShot.getHoodAngle());
+                ferryShot = ShooterCalculator.getInstance().calculateShot(0, 0, 0, 0);
+                Alignment.getInstance().getRotation(ferryShot.getRotation());
+                shooterPartsControl(ferryShot.getflywheelSpeed(), FeederStates.FIRE.enumVelocity, ferryShot.getHoodAngle());
             break;
             case TRENCH:
                 Superstructure.getInstance().wantedState = SuperstructureStates.SAFE;
                 break;  
             case ZEROING:
-                // if(hood.zero()){
-                //     alreadyZeroed = true;
-                // }
-                
+                if(hood.zero()){
+                    alreadyZeroed = true;
+                }
             break;    
             case FIXEDFIRE:
-                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity + DriverCommunications.testFlywheelSpeedTower, FeederStates.FIRE.enumVelocity,HoodStates.UPPIES.enumAngle);
+                shooterPartsControl(FlywheelStates.FIXEDFIRE.enumVelocity + DriverCommunications.testFlywheelSpeedTower, FeederStates.FIRE.enumVelocity, HoodStates.UPPIES.enumAngle);
             break;
             case FIXEDTRENCH:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
                 // shooterPartsControl(DriverCommunications.testFlywheelSpeed, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
-                shooterPartsControl(FlywheelStates.TRENCHFIRE.enumVelocity + DriverCommunications.testFlywheelSpeed, FeederStates.FIRE.enumVelocity,HoodStates.UPPIES.enumAngle);
+                shooterPartsControl(FlywheelStates.TRENCHFIRE.enumVelocity + DriverCommunications.testFlywheelSpeed, FeederStates.FIRE.enumVelocity, HoodStates.UPPIES.enumAngle);
             break;
             case FIXEDCLOSE:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
                 // shooterPartsControl(DriverCommunications.testFlywheelSpeed, FeederStates.FIRE.enumVelocity, HoodStates.FIXEDFIRE.enumAngle);
-                shooterPartsControl(FlywheelStates.FIXEDCLOSE.enumVelocity + DriverCommunications.testFlywheelSpeedClose, FeederStates.FIRE.enumVelocity,HoodStates.UPPIES.enumAngle);
+                shooterPartsControl(FlywheelStates.FIXEDCLOSE.enumVelocity + DriverCommunications.testFlywheelSpeedClose, FeederStates.FIRE.enumVelocity, HoodStates.UPPIES.enumAngle);
             break;
 
             case UNJAM:

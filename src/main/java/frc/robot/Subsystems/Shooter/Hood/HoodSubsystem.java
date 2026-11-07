@@ -29,7 +29,7 @@ public class HoodSubsystem extends SubsystemBase{
         TX.init();
         ArmConfig HoodConfig = new ArmConfig()
         .withLength(Feet.of(TX.hoodRadius))
-        .withHardLimits(Degrees.of(0), Degrees.of(0))//TODO replace
+        .withHardLimits(Degrees.of(0), Degrees.of(360))//TODO replace
         .withTelemetry("HoodMech", TelemetryVerbosity.HIGH);
         
         hood = new Arm(HoodConfig, TX.HoodMotorSMC);

@@ -24,21 +24,24 @@ import yams.motorcontrollers.remote.TalonFXWrapper;
 public class HoodTalonFX {
     public static double hoodRadius = 15.24; //TODO harass jett about ts
     public static double hoodMass = 1;
-    public SmartMotorControllerConfig HoodSMC = new SmartMotorControllerConfig(HoodSubsystem.getInstanceHood())
-    .withControlMode(ControlMode.CLOSED_LOOP)
-    .withGearing(new MechanismGearing(GearBox.fromReductionStages(0.9)))
-    .withClosedLoopController(25,0,0)
-    .withSimClosedLoopController(0.5,0,0.01)
-    //.withClosedLoopTolerance(Degrees.of(2))
-    .withFeedforward(new ArmFeedforward(0, 0, 0))
-    .withSimFeedforward(new ArmFeedforward(0, 0, 0))
-    .withMotorInverted(true)
-    //.withSoftLimit()
-    .withStartingPosition(Degrees.of(.3))
-    .withStatorCurrentLimit(Amps.of(HoodSubsystem.HoodStatorLimit))
-    .withIdleMode(MotorMode.BRAKE)
-    .withMomentOfInertia(Centimeters.of(hoodRadius), Pounds.of(hoodMass))
-    .withTelemetry("armMotor", TelemetryVerbosity.HIGH);
+    public SmartMotorControllerConfig HoodSMC;
+    public HoodTalonFX(){
+        HoodSMC = new SmartMotorControllerConfig(HoodSubsystem.getInstanceHood())
+        .withControlMode(ControlMode.CLOSED_LOOP)
+        .withGearing(new MechanismGearing(GearBox.fromReductionStages(0.9)))
+        .withClosedLoopController(25,4,1)
+        .withSimClosedLoopController(25,4,1)
+        //.withClosedLoopTolerance(Degrees.of(2))
+        .withFeedforward(new ArmFeedforward(0, 0, 0))
+        .withSimFeedforward(new ArmFeedforward(0, 0, 0))
+        .withMotorInverted(true)
+        //.withSoftLimit()
+        .withStartingPosition(Degrees.of(0))
+        .withStatorCurrentLimit(Amps.of(HoodSubsystem.HoodStatorLimit))
+        .withIdleMode(MotorMode.BRAKE)
+        .withMomentOfInertia(Centimeters.of(hoodRadius), Pounds.of(hoodMass))
+        .withTelemetry("armMotor", TelemetryVerbosity.HIGH);
+    } 
     public SmartMotorController HoodMotorSMC;
 
     public void init(){

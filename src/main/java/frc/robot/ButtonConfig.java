@@ -69,7 +69,7 @@ public class ButtonConfig {
         driverController.x().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SPINUP)));
         driverController.x().onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
         
-        driverController.rightTrigger().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDTRENCH)))
+        driverController.y().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDTRENCH)))
         //.onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS))
         .onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
 
