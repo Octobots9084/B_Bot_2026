@@ -195,6 +195,6 @@ public Robot() {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
-    // SwerveSubsystem.getInstance().commandSwerveDrivetrain.updateSimState(defaultPeriodSecs, 10);
+    SwerveSubsystem.getInstance().tunerSwerveDrivetrain.updateSimState(defaultPeriodSecs, 10);
   }
 }

@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.Radian;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Second;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.AngularVelocityUnit;
@@ -37,9 +39,6 @@ public class RobotContainer {
     public FeederSubsystem feeder;
     public HoodSubsystem hood;
     public ButtonConfig buttons;
-
-
-
 
 // Dashboard inputs
  final SendableChooser<Command> autoChooser;
@@ -101,6 +100,7 @@ public class RobotContainer {
 
  }
  
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

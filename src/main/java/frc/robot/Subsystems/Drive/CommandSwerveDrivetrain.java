@@ -245,7 +245,6 @@ public class CommandSwerveDrivetrain extends frc.robot.Subsystems.Drive.TunerCon
             });
         }
     }
-    @AutoLogOutput
     public Pose2d getPose2d() {
         return this.getState().Pose;
     }

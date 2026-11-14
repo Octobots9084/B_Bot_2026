@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Feet;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Pounds;
+import static edu.wpi.first.units.Units.Rotations;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -17,7 +18,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 public class HoodSubsystem extends SubsystemBase{
     public double hoodZeroAngle = -10;
     public static double HoodStatorLimit = 40; //TODO replace with real stuff
-    public static Angle hoodTolerance = Degrees.of(5);
+    public static Angle hoodTolerance = Rotations.of(0);
     public Arm hood;
     public HoodTalonFX TX;
     public static HoodSubsystem instance;

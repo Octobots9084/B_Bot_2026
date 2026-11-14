@@ -82,7 +82,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
     public double rotLockAngle = 0;
 
-    public CommandSwerveDrivetrain commandSwerveDrivetrain;
     private SlewRateLimiter rotlimiter;
 
     public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
@@ -92,6 +91,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
     long timer = 0l;
     boolean debounce = true;
 
+    public TunerSwerveDrivetrain tunerSwerveDrivetrain;
     public static SwerveSubsystem instance;
 
     PIDController rotationPidController = new PIDController(4.0, 0, 0.1);
@@ -122,11 +122,11 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         return constants;
     }
     
-    public SwerveSubsystem(CommandSwerveDrivetrain commandSwerveDrivetrain, CommandXboxController driverController2, CommandXboxController coDriverController2, double maxVelocity, double maxAngularVelocity) {
+    public SwerveSubsystem(TunerSwerveDrivetrain TSdrivetrain, CommandXboxController driverController2, CommandXboxController coDriverController2, double maxVelocity, double maxAngularVelocity) {
         super(TunerConstants.DrivetrainConstants, TunerConstants.FrontLeft, TunerConstants.FrontRight, TunerConstants.BackLeft, TunerConstants.BackRight);
         this.driverController = driverController2;
-        this.commandSwerveDrivetrain = commandSwerveDrivetrain;
         //this.coDriverController = driverController2;
+        this.tunerSwerveDrivetrain = TSdrivetrain;
         this.maxVelocity = maxVelocity;
         this.maxAngularVelocity = maxAngularVelocity;
         this.rotlimiter = new SlewRateLimiter(Math.PI*10);
@@ -134,16 +134,16 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         configureAutoBuilder();
     }
 
-    public static SwerveSubsystem setInstance(CommandSwerveDrivetrain commandSwerveDrivetrain,CommandXboxController driverController, CommandXboxController coDriverController2,
-            double maxAngularVelocity, double maxVelocity) {
-        SwerveSubsystem instance = new SwerveSubsystem(commandSwerveDrivetrain, driverController, coDriverController2, maxAngularVelocity, maxVelocity);
+    public static SwerveSubsystem setInstance(TunerSwerveDrivetrain tsDrivetrain,CommandXboxController driverController, CommandXboxController coDriverController2,
+        double maxAngularVelocity, double maxVelocity) {
+        SwerveSubsystem instance = new SwerveSubsystem(tsDrivetrain, driverController, coDriverController2, maxAngularVelocity, maxVelocity);
         instance.registerNamedCommands();
         return instance;
     }
 
     public Pose2d getPose2d()
     {
-     return commandSwerveDrivetrain.getPose2d();   
+        return tunerSwerveDrivetrain.getPose2d();   
     }
 
     public void zeroGyro() {
@@ -190,6 +190,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         handleStateTransitions();
         applyStates();
         log();
+        robotPose = this.getRobotPose();
 
     }
 
@@ -227,7 +228,6 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         switch (currentState) {
             case ALIGNHUB:
                 Translation2d pos = new Translation2d();
-                robotPose = SwerveSubsystem.getInstance().getRobotPose();
                 double globalAngle = Math.toDegrees(Math.atan2(pos.getY() - robotPose.getY(), pos.getX() - robotPose.getX()));
                 double change = globalAngle - robotPose.getRotation().getDegrees();
             
@@ -238,7 +238,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
             //idk if this math is right i dont remember waht these angles are
 
-                commandSwerveDrivetrain.setSwerveState(
+                tunerSwerveDrivetrain.setSwerveState(
                     new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, rotationPidController.calculate(getRobotPose().getRotation().getRadians(), calc - change) * 1 /*todo tune */)));
                 
                 break;
@@ -246,18 +246,18 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
                 break;
             case MANUAL:
                 // shouldXLock();
-                commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                tunerSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
                 break;
             case REVERSE:
-                commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
+                tunerSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
                     .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
          
                 break;
             case ROTATION_LOCK:
-            commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+            tunerSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateRotLockSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
@@ -273,14 +273,14 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
                 //end segment
 
-                commandSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                tunerSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(speeds)
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
                 
                 break;
             case XLOCK:
-                commandSwerveDrivetrain.setSwerveState(xLockbrake);
+                tunerSwerveDrivetrain.setSwerveState(xLockbrake);
                 break;
             default:
                 break;
@@ -378,9 +378,8 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
     }
     public Pose2d getRobotPose() {
-        return commandSwerveDrivetrain.getPose2d();
+        return tunerSwerveDrivetrain.getPose2d();
     }
-
     public  static SwerveSubsystem getInstance(){
         return instance;
     }
@@ -388,22 +387,22 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
 
         //states, motor voltage
         public void log() {
-        Logger.recordOutput("RobotPose", commandSwerveDrivetrain.getPose2d());
-        Logger.recordOutput("Pose X", commandSwerveDrivetrain.getPose2d().getX());
-        Logger.recordOutput("Pose Y", commandSwerveDrivetrain.getPose2d().getY());
-        Logger.recordOutput("Pose Rotation (Degrees)", commandSwerveDrivetrain.getPose2d().getRotation().getDegrees());
-        Logger.recordOutput("Pose Rotation (Radians)", commandSwerveDrivetrain.getPose2d().getRotation().getRadians());
-        ChassisSpeeds mango = calculateSpeedsBasedOnJoystickInputs();
-        Logger.recordOutput("X Velocity", mango.vxMetersPerSecond);
-        Logger.recordOutput("Y Velocity", mango.vyMetersPerSecond);
-        Logger.recordOutput("Rotational Velocity (Degrees)", Math.toDegrees(mango.omegaRadiansPerSecond));
-        Logger.recordOutput("Rotational Velocity (Radians)", mango.omegaRadiansPerSecond);
-        Logger.recordOutput("currentSwerveState", currentState);
-        Logger.recordOutput("wantedSwerveState", wantedState);
-        Logger.recordOutput("Front Left Drive Motor Voltage", commandSwerveDrivetrain.getModule(0).getDriveMotor().getMotorVoltage().getValueAsDouble());
-        Logger.recordOutput("Front Right Drive Motor Voltage", commandSwerveDrivetrain.getModule(1).getDriveMotor().getMotorVoltage().getValueAsDouble());
-        Logger.recordOutput("Back Left Drive Motor Voltage", commandSwerveDrivetrain.getModule(2).getDriveMotor().getMotorVoltage().getValueAsDouble());
-        Logger.recordOutput("Back Right Drive Motor Voltage", commandSwerveDrivetrain.getModule(3).getDriveMotor().getMotorVoltage().getValueAsDouble());
+            Logger.recordOutput("Swerve/ RobotPose", robotPose);
+            Logger.recordOutput("Pose X", tunerSwerveDrivetrain.getPose2d().getX());
+            Logger.recordOutput("Pose Y", tunerSwerveDrivetrain.getPose2d().getY());
+            Logger.recordOutput("Pose Rotation (Degrees)", tunerSwerveDrivetrain.getPose2d().getRotation().getDegrees());
+            Logger.recordOutput("Pose Rotation (Radians)", tunerSwerveDrivetrain.getPose2d().getRotation().getRadians());
+            ChassisSpeeds mango = calculateSpeedsBasedOnJoystickInputs();
+            Logger.recordOutput("X Velocity", mango.vxMetersPerSecond);
+            Logger.recordOutput("Y Velocity", mango.vyMetersPerSecond);
+            Logger.recordOutput("Rotational Velocity (Degrees)", Math.toDegrees(mango.omegaRadiansPerSecond));
+            Logger.recordOutput("Rotational Velocity (Radians)", mango.omegaRadiansPerSecond);
+            Logger.recordOutput("currentSwerveState", currentState);
+            Logger.recordOutput("wantedSwerveState", wantedState);
+            Logger.recordOutput("Front Left Drive Motor Voltage", tunerSwerveDrivetrain.getModule(0).getDriveMotor().getMotorVoltage().getValueAsDouble());
+            Logger.recordOutput("Front Right Drive Motor Voltage", tunerSwerveDrivetrain.getModule(1).getDriveMotor().getMotorVoltage().getValueAsDouble());
+            Logger.recordOutput("Back Left Drive Motor Voltage", tunerSwerveDrivetrain.getModule(2).getDriveMotor().getMotorVoltage().getValueAsDouble());
+            Logger.recordOutput("Back Right Drive Motor Voltage", tunerSwerveDrivetrain.getModule(3).getDriveMotor().getMotorVoltage().getValueAsDouble());
          //front left, fr, bl, br
     }
     
