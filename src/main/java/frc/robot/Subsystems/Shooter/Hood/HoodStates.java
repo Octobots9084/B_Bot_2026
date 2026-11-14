@@ -8,7 +8,6 @@ import edu.wpi.first.units.measure.Angle;
    
                                                                                                                                                                                                                                                                   
 
-//TODO ADD UNITS
 public enum HoodStates {
     SAFE(Radians.of(0)), 
     UPPIES(Rotations.of(0.65)),
