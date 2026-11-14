@@ -82,7 +82,8 @@ public Robot() {
 
     CommandScheduler.getInstance().enable();
     // ShooterSubsystem.getInstance().getSwerve().initCommandSwerveDrivetrain();
-    
+    SmartDashboard.putNumber("rSlow", .3);
+    SmartDashboard.putNumber("Slow", .3);
 }
 
   /**

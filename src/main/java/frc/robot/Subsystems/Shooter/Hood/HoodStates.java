@@ -12,7 +12,7 @@ import edu.wpi.first.units.measure.Angle;
 public enum HoodStates {
     SAFE(Radians.of(0)), 
     UPPIES(Rotations.of(0.65)),
-    FIXEDFIRE(Radians.of(Math.PI/2));
+    FIXEDFIRE(Rotations.of(0.15));
     public final Angle enumAngle;
     private HoodStates(Angle enumAngle){
         this.enumAngle = enumAngle;

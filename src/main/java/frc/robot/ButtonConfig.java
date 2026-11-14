@@ -73,7 +73,7 @@ public class ButtonConfig {
         //.onTrue(new InstantCommand(() -> superstructure.driverRequestedIntakeState = IntakeStates.ELEPHANTIASIS))
         .onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
 
-        driverController.rightBumper().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDFIRE)))
+        driverController.rightTrigger().onTrue(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.FIXEDFIRE)))
         .onFalse(new InstantCommand(() -> superstructure.setWantedState(SuperstructureStates.SAFE)));
 
         driverController.povDown().onTrue(new InstantCommand(() -> DriverCommunications.testFlywheelSpeed -= 0.5));

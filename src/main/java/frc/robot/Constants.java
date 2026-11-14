@@ -29,7 +29,7 @@ public class Constants {
     //general
     public static CANBus krakenBus = new CANBus("krakenbus");
   public static Boolean isBlueAlliance = null;
-    public static double flywheelShootTolerance = 32;
+    public static double flywheelShootTolerance = 27;
 
     public static double redTrenchX = 11.7;
     public static double blueTrenchX = 4.8;
@@ -105,7 +105,7 @@ public class Constants {
 
 
 public static final double maxAngularVelocity = 2 * Math.PI;
-public static final double maxVelocity = 4.5;
+public static final double maxVelocity = 3;
   private static final SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> constantCreator =
         new SwerveModuleConstantsFactory<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>()
         .withDriveMotorGearRatio(1)

@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 public enum FlywheelStates {
     SAFE(0),
     CUSTOMFIRE(0),
-    TRENCHFIRE(37),
+    TRENCHFIRE(29.5),
     FIXEDFIRE(45.25), //maybe subtract 1.5
     FIXEDCLOSE(34);
     

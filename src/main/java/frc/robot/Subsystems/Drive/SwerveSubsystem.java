@@ -26,6 +26,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -320,10 +321,11 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
             }
         }
         double angularMagnitude = MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
-        double xVelocity = xMagnitude * maxVelocity;
-        double yVelocity = yMagnitude * maxVelocity;
+        double xVelocity = xMagnitude * maxVelocity*SmartDashboard.getNumber("Slow", .3);;
+        double yVelocity = yMagnitude * maxVelocity*SmartDashboard.getNumber("Slow", .3);;
 
-        double RotVelocity = angularPidcontroller.calculate(getRobotPose().getRotation().getRadians(),rotLockAngle);
+        double RotVelocity = angularPidcontroller.calculate(getRobotPose().getRotation().getRadians(),rotLockAngle)*SmartDashboard.getNumber("rSlow", .3);
+        ;
 
         if (Constants.isBlueAlliance) {   
             return new ChassisSpeeds(-xVelocity, -yVelocity, RotVelocity);
@@ -364,9 +366,9 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
         double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
         double angularMagnitude = MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
-        angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
-        double xVelocity = xMagnitude * maxVelocity;
-        double yVelocity = yMagnitude * maxVelocity;
+        angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude)*SmartDashboard.getNumber("rSlow", .3);
+        double xVelocity = xMagnitude * maxVelocity*SmartDashboard.getNumber("Slow", .3);
+        double yVelocity = yMagnitude * maxVelocity*SmartDashboard.getNumber("Slow", .3);
 
         double angularVelocity = angularMagnitude * maxAngularVelocity;
 
