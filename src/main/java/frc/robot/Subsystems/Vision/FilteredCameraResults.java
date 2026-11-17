@@ -21,13 +21,16 @@ public class FilteredCameraResults{
 
     int numTargets;
     double timeStamp;
+    double visionSD = 0;
     ArrayList<PhotonTrackedTarget> targets = new ArrayList<>();
     Optional<EstimatedRobotPose> visionEst;
     PhotonPipelineResult result;
 
     //constructor takes in a raw result
-    public FilteredCameraResults(PhotonPipelineResult result, PhotonPoseEstimator photonEstimator){
+    public FilteredCameraResults(PhotonPipelineResult result, PhotonPoseEstimator photonEstimator, double visionSDX, double visionSDY, double visionSDR){
         this.result = result;
+        this.visionSD = visionSD;
+
         timeStamp = result.getTimestampSeconds();
 
         //the list of targets from the result gets filled with targets
@@ -57,5 +60,9 @@ public class FilteredCameraResults{
 
     public PhotonPipelineResult getResult(){
         return result;
+    }
+
+    public void setVisionSDX(double sD){
+        visionSD = sD;
     }
 }

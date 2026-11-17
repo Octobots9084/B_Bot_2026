@@ -135,10 +135,21 @@ public class VisionIOSystem implements VisionIO{
         }
     }
 
+    //estimate standard deviation
+    //only one tag constant deviation
+    //return confidence
+    public double estimateStandardDeviation(){
+        for(int i = 0; i< filteredResults.size(); i++){
+            if(filteredResults.get(i).getNumTargets() == 1){
+                
+            }else{                
+            }
+        }
+    }
+
+
     //send the arraylist to the pose estimator, and any other relative information
-    public void sendResults(){
-        //call to estimate robot pose method
-        //Swerve.addVisionEstimate(filteredResults);
+    public ArrayList<FilteredCameraResults> sendResults(){
+       return filteredResults;
     }
 }
-

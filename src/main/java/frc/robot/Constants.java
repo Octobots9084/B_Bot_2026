@@ -79,6 +79,10 @@ public class Constants {
     @AutoLogOutput public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
     public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
 
+    public static double visionSDSingleTagX = 4;
+    public static double visionSDSingleTagY = 4;
+    public static double visionSDSingleTagRot = 8;
+
 
     public static enum Mode {
         /** Running on a real robot. */
