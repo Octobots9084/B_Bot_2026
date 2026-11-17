@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
-import frc.robot.Subsystems.Drive.CommandSwerveDrivetrain;
 import frc.robot.Subsystems.Drive.SwerveSubsystem;
 import frc.robot.Subsystems.Drive.TunerConstants;
 import frc.robot.Subsystems.Drive.TunerConstants;
@@ -29,6 +28,7 @@ import frc.robot.Subsystems.Shooter.Feeder.FeederSubsystem;
 import frc.robot.Subsystems.Shooter.Flywheel.FlywheelSubsystem;
 import frc.robot.Subsystems.Shooter.Hood.HoodSubsystem;
 import frc.robot.Subsystems.Superstructure.Superstructure;
+import frc.robot.Subsystems.Vision.VisionIOSystem;
 
 public class RobotContainer {
     public IntakeSubsystem intake;
@@ -39,7 +39,7 @@ public class RobotContainer {
     public FeederSubsystem feeder;
     public HoodSubsystem hood;
     public ButtonConfig buttons;
-
+    public VisionIOSystem vision;
 // Dashboard inputs
  final SendableChooser<Command> autoChooser;
 
@@ -49,6 +49,13 @@ public class RobotContainer {
 
     public RobotContainer(Robot robot) {
 
+      SwerveSubsystem swerve = SwerveSubsystem.setInstance(
+        TunerConstants.createDrivetrain(),
+        ButtonConfig.driverController, 
+        ButtonConfig.coDriverController,
+          Constants.maxVelocity, 
+          Constants.maxAngularVelocity);
+          
         switch(Constants.currentMode){
             case REAL: {
                 intake = new IntakeSubsystem();
@@ -59,6 +66,8 @@ public class RobotContainer {
                 feeder = this.shooter.getFeeder();
                 hood = this.shooter.getHood();
                 buttons = new ButtonConfig();
+
+                vision = new VisionIOSystem(swerve::addVisionMeasurement);
                 break;
             }
 
@@ -81,12 +90,7 @@ public class RobotContainer {
         
     buttons.initTeleop();
 
-  SwerveSubsystem swerve = SwerveSubsystem.setInstance(
-        TunerConstants.createDrivetrain(),
-        ButtonConfig.driverController, 
-        ButtonConfig.coDriverController,
-          Constants.maxVelocity, 
-          Constants.maxAngularVelocity);
+  
   configureBindings();
 
 

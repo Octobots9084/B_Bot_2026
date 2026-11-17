@@ -1,5 +1,6 @@
 package frc.robot.Subsystems.Vision;
 
+import org.photonvision.EstimatedRobotPose;
 // Represents a PhotonVision camera
 import org.photonvision.PhotonCamera;
 //i lowkey forgot why this is here
@@ -8,14 +9,25 @@ import java.nio.file.DirectoryStream.Filter;
 import java.util.ArrayList;
 //holds data types, needed for unread results
 import java.util.List;
+import java.util.Optional;
+
+import javax.lang.model.util.ElementScanner14;
+
 //Contains all vision detections from a single camera frame
 import org.photonvision.targeting.PhotonPipelineResult;
 // Represents one detected target (AprilTag, reflective tape, etc.)
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 //timer that starts when the match starts
 import edu.wpi.first.wpilibj.Timer;
 // Calculates robot position on the field using detected AprilTags
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
+
 //the constants we made
 import frc.robot.Constants;
 
@@ -38,10 +50,11 @@ public class VisionIOSystem implements VisionIO{
     public ArrayList<List<PhotonPipelineResult>> cameraResults = new ArrayList<>();
 
     public List<PhotonPipelineResult> unreadResults = new ArrayList<>();
+    private EstimateConsumer estConsumer;
 
 
     //constructor for cameras and pose estimator
-    public VisionIOSystem(){
+    public VisionIOSystem(EstimateConsumer estConsumer){
     cameras = new PhotonCamera[] {
             new PhotonCamera("Camera 1"), 
             new PhotonCamera("Camera 2"),
@@ -76,6 +89,7 @@ public class VisionIOSystem implements VisionIO{
 
         chooseResults();
        
+        estimateStandardDeviation();
 
         //send the FilteredCameraResults arraylist to the pose esimator
         sendResults();
@@ -138,18 +152,31 @@ public class VisionIOSystem implements VisionIO{
     //estimate standard deviation
     //only one tag constant deviation
     //return confidence
-    public double estimateStandardDeviation(){
+    public void estimateStandardDeviation(){
         for(int i = 0; i< filteredResults.size(); i++){
             if(filteredResults.get(i).getNumTargets() == 1){
-                
-            }else{                
+                    filteredResults.get(i).setVisionSD(Constants.kSingleTagStdDevs);
+            }else{    
+                    filteredResults.get(i).setVisionSD(Constants.kMultiTagStdDevs);
             }
         }
     }
 
 
     //send the arraylist to the pose estimator, and any other relative information
-    public ArrayList<FilteredCameraResults> sendResults(){
-       return filteredResults;
+    void sendResults(){
+        for (int i =0;i < filteredResults.size(); i++){
+            Optional<EstimatedRobotPose> currentEst = filteredResults.get(i).visionEst;
+            if(currentEst != null)
+            {
+                    estConsumer.accept(currentEst.get().estimatedPose.toPose2d(), filteredResults.get(i).getTimeStamp(), filteredResults.get(i).getStandardDev());
+            }
+        }
     }
+    
+@FunctionalInterface
+    public static interface EstimateConsumer {
+        public void accept(Pose2d pose, double timestamp, Matrix<N3, N1> estimationStdDevs);
+    }
+
 }

@@ -15,7 +15,6 @@ public class DriverCommunications {
     public static Field2d fieldPose = new Field2d();
     public static double TeleopTimer = Timer.getMatchTime();
     public static double TeleopTimePassed = 160 - Timer.getMatchTime();
-    public static VisionIOSystem vision = new VisionIOSystem();
     public static double testFlywheelSpeed = 0;
     public static double testHoodAngle = 0;
     public static double testFlywheelSpeedTower = 0;
@@ -30,10 +29,9 @@ public class DriverCommunications {
 
     public static void pushToElastic() {
         // Are the cameras connected
-        
-        SmartDashboard.putBoolean("Cam/left camera connected", vision.cameraConnected(0));
-        SmartDashboard.putBoolean("Cam/right camera connected", vision.cameraConnected(1));
-        SmartDashboard.putBoolean("Cam/shooter camera connected", vision.cameraConnected(2));
+        // SmartDashboard.putBoolean("Cam/left camera connected", vision.cameraConnected(0));
+        // SmartDashboard.putBoolean("Cam/right camera connected", vision.cameraConnected(1));
+        // SmartDashboard.putBoolean("Cam/shooter camera connected", vision.cameraConnected(2));
 
         // Match times
         SmartDashboard.putNumber("Time Passed", TeleopTimePassed);

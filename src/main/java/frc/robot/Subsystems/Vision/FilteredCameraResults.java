@@ -3,13 +3,17 @@ package frc.robot.Subsystems.Vision;
 import java.util.ArrayList;
 import java.util.Optional;
 
+// Calculates robot position on the field using detected AprilTags
 import org.photonvision.*;
 //Contains all vision detections from a single camera frame
 import org.photonvision.targeting.PhotonPipelineResult;
 // Represents one detected target (AprilTag, reflective tape, etc.)
 import org.photonvision.targeting.PhotonTrackedTarget;
-// Calculates robot position on the field using detected AprilTags
-import org.photonvision.PhotonPoseEstimator;
+
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 
 public class FilteredCameraResults{
     /*
@@ -21,15 +25,14 @@ public class FilteredCameraResults{
 
     int numTargets;
     double timeStamp;
-    double visionSD = 0;
+    Matrix<N3, N1> kResultDev = VecBuilder.fill(0.0, 0.0, 0.0);
     ArrayList<PhotonTrackedTarget> targets = new ArrayList<>();
     Optional<EstimatedRobotPose> visionEst;
     PhotonPipelineResult result;
 
     //constructor takes in a raw result
-    public FilteredCameraResults(PhotonPipelineResult result, PhotonPoseEstimator photonEstimator, double visionSDX, double visionSDY, double visionSDR){
+    public FilteredCameraResults(PhotonPipelineResult result, PhotonPoseEstimator photonEstimator){
         this.result = result;
-        this.visionSD = visionSD;
 
         timeStamp = result.getTimestampSeconds();
 
@@ -40,6 +43,7 @@ public class FilteredCameraResults{
 
         numTargets = targets.size();
 
+        kResultDev = VecBuilder.fill(numTargets, timeStamp, numTargets);
         //calculate pose based on if your single or multitag
         if(numTargets > 1){
             visionEst = photonEstimator.estimateCoprocMultiTagPose(result);
@@ -62,7 +66,11 @@ public class FilteredCameraResults{
         return result;
     }
 
-    public void setVisionSDX(double sD){
-        visionSD = sD;
+    public Matrix<N3, N1> getStandardDev(){
+        return kResultDev;
+    }
+
+    public void setVisionSD(Matrix<N3, N1> kRD){
+        kResultDev = kRD;
     }
 }
