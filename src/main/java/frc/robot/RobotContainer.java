@@ -49,12 +49,7 @@ public class RobotContainer {
 
     public RobotContainer(Robot robot) {
 
-      SwerveSubsystem swerve = SwerveSubsystem.setInstance(
-        TunerConstants.createDrivetrain(),
-        ButtonConfig.driverController, 
-        ButtonConfig.coDriverController,
-          Constants.maxVelocity, 
-          Constants.maxAngularVelocity);
+      
           
         switch(Constants.currentMode){
             case REAL: {
@@ -66,7 +61,12 @@ public class RobotContainer {
                 feeder = this.shooter.getFeeder();
                 hood = this.shooter.getHood();
                 buttons = new ButtonConfig();
-
+                SwerveSubsystem swerve = SwerveSubsystem.setInstance(
+                        TunerConstants.createDrivetrain(),
+                        ButtonConfig.driverController, 
+                        ButtonConfig.coDriverController,
+                          Constants.maxVelocity, 
+                          Constants.maxAngularVelocity);
                 vision = new VisionIOSystem(swerve::addVisionMeasurement);
                 break;
             }

@@ -32,12 +32,12 @@ public class ButtonConfig {
     Superstructure superstructure = Superstructure.getInstance();
     //private ShooterCalculator alignRotation;
     public ButtonConfig(){
-
+        driverController = new CommandXboxController(0);
+        coDriverController = new CommandXboxController(1);
     }
     
     public void initTeleop() {
-        driverController = new CommandXboxController(0);
-        coDriverController = new CommandXboxController(1);
+        
         //initCalculator()u;
 //         driverController.rightTrigger().onTrue(new ConditionalCommand(new InstantCommand(()-> 
 //             superstructure.setWantedState(SuperstructureStates.FIXEDTRENCH)), 

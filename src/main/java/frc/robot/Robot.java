@@ -53,7 +53,6 @@ public Robot() {
       // TODO change the buttons from driverleft and right to the xbox controller
 
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
         switch(Constants.currentMode) { //TODO log
       case REAL:
