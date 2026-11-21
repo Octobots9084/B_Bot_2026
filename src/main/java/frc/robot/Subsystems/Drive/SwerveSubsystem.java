@@ -245,7 +245,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
             case IDLE:
                 break;
             case MANUAL:
-                // shouldXLock();
+                 shouldXLock();
                 tunerSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
@@ -262,7 +262,7 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             case SLOW:
-                // shouldXLock();
+                shouldXLock();
                 ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
 
               
@@ -276,11 +276,10 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
                 tunerSwerveDrivetrain.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(speeds)
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-
-                
                 break;
             case XLOCK:
                 tunerSwerveDrivetrain.setSwerveState(xLockbrake);
+                shouldXLock();
                 break;
             default:
                 break;
@@ -333,22 +332,24 @@ public class SwerveSubsystem extends TunerSwerveDrivetrain implements Subsystem{
         return new ChassisSpeeds(xVelocity, yVelocity, RotVelocity);
     }
     public void shouldXLock() {
-        if (MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || 
-            MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0 ||
-            MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) != 0 ||
-            MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) != 0) {
+        if (MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) == 0 && 
+            MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) == 0 &&
+            MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) == 0 &&
+            MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) == 0) {
 
             if (debounce) {
-            timer = System.currentTimeMillis();
-
-            debounce = false;
+                timer = System.currentTimeMillis();
+                debounce = false;
             }
 
             if (System.currentTimeMillis() - timer > 500) 
-                wantedState = SwerveStates.MANUAL;
+                wantedState = SwerveStates.XLOCK;
             
-        } else {
+        }
+        // yes joyst6ick input
+        else {
             debounce = true;
+            wantedState = SwerveStates.MANUAL;
         };
         
 
